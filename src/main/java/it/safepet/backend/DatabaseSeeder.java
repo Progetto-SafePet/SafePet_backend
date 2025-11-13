@@ -1,6 +1,7 @@
 package it.safepet.backend;
 
 import it.safepet.backend.persistence.entity.Pet;
+import it.safepet.backend.persistence.entity.Proprietario;
 import it.safepet.backend.persistence.entity.User;
 import it.safepet.backend.persistence.repository.PetRepository;
 import it.safepet.backend.persistence.repository.UserRepository;
@@ -43,19 +44,19 @@ public class DatabaseSeeder implements CommandLineRunner {
             System.out.println("🚀 Popolamento iniziale del database...");
 
             // --- UTENTI ---
-            User mario = new User();
+            Proprietario mario = new Proprietario();
             mario.setEmail("mario.rossi@example.com");
             mario.setPassword(passwordEncoder.encode("Password123"));
             mario.setNome("Mario");
             mario.setCognome("Rossi");
 
-            User lucia = new User();
+            Proprietario lucia = new Proprietario();
             lucia.setEmail("lucia.bianchi@example.com");
             lucia.setPassword(passwordEncoder.encode("Password123"));
             lucia.setNome("Lucia");
             lucia.setCognome("Bianchi");
 
-            User admin = new User();
+            Proprietario admin = new Proprietario();
             admin.setEmail("admin@example.com");
             admin.setPassword(passwordEncoder.encode("Password123"));
             admin.setNome("Admin");
@@ -69,30 +70,30 @@ public class DatabaseSeeder implements CommandLineRunner {
             Pet dog = new Pet();
             dog.setNome("Fido");
             dog.setRazza("Labrador");
-            dog.setMicrochip("123ABC456");
+            dog.setnMicrochip("123ABC456");
             dog.setSesso("M");
             dog.setFoto(loadImage("images/dog1.jpg"));
-            dog.setOwner(mario);
+            dog.setProprietario(mario);
             mario.getPets().add(dog);
             petRepository.save(dog);
 
             Pet cat = new Pet();
             cat.setNome("Micia");
             cat.setRazza("Siamese");
-            cat.setMicrochip("789XYZ123");
+            cat.setnMicrochip("789XYZ123");
             cat.setSesso("F");
             cat.setFoto(loadImage("images/dog2.jpg"));
-            cat.setOwner(lucia);
+            cat.setProprietario(lucia);
             lucia.getPets().add(cat);
             petRepository.save(cat);
 
             Pet rabbit = new Pet();
             rabbit.setNome("Bunny");
             rabbit.setRazza("Coniglio Nano");
-            rabbit.setMicrochip("456DEF789");
+            rabbit.setnMicrochip("456DEF789");
             rabbit.setSesso("M");
             rabbit.setFoto(loadImage("images/dog1.jpg"));
-            rabbit.setOwner(lucia);
+            rabbit.setProprietario(lucia);
             lucia.getPets().add(rabbit);
             petRepository.save(rabbit);
 

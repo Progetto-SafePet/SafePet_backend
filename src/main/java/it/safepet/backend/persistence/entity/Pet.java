@@ -11,40 +11,40 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "nome", nullable = false)
     private String nome;
 
-    @Column(nullable = false)
-    private String specie;
-
-    @Column(nullable = false)
-    private Date data_nascita;
-
-    @Column(nullable = false)
-    private String razza;
-
-    @Column(nullable = false)
-    private Double peso;
-
-    @Column(nullable = false)
-    private String colore_mantello;
-
-    @Column(name="microchip", unique = true, nullable = false)
-    private String microchip;
-
-    @Column(name="sesso", nullable = false, length = 1)
+    @Column(name = "sesso", nullable = false, length = 1)
     private String sesso;
 
-    @Column(nullable = false)
-    private Boolean sterilizzato;
+    @Column(name = "specie", nullable = false)
+    private String specie;
+
+    @Column(name = "razza", nullable = false)
+    private String razza;
+
+    @Column(name = "data_nascita", nullable = false)
+    private Date dataNascita;
+
+    @Column(name = "peso", nullable = false)
+    private Double peso;
+
+    @Column(name = "colore_mantello",nullable = false)
+    private String coloreMantello;
+
+    @Column(name="n_microchip", nullable = false, unique = true)
+    private String nMicrochip;
+
+    @Column(name = "sterilizzato", nullable = false)
+    private Boolean isSterilizzato;
 
     @Lob
     @Column(name = "foto", columnDefinition = "LONGBLOB")
     private byte[] foto;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "owner_id")
-//    private User owner;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "proprietario_id")
+    private Proprietario proprietario;
 
     public Pet() {
     }
@@ -53,4 +53,95 @@ public class Pet {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getSesso() {
+        return sesso;
+    }
+
+    public void setSesso(String sesso) {
+        this.sesso = sesso;
+    }
+
+    public String getSpecie() {
+        return specie;
+    }
+
+    public void setSpecie(String specie) {
+        this.specie = specie;
+    }
+
+    public Date getDataNascita() {
+        return dataNascita;
+    }
+
+    public void setDataNascita(Date dataNascita) {
+        this.dataNascita = dataNascita;
+    }
+
+    public String getRazza() {
+        return razza;
+    }
+
+    public void setRazza(String razza) {
+        this.razza = razza;
+    }
+
+    public Double getPeso() {
+        return peso;
+    }
+
+    public void setPeso(Double peso) {
+        this.peso = peso;
+    }
+
+    public String getColoreMantello() {
+        return coloreMantello;
+    }
+
+    public void setColoreMantello(String coloreMantello) {
+        this.coloreMantello = coloreMantello;
+    }
+
+    public String getnMicrochip() {
+        return nMicrochip;
+    }
+
+    public void setnMicrochip(String nMicrochip) {
+        this.nMicrochip = nMicrochip;
+    }
+
+    public Boolean getSterilizzato() {
+        return isSterilizzato;
+    }
+
+    public void setSterilizzato(Boolean sterilizzato) {
+        isSterilizzato = sterilizzato;
+    }
+
+    public byte[] getFoto() {
+        return foto;
+    }
+
+    public void setFoto(byte[] foto) {
+        this.foto = foto;
+    }
+
+    public Proprietario getProprietario() {
+        return proprietario;
+    }
+
+    public void setProprietario(Proprietario proprietario) {
+        this.proprietario = proprietario;
+    }
 }

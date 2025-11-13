@@ -75,11 +75,11 @@ public class Vaccinazione {
     }
 
     public Somministrazione getSomministrazione() {
-        return somministrazione;
+        return viaDiSomministrazione;
     }
 
     public void setSomministrazione(Somministrazione somministrazione) {
-        this.somministrazione = somministrazione;
+        this.viaDiSomministrazione = somministrazione;
     }
 
     public String getEffettiCollaterali() {
