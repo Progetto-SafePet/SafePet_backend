@@ -21,6 +21,9 @@ public class OrarioDiApertura {
     @Column(name = "orario_chiusura", nullable = false)
     private LocalTime orarioChiusura;
 
+    @Column(name = "aperto_24h", nullable = false)
+    private Boolean isAperto24h;
+
     public enum Giorno {
         LUNEDÌ,
         MARTEDÌ,
@@ -64,5 +67,13 @@ public class OrarioDiApertura {
 
     public void setOrarioChiusura(LocalTime orarioChiusura) {
         this.orarioChiusura = orarioChiusura;
+    }
+
+    public Boolean getAperto24h() {
+        return isAperto24h;
+    }
+
+    public void setAperto24h(Boolean aperto24h) {
+        isAperto24h = aperto24h;
     }
 }
