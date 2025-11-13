@@ -12,7 +12,7 @@ public class Recensione {
     @Column(name = "punteggio", nullable = false)
     private Integer punteggio;
 
-    @Column(name = "punteggio", nullable = false)
+    @Column(name = "descrizione", nullable = false)
     private String descrizione;
 
     @ManyToOne
