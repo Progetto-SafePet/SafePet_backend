@@ -9,9 +9,10 @@ import java.time.LocalTime;
 public class OrarioDiApertura {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    //@Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(name = "giorno", nullable = false)
     private Giorno giorno;
 
@@ -23,6 +24,10 @@ public class OrarioDiApertura {
 
     @Column(name = "aperto_24h", nullable = false)
     private Boolean isAperto24h;
+
+    @ManyToOne
+    @JoinColumn(name = "clinica_id", nullable = false)
+    private Clinica clinica;
 
     public enum Giorno {
         LUNEDÌ,
@@ -75,5 +80,13 @@ public class OrarioDiApertura {
 
     public void setAperto24h(Boolean aperto24h) {
         isAperto24h = aperto24h;
+    }
+
+    public Clinica getClinica() {
+        return clinica;
+    }
+
+    public void setClinica(Clinica clinica) {
+        this.clinica = clinica;
     }
 }

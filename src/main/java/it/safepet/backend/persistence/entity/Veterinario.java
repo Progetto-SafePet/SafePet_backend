@@ -2,6 +2,10 @@ package it.safepet.backend.persistence.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 @Entity
 @Table(name = "veterinari")
 public class Veterinario {
@@ -9,33 +13,45 @@ public class Veterinario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="nome", nullable = false, length = 50)
+    @Column(name = "nome", nullable = false, length = 50)
     private String nome;
 
-    @Column(name="cognome", nullable = false, length = 50)
+    @Column(name = "cognome", nullable = false, length = 50)
     private String cognome;
 
-    @Column(name="data_nascita", nullable = false)
-    private String dataNascita;
+    @Column(name = "data_nascita", nullable = false)
+    private Date dataNascita;
 
-    @Column(name="genere", nullable = false, length = 1)
+    @Column(name = "genere", nullable = false, length = 1)
     private String genere; // es: "M" o "F"
 
-    @Column(name="email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name="password", nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name="numero_telefono", nullable = false, length = 10)
+    @Column(name = "numero_telefono", nullable = false, length = 10)
     private String numeroTelefono;
 
-    //caricamento documento professionale
-
-    @Column(name="specializzazioni_animali", nullable = false)
+    @Column(name = "specializzazioni_animali", nullable = false)
     private String specializzazioniAnimali;
 
-    //onetomany per recensioni
+    @OneToOne
+    @JoinColumn(name = "clinica_id", unique = true)
+    private Clinica clinica;
+
+    @OneToMany(mappedBy = "veterinario", cascade = CascadeType.ALL)
+    private List<Recensione> recensioni = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "veterinario_pet",
+            joinColumns = @JoinColumn(name = "veterinario_id"),
+            inverseJoinColumns = @JoinColumn(name = "pet_id")
+    )
+    private List<Pet> petsAssociati = new ArrayList<>();
+
 
     public Veterinario() {
     }
@@ -64,11 +80,11 @@ public class Veterinario {
         this.cognome = cognome;
     }
 
-    public String getDataNascita() {
+    public Date getDataNascita() {
         return dataNascita;
     }
 
-    public void setDataNascita(String dataNascita) {
+    public void setDataNascita(Date dataNascita) {
         this.dataNascita = dataNascita;
     }
 
@@ -110,5 +126,29 @@ public class Veterinario {
 
     public void setSpecializzazioniAnimali(String specializzazioniAnimali) {
         this.specializzazioniAnimali = specializzazioniAnimali;
+    }
+
+    public Clinica getClinica() {
+        return clinica;
+    }
+
+    public void setClinica(Clinica clinica) {
+        this.clinica = clinica;
+    }
+
+    public List<Recensione> getRecensioni() {
+        return recensioni;
+    }
+
+    public void setRecensioni(List<Recensione> recensioni) {
+        this.recensioni = recensioni;
+    }
+
+    public List<Pet> getPetsAssociati() {
+        return petsAssociati;
+    }
+
+    public void setPetsAssociati(List<Pet> petsAssociati) {
+        this.petsAssociati = petsAssociati;
     }
 }

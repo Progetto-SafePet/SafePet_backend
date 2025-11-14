@@ -4,33 +4,45 @@ import jakarta.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name="vaccinazioni")
+@Table(name = "vaccinazioni")
 public class Vaccinazione {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name="nome", nullable = false)
+    @Column(name = "nome", nullable = false)
     private String nome;
 
-    @Column(name="tipologia", nullable = false)
+    @Column(name = "tipologia", nullable = false)
     private String tipologia;
 
-    @Column(name="data_di_somministrazione", nullable = false)
+    @Column(name = "data_di_somministrazione", nullable = false)
     private Date dataDiSomministrazione;
 
-    @Column(name="dose_somministrata", nullable = false)
+    @Column(name = "dose_somministrata", nullable = false)
     private Float doseSomministrata;
 
-    @Column(name="via_di_somministrazione", nullable = false)
+    @Column(name = "via_di_somministrazione", nullable = false)
     private Somministrazione viaDiSomministrazione;
 
-    @Column(name="effetti_collaterali", nullable = false)
+    @Column(name = "effetti_collaterali", nullable = false)
     private String effettiCollaterali;
 
-    @Column(name="richiamo_previsto", nullable = false)
+    @Column(name = "richiamo_previsto", nullable = false)
     private Date richiamoPrevisto;
+
+    @ManyToOne
+    @JoinColumn(name = "cartella_clinica_id", nullable = false)
+    private CartellaClinica cartellaClinica;
+
+    public enum Somministrazione {
+        SOTTOCUTANEA,
+        INTRAMUSCOLARE,
+        ORALE,
+        INTRANASALE,
+        TRANSDERMICA;
+    }
 
     public Vaccinazione() {}
 
@@ -74,12 +86,12 @@ public class Vaccinazione {
         this.doseSomministrata = doseSomministrata;
     }
 
-    public Somministrazione getSomministrazione() {
+    public Somministrazione getViaDiSomministrazione() {
         return viaDiSomministrazione;
     }
 
-    public void setSomministrazione(Somministrazione somministrazione) {
-        this.viaDiSomministrazione = somministrazione;
+    public void setViaDiSomministrazione(Somministrazione viaDiSomministrazione) {
+        this.viaDiSomministrazione = viaDiSomministrazione;
     }
 
     public String getEffettiCollaterali() {
@@ -96,5 +108,13 @@ public class Vaccinazione {
 
     public void setRichiamoPrevisto(Date richiamoPrevisto) {
         this.richiamoPrevisto = richiamoPrevisto;
+    }
+
+    public CartellaClinica getCartellaClinica() {
+        return cartellaClinica;
+    }
+
+    public void setCartellaClinica(CartellaClinica cartellaClinica) {
+        this.cartellaClinica = cartellaClinica;
     }
 }

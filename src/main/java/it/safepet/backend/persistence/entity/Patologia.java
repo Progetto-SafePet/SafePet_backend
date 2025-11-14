@@ -1,29 +1,35 @@
+package it.safepet.backend.persistence.entity;
+
 import jakarta.persistence.*;
 
 import java.sql.Date;
 
 @Entity
-@Table(name="patologie")
+@Table(name = "patologie")
 public class Patologia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name="nome", nullable = false)
+    @Column(name = "nome", nullable = false)
     private String nome;
 
-    @Column(name="data_di_diagnosi", nullable = false)
+    @Column(name = "data_di_diagnosi", nullable = false)
     private Date dataDiDiagnosi;
 
-    @Column(name="sintomi_osservati", nullable = false)
+    @Column(name = "sintomi_osservati", nullable = false)
     private String sintomiOsservati;
 
-    @Column(name="diagnosi", nullable = false)
+    @Column(name = "diagnosi", nullable = false)
     private String diagnosi;
 
-    @Column(name="terapia_associata", nullable = false)
+    @Column(name = "terapia_associata", nullable = false)
     private String terapiaAssociata;
+
+    @ManyToOne
+    @JoinColumn(name = "cartella_clinica_id", nullable = false)
+    private CartellaClinica cartellaClinica;
 
     public Patologia() {}
 
@@ -73,5 +79,13 @@ public class Patologia {
 
     public void setTerapiaAssociata(String terapiaAssociata) {
         this.terapiaAssociata = terapiaAssociata;
+    }
+
+    public CartellaClinica getCartellaClinica() {
+        return cartellaClinica;
+    }
+
+    public void setCartellaClinica(CartellaClinica cartellaClinica) {
+        this.cartellaClinica = cartellaClinica;
     }
 }

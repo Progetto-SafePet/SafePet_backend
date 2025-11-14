@@ -3,36 +3,40 @@ package it.safepet.backend.persistence.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="terapie")
+@Table(name = "terapie")
 public class Terapia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name="nome", nullable=false)
+    @Column(name = "nome", nullable=false)
     private String nome;
 
-    @Column(name="forma_farmaceutica", nullable = false)
+    @Column(name = "forma_farmaceutica", nullable = false)
     private String formaFarmaceutica;
 
-    @Column(name="dosaggio", nullable = false)
+    @Column(name = "dosaggio", nullable = false)
     private String dosaggio;
 
-    @Column(name="posologia", nullable = false)
+    @Column(name = "posologia", nullable = false)
     private String posologia;
 
-    @Column(name="via_di_somministrazione", nullable = false)
+    @Column(name = "via_di_somministrazione", nullable = false)
     private String viaDiSomministrazione;
 
-    @Column(name="durata", nullable = false)
+    @Column(name = "durata", nullable = false)
     private String durata;
 
-    @Column(name="frequenza", nullable = false)
+    @Column(name = "frequenza", nullable = false)
     private String frequenza;
 
-    @Column(name="motivo", nullable = false)
+    @Column(name = "motivo", nullable = false)
     private String motivo;
+
+    @ManyToOne
+    @JoinColumn(name = "cartella_clinica_id", nullable = false)
+    private CartellaClinica cartellaClinica;
 
     public Terapia() {}
 
@@ -106,5 +110,13 @@ public class Terapia {
 
     public void setMotivo(String motivo) {
         this.motivo = motivo;
+    }
+
+    public CartellaClinica getCartellaClinica() {
+        return cartellaClinica;
+    }
+
+    public void setCartellaClinica(CartellaClinica cartellaClinica) {
+        this.cartellaClinica = cartellaClinica;
     }
 }

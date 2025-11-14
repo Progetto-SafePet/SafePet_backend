@@ -2,13 +2,16 @@ package it.safepet.backend.persistence.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "pets")
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "nome", nullable = false)
@@ -42,9 +45,22 @@ public class Pet {
     @Column(name = "foto", columnDefinition = "LONGBLOB")
     private byte[] foto;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "proprietario_id")
+    @ManyToOne //(fetch = FetchType.LAZY)
+    @JoinColumn(name = "proprietario_id", nullable = false)
     private Proprietario proprietario;
+
+    @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL)
+    private CartellaClinica cartellaClinica;
+
+    @ManyToMany(mappedBy = "petsAssociati")
+    private List<Veterinario> veterinariAssociati = new ArrayList<>();
+
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<NoteProprietario> note = new ArrayList<>();
+
+    @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL)
+    private LinkingCode linkingCode;
+
 
     public Pet() {
     }
@@ -143,5 +159,37 @@ public class Pet {
 
     public void setProprietario(Proprietario proprietario) {
         this.proprietario = proprietario;
+    }
+
+    public CartellaClinica getCartellaClinica() {
+        return cartellaClinica;
+    }
+
+    public void setCartellaClinica(CartellaClinica cartellaClinica) {
+        this.cartellaClinica = cartellaClinica;
+    }
+
+    public List<Veterinario> getVeterinariAssociati() {
+        return veterinariAssociati;
+    }
+
+    public void setVeterinariAssociati(List<Veterinario> veterinariAssociati) {
+        this.veterinariAssociati = veterinariAssociati;
+    }
+
+    public List<NoteProprietario> getNote() {
+        return note;
+    }
+
+    public void setNote(List<NoteProprietario> note) {
+        this.note = note;
+    }
+
+    public LinkingCode getLinkingCode() {
+        return linkingCode;
+    }
+
+    public void setLinkingCode(LinkingCode linkingCode) {
+        this.linkingCode = linkingCode;
     }
 }

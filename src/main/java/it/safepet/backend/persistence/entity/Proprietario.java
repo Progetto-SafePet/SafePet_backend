@@ -3,6 +3,7 @@ package it.safepet.backend.persistence.entity;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -10,40 +11,46 @@ import java.util.List;
 public class Proprietario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name="nome", nullable = false, length = 50)
+    @Column(name = "nome", nullable = false, length = 50)
     private String nome;
 
-    @Column(name="cognome", nullable = false, length = 50)
+    @Column(name = "cognome", nullable = false, length = 50)
     private String cognome;
 
-    @Column(name="data_nascita", nullable = false)
-    private String dataNascita;
+    @Column(name = "data_nascita", nullable = false)
+    private Date dataNascita;
 
-    @Column(name="genere", nullable = false, length = 1)
+    @Column(name = "genere", nullable = false, length = 1)
     private String genere; // es: "M" o "F"
 
-    @Column(name="email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name="password", nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name="numero_telefono", nullable = false, length = 10)
+    @Column(name = "numero_telefono", nullable = false, length = 10)
     private String numeroTelefono;
 
-    @Column(name="indirizzo_domicilio", nullable = false)
+    @Column(name = "indirizzo_domicilio", nullable = false)
     private String indirizzoDomicilio;
 
     @OneToMany(mappedBy = "proprietario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pet> pets = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "propritario", cascade = CascadeType.ALL)
-//    private List<Recensione> recensioni = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "proprietario", cascade = CascadeType.ALL)
-//    private List<ListaPreferiti> preferiti;
+    @OneToMany(mappedBy = "proprietario", cascade = CascadeType.ALL)
+    private List<Recensione> recensioni = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "proprietario_veterinario_preferiti",
+            joinColumns = @JoinColumn(name = "proprietario_id"),
+            inverseJoinColumns = @JoinColumn(name = "veterinario_id")
+    )
+    private List<Veterinario> veterinariPreferiti = new ArrayList<>();
 
     public Proprietario() {
     }
@@ -72,11 +79,11 @@ public class Proprietario {
         this.cognome = cognome;
     }
 
-    public String getDataNascita() {
+    public Date getDataNascita() {
         return dataNascita;
     }
 
-    public void setDataNascita(String dataNascita) {
+    public void setDataNascita(Date dataNascita) {
         this.dataNascita = dataNascita;
     }
 
@@ -118,5 +125,29 @@ public class Proprietario {
 
     public void setIndirizzoDomicilio(String indirizzoDomicilio) {
         this.indirizzoDomicilio = indirizzoDomicilio;
+    }
+
+    public List<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(List<Pet> pets) {
+        this.pets = pets;
+    }
+
+    public List<Recensione> getRecensioni() {
+        return recensioni;
+    }
+
+    public void setRecensioni(List<Recensione> recensioni) {
+        this.recensioni = recensioni;
+    }
+
+    public List<Veterinario> getVeterinariPreferiti() {
+        return veterinariPreferiti;
+    }
+
+    public void setVeterinariPreferiti(List<Veterinario> veterinariPreferiti) {
+        this.veterinariPreferiti = veterinariPreferiti;
     }
 }
