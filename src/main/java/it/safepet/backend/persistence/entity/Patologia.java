@@ -1,8 +1,11 @@
 package it.safepet.backend.persistence.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "patologie")
@@ -20,7 +23,7 @@ public class Patologia extends RecordMedico {
     @Column(name = "terapia_associata", nullable = false)
     private String terapiaAssociata;
 
-    public Patologia() {}
+    public Patologia() { }
 
     public Date getDataDiDiagnosi() {
         return dataDiDiagnosi;
