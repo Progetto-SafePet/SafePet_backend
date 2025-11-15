@@ -5,15 +5,8 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "vaccinazioni")
-public class Vaccinazione {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
-
-    @Column(name = "nome", nullable = false)
-    private String nome;
-
+@DiscriminatorValue("VACCINAZIONE")
+public class Vaccinazione extends RecordMedico {
     @Column(name = "tipologia", nullable = false)
     private String tipologia;
 
@@ -32,10 +25,6 @@ public class Vaccinazione {
     @Column(name = "richiamo_previsto", nullable = false)
     private Date richiamoPrevisto;
 
-    @ManyToOne
-    @JoinColumn(name = "cartella_clinica_id", nullable = false)
-    private CartellaClinica cartellaClinica;
-
     public enum Somministrazione {
         SOTTOCUTANEA,
         INTRAMUSCOLARE,
@@ -45,22 +34,6 @@ public class Vaccinazione {
     }
 
     public Vaccinazione() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
 
     public String getTipologia() {
         return tipologia;
@@ -108,13 +81,5 @@ public class Vaccinazione {
 
     public void setRichiamoPrevisto(Date richiamoPrevisto) {
         this.richiamoPrevisto = richiamoPrevisto;
-    }
-
-    public CartellaClinica getCartellaClinica() {
-        return cartellaClinica;
-    }
-
-    public void setCartellaClinica(CartellaClinica cartellaClinica) {
-        this.cartellaClinica = cartellaClinica;
     }
 }

@@ -6,15 +6,8 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "patologie")
-public class Patologia {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
-
-    @Column(name = "nome", nullable = false)
-    private String nome;
-
+@DiscriminatorValue("PATOLOGIA")
+public class Patologia extends RecordMedico {
     @Column(name = "data_di_diagnosi", nullable = false)
     private Date dataDiDiagnosi;
 
@@ -27,27 +20,7 @@ public class Patologia {
     @Column(name = "terapia_associata", nullable = false)
     private String terapiaAssociata;
 
-    @ManyToOne
-    @JoinColumn(name = "cartella_clinica_id", nullable = false)
-    private CartellaClinica cartellaClinica;
-
     public Patologia() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
 
     public Date getDataDiDiagnosi() {
         return dataDiDiagnosi;
@@ -79,13 +52,5 @@ public class Patologia {
 
     public void setTerapiaAssociata(String terapiaAssociata) {
         this.terapiaAssociata = terapiaAssociata;
-    }
-
-    public CartellaClinica getCartellaClinica() {
-        return cartellaClinica;
-    }
-
-    public void setCartellaClinica(CartellaClinica cartellaClinica) {
-        this.cartellaClinica = cartellaClinica;
     }
 }

@@ -49,9 +49,6 @@ public class Pet {
     @JoinColumn(name = "proprietario_id", nullable = false)
     private Proprietario proprietario;
 
-    @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL)
-    private CartellaClinica cartellaClinica;
-
     @ManyToMany(mappedBy = "petsAssociati")
     private List<Veterinario> veterinariAssociati = new ArrayList<>();
 
@@ -60,6 +57,9 @@ public class Pet {
 
     @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL)
     private LinkingCode linkingCode;
+
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RecordMedico> recordMedici = new ArrayList<>();
 
 
     public Pet() {
@@ -161,14 +161,6 @@ public class Pet {
         this.proprietario = proprietario;
     }
 
-    public CartellaClinica getCartellaClinica() {
-        return cartellaClinica;
-    }
-
-    public void setCartellaClinica(CartellaClinica cartellaClinica) {
-        this.cartellaClinica = cartellaClinica;
-    }
-
     public List<Veterinario> getVeterinariAssociati() {
         return veterinariAssociati;
     }
@@ -191,5 +183,13 @@ public class Pet {
 
     public void setLinkingCode(LinkingCode linkingCode) {
         this.linkingCode = linkingCode;
+    }
+
+    public List<RecordMedico> getRecordMedici() {
+        return recordMedici;
+    }
+
+    public void setRecordMedici(List<RecordMedico> recordMedici) {
+        this.recordMedici = recordMedici;
     }
 }

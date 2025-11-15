@@ -4,15 +4,8 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "terapie")
-public class Terapia {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
-
-    @Column(name = "nome", nullable=false)
-    private String nome;
-
+@DiscriminatorValue("TERAPIA")
+public class Terapia extends RecordMedico{
     @Column(name = "forma_farmaceutica", nullable = false)
     private String formaFarmaceutica;
 
@@ -34,27 +27,7 @@ public class Terapia {
     @Column(name = "motivo", nullable = false)
     private String motivo;
 
-    @ManyToOne
-    @JoinColumn(name = "cartella_clinica_id", nullable = false)
-    private CartellaClinica cartellaClinica;
-
     public Terapia() {}
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
 
     public String getFormaFarmaceutica() {
         return formaFarmaceutica;
@@ -110,13 +83,5 @@ public class Terapia {
 
     public void setMotivo(String motivo) {
         this.motivo = motivo;
-    }
-
-    public CartellaClinica getCartellaClinica() {
-        return cartellaClinica;
-    }
-
-    public void setCartellaClinica(CartellaClinica cartellaClinica) {
-        this.cartellaClinica = cartellaClinica;
     }
 }
