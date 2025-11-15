@@ -1,7 +1,11 @@
 package it.safepet.backend.persistence.entity;
 
-import jakarta.persistence.*;
-import java.sql.Date;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "vaccinazioni")
@@ -33,7 +37,9 @@ public class Vaccinazione extends RecordMedico {
         TRANSDERMICA;
     }
 
-    public Vaccinazione() {}
+    public Vaccinazione() {
+
+    }
 
     public String getTipologia() {
         return tipologia;

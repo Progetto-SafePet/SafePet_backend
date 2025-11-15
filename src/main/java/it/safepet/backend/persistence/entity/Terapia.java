@@ -1,11 +1,14 @@
 package it.safepet.backend.persistence.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "terapie")
 @DiscriminatorValue("TERAPIA")
-public class Terapia extends RecordMedico{
+public class Terapia extends RecordMedico {
     @Column(name = "forma_farmaceutica", nullable = false)
     private String formaFarmaceutica;
 
@@ -27,7 +30,9 @@ public class Terapia extends RecordMedico{
     @Column(name = "motivo", nullable = false)
     private String motivo;
 
-    public Terapia() {}
+    public Terapia() {
+
+    }
 
     public String getFormaFarmaceutica() {
         return formaFarmaceutica;

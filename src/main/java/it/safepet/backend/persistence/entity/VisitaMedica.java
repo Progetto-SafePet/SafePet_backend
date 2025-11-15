@@ -1,8 +1,12 @@
 package it.safepet.backend.persistence.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Lob;
+import jakarta.persistence.Table;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "visite_mediche")
@@ -18,7 +22,9 @@ public class VisitaMedica extends RecordMedico {
     @Column(name = "referto")
     private byte[] referto;
 
-    public VisitaMedica() {}
+    public VisitaMedica() {
+
+    }
 
     public String getDescrizione() {
         return descrizione;

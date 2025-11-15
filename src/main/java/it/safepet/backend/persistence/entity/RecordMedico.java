@@ -1,11 +1,19 @@
 package it.safepet.backend.persistence.entity;
 
-import jakarta.persistence.*;
-
-import java.util.Date;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "record_medico")
+@Table(name = "record_medici")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "tipo_record")
 public abstract class RecordMedico {
@@ -24,7 +32,9 @@ public abstract class RecordMedico {
     @JoinColumn(name = "veterinario_id", nullable = false)
     private Veterinario veterinario;
 
-    public RecordMedico() {}
+    public RecordMedico() {
+
+    }
 
     public Long getId() {
         return id;
