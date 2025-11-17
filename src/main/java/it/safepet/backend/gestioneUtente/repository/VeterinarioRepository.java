@@ -1,6 +1,6 @@
-package it.safepet.backend.persistence.repository;
+package it.safepet.backend.gestioneUtente.repository;
 
-import it.safepet.backend.persistence.entity.Veterinario;
+import it.safepet.backend.gestioneUtente.model.Veterinario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

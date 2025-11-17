@@ -1,9 +1,9 @@
 package it.safepet.backend;
 
 import it.safepet.backend.persistence.entity.Pet;
-import it.safepet.backend.persistence.entity.Proprietario;
+import it.safepet.backend.gestioneUtente.model.Proprietario;
 import it.safepet.backend.persistence.repository.PetRepository;
-import it.safepet.backend.persistence.repository.ProprietarioRepository;
+import it.safepet.backend.gestioneUtente.repository.ProprietarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;

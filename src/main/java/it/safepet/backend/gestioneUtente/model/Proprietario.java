@@ -1,5 +1,7 @@
-package it.safepet.backend.persistence.entity;
+package it.safepet.backend.gestioneUtente.model;
 
+import it.safepet.backend.persistence.entity.Pet;
+import it.safepet.backend.persistence.entity.Recensione;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,7 +12,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import java.util.ArrayList;
@@ -18,10 +19,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "veterinari")
-public class Veterinario {
+@Table(name = "proprietari")
+public class Proprietario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "nome", nullable = false, length = 50)
@@ -45,27 +47,24 @@ public class Veterinario {
     @Column(name = "numero_telefono", nullable = false, length = 10)
     private String numeroTelefono;
 
-    @Column(name = "specializzazioni_animali", nullable = false)
-    private String specializzazioniAnimali;
+    @Column(name = "indirizzo_domicilio", nullable = false)
+    private String indirizzoDomicilio;
 
-    @OneToOne
-    @JoinColumn(name = "clinica_id", unique = true)
-    private Clinica clinica;
+    @OneToMany(mappedBy = "proprietario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pet> pets = new ArrayList<>();
 
-    @OneToMany(mappedBy = "veterinario", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "proprietario", cascade = CascadeType.ALL)
     private List<Recensione> recensioni = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
-            name = "veterinario_pet",
-            joinColumns = @JoinColumn(name = "veterinario_id"),
-            inverseJoinColumns = @JoinColumn(name = "pet_id")
+            name = "proprietario_veterinario_preferiti",
+            joinColumns = @JoinColumn(name = "proprietario_id"),
+            inverseJoinColumns = @JoinColumn(name = "veterinario_id")
     )
-    private List<Pet> petsAssociati = new ArrayList<>();
+    private List<Veterinario> veterinariPreferiti = new ArrayList<>();
 
-
-    public Veterinario() {
-
+    public Proprietario() {
     }
 
     public Long getId() {
@@ -100,14 +99,6 @@ public class Veterinario {
         this.dataNascita = dataNascita;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getGenere() {
         return genere;
     }
@@ -124,6 +115,14 @@ public class Veterinario {
         this.password = password;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getNumeroTelefono() {
         return numeroTelefono;
     }
@@ -132,20 +131,20 @@ public class Veterinario {
         this.numeroTelefono = numeroTelefono;
     }
 
-    public String getSpecializzazioniAnimali() {
-        return specializzazioniAnimali;
+    public String getIndirizzoDomicilio() {
+        return indirizzoDomicilio;
     }
 
-    public void setSpecializzazioniAnimali(String specializzazioniAnimali) {
-        this.specializzazioniAnimali = specializzazioniAnimali;
+    public void setIndirizzoDomicilio(String indirizzoDomicilio) {
+        this.indirizzoDomicilio = indirizzoDomicilio;
     }
 
-    public Clinica getClinica() {
-        return clinica;
+    public List<Pet> getPets() {
+        return pets;
     }
 
-    public void setClinica(Clinica clinica) {
-        this.clinica = clinica;
+    public void setPets(List<Pet> pets) {
+        this.pets = pets;
     }
 
     public List<Recensione> getRecensioni() {
@@ -156,11 +155,11 @@ public class Veterinario {
         this.recensioni = recensioni;
     }
 
-    public List<Pet> getPetsAssociati() {
-        return petsAssociati;
+    public List<Veterinario> getVeterinariPreferiti() {
+        return veterinariPreferiti;
     }
 
-    public void setPetsAssociati(List<Pet> petsAssociati) {
-        this.petsAssociati = petsAssociati;
+    public void setVeterinariPreferiti(List<Veterinario> veterinariPreferiti) {
+        this.veterinariPreferiti = veterinariPreferiti;
     }
 }
