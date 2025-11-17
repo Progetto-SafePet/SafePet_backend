@@ -1,4 +1,4 @@
-package it.safepet.backend.persistence.entity;
+package it.safepet.backend.gestioneCartellaClinica.model;
 
 import it.safepet.backend.gestionePet.model.Pet;
 import it.safepet.backend.gestioneUtente.model.Veterinario;

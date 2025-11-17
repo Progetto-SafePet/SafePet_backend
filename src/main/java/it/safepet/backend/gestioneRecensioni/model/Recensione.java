@@ -1,4 +1,4 @@
-package it.safepet.backend.persistence.entity;
+package it.safepet.backend.gestioneRecensioni.model;
 
 import it.safepet.backend.gestioneUtente.model.Proprietario;
 import it.safepet.backend.gestioneUtente.model.Veterinario;
