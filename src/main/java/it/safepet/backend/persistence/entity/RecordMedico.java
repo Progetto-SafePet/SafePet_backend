@@ -1,5 +1,6 @@
 package it.safepet.backend.persistence.entity;
 
+import it.safepet.backend.gestionePet.model.Pet;
 import it.safepet.backend.gestioneUtente.model.Veterinario;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;

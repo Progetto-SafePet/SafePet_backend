@@ -1,4 +1,4 @@
-package it.safepet.backend.persistence.entity;
+package it.safepet.backend.gestionePet.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

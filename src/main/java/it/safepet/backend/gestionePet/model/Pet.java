@@ -1,7 +1,9 @@
-package it.safepet.backend.persistence.entity;
+package it.safepet.backend.gestionePet.model;
 
 import it.safepet.backend.gestioneUtente.model.Proprietario;
 import it.safepet.backend.gestioneUtente.model.Veterinario;
+import it.safepet.backend.gestionePaziente.model.LinkingCode;
+import it.safepet.backend.persistence.entity.RecordMedico;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

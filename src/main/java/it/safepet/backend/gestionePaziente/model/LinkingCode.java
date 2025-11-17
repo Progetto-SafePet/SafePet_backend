@@ -1,5 +1,6 @@
-package it.safepet.backend.persistence.entity;
+package it.safepet.backend.gestionePaziente.model;
 
+import it.safepet.backend.gestionePet.model.Pet;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,6 +1,6 @@
 package it.safepet.backend.gestioneUtente.model;
 
-import it.safepet.backend.persistence.entity.Pet;
+import it.safepet.backend.gestionePet.model.Pet;
 import it.safepet.backend.persistence.entity.Recensione;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
