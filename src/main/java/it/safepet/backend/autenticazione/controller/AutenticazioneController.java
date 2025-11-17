@@ -20,7 +20,7 @@ public class AutenticazioneController {
      * Autentica un utente esistente e restituisce un token JWT valido.
      *
      * <p><b>Metodo:</b> POST<br>
-     * <b>Endpoint:</b> /gestioneUtente/login<br>
+     * <b>Endpoint:</b> /it.safepet.backend.gestioneUtente/login<br>
      * <b>Content-Type:</b> application/json</p>
      *
      * <p><b>Corpo richiesta (JSON):</b></p>
