@@ -1,4 +1,4 @@
-package it.safepet.backend;
+package it.safepet.backend.seeders;
 
 import it.safepet.backend.gestionePet.model.Pet;
 import it.safepet.backend.gestioneUtente.model.Proprietario;
@@ -7,6 +7,7 @@ import it.safepet.backend.gestioneUtente.repository.ProprietarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 @Component
-public class DatabaseSeeder implements CommandLineRunner {
+@Order(2)
+public class ProprietariPetsSeeder implements CommandLineRunner {
     private final ProprietarioRepository proprietarioRepository;
     private final PetRepository petRepository;
     private final PasswordEncoder passwordEncoder;
@@ -25,7 +27,8 @@ public class DatabaseSeeder implements CommandLineRunner {
     @Value("true")
     private boolean resetDatabase;
 
-    public DatabaseSeeder(ProprietarioRepository proprietarioRepository, PetRepository petRepository, PasswordEncoder passwordEncoder) {
+    public ProprietariPetsSeeder(ProprietarioRepository proprietarioRepository, PetRepository petRepository,
+                                 PasswordEncoder passwordEncoder) {
         this.proprietarioRepository = proprietarioRepository;
         this.petRepository = petRepository;
         this.passwordEncoder = passwordEncoder;
@@ -36,12 +39,11 @@ public class DatabaseSeeder implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if (resetDatabase) {
             proprietarioRepository.deleteAll();
-            petRepository.deleteAll();
-            System.out.println("Eliminazione del database");
+            System.out.println("Eliminazione Proprietari");
         }
 
         if (proprietarioRepository.count() == 0) {
-            System.out.println("Popolamento iniziale del database");
+            System.out.println("Popolamento di proprietari e pets");
             Proprietario p1 = new Proprietario();
             p1.setNome("Gianni");
             p1.setCognome("Angel");
@@ -68,10 +70,6 @@ public class DatabaseSeeder implements CommandLineRunner {
             p1.getPets().add(pet1);
             petRepository.save(pet1);
         }
-
-
-
-
     }
 
     private byte[] loadImage(String path) {
