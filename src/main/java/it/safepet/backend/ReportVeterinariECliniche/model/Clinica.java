@@ -46,6 +46,17 @@ public class Clinica {
     public Clinica() {
     }
 
+    public Clinica(String nome, String indirizzo, String numeroTelefono, Double latitudine, Double longitudine,
+                   Veterinario veterinario, List<OrarioDiApertura> orariApertura) {
+        this.nome = nome;
+        this.indirizzo = indirizzo;
+        this.numeroTelefono = numeroTelefono;
+        this.latitudine = latitudine;
+        this.longitudine = longitudine;
+        this.veterinario = veterinario;
+        this.orariApertura = orariApertura;
+    }
+
     public Long getId() {
         return id;
     }

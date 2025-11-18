@@ -51,6 +51,15 @@ public class OrarioDiApertura {
     public OrarioDiApertura() {
     }
 
+    public OrarioDiApertura(Giorno giorno, LocalTime orarioApertura, LocalTime orarioChiusura,
+                            Boolean isAperto24h, Clinica clinica) {
+        this.giorno = giorno;
+        this.orarioApertura = orarioApertura;
+        this.orarioChiusura = orarioChiusura;
+        this.isAperto24h = isAperto24h;
+        this.clinica = clinica;
+    }
+
     public Long getId() {
         return id;
     }

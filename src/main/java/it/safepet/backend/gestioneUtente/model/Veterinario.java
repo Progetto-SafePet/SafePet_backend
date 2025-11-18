@@ -71,6 +71,22 @@ public class Veterinario {
 
     }
 
+    public Veterinario(String nome, String cognome, Date dataNascita, String genere, String email, String password,
+                       String numeroTelefono, String specializzazioniAnimali, Clinica clinica,
+                       List<Recensione> recensioni, List<Pet> petsAssociati) {
+        this.nome = nome;
+        this.cognome = cognome;
+        this.dataNascita = dataNascita;
+        this.genere = genere;
+        this.email = email;
+        this.password = password;
+        this.numeroTelefono = numeroTelefono;
+        this.specializzazioniAnimali = specializzazioniAnimali;
+        this.clinica = clinica;
+        this.recensioni = recensioni;
+        this.petsAssociati = petsAssociati;
+    }
+
     public Long getId() {
         return id;
     }
