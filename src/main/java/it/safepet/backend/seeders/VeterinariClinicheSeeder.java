@@ -40,6 +40,7 @@ public class VeterinariClinicheSeeder implements CommandLineRunner {
 
         if (clinicaRepository.count() == 0) {
             System.out.println("Popolamento di veterinari e cliniche");
+
             Clinica c1 = new Clinica("Zampa Felice", "Via Giovanni Paolo II, 150 - Fisciano", "0899911111",
                     40.7715, 14.7890);
             Veterinario v1 = new Veterinario("Simone", "Cimmino",
@@ -100,7 +101,77 @@ public class VeterinariClinicheSeeder implements CommandLineRunner {
             c6.setVeterinario(v6);
             aggiungiOrariStandard(c6);
 
-            Clinica c14 = new Clinica("DAmatoVet", "Via San Giovanni, 18 - Pellezzano", "0899914141",
+            Clinica c7 = new Clinica("Vet Nova", "Via Trento, 40 - Baronissi", "0899977777",
+                    40.7390, 14.7695);
+            Veterinario v7 = new Veterinario("Rosario", "Saggese",
+                    new GregorianCalendar(1983, Calendar.OCTOBER, 18).getTime(),
+                    "M", "rsaggese@gmail.com", passwordEncoder.encode("RSaggese.83"),
+                    "3377777777", "Cani, gatti, roditori");
+            v7.setClinica(c7);
+            c7.setVeterinario(v7);
+            aggiungiOrariStandard(c7);
+
+            Clinica c8 = new Clinica("Pet Fusion", "Via UniversitÃ, 20 - Fisciano", "0899988888", 40.7720, 14.7900);
+            Veterinario v8 = new Veterinario("Giuseppe", "Rossano",
+                    new GregorianCalendar(1979, Calendar.JANUARY, 7).getTime(),
+                    "M", "grossano@gmail.com", passwordEncoder.encode("GRossano.79"),
+                    "3388888888", "Animali da fattoria");
+            v8.setClinica(c8);
+            c8.setVeterinario(v8);
+            aggiungiOrariStandard(c8);
+
+            Clinica c9 = new Clinica("AnimAxis", "Via San Lorenzo, 8 - Mercato San Severino", "0899999999",
+                    40.7820, 14.7560);
+            Veterinario v9 = new Veterinario("Aldo", "Adinolfi",
+                    new GregorianCalendar(1984, Calendar.AUGUST, 25).getTime(),
+                    "M", "aadinolfi@gmail.com", passwordEncoder.encode("AAdinolfi.84"),
+                    "3399999999", "Cani, gatti, cavalli");
+            v9.setClinica(c9);
+            c9.setVeterinario(v9);
+            aggiungiOrariStandard(c9);
+
+            Clinica c10 = new Clinica("Vet Mind", "Via Roma, 200 - Baronissi", "0899922222",
+                    40.7378, 14.7678);
+            Veterinario v10 = new Veterinario("Gianmarco", "Amatruda",
+                    new GregorianCalendar(1993, Calendar.MARCH, 3).getTime(),
+                    "M", "gamatruda2@gmail.com", passwordEncoder.encode("GAmatruda.93"),
+                    "3322222222", "Cani, cavalli, animali esotici");
+            v10.setClinica(c10);
+            c10.setVeterinario(v10);
+            aggiungiOrariStandard(c10);
+
+
+            Clinica c11 = new Clinica("Vet Sphere", "Via San Michele, 14 - Fisciano", "0899911112",
+                    40.7705, 14.7885);
+            Veterinario v11 = new Veterinario("Matteo", "Emolo",
+                    new GregorianCalendar(1988, Calendar.JUNE, 11).getTime(),
+                    "M", "memolo@gmail.com", passwordEncoder.encode("MEmolo.88"),
+                    "3311111122", "Cani, gatti, uccelli");
+            v11.setClinica(c11);
+            c11.setVeterinario(v11);
+            aggiungiOrariStandard(c11);
+
+            Clinica c12 = new Clinica("Pinto Pet", "Via Aldo Moro, 22 - Baronissi", "0899912121",
+                    40.7380, 14.7690);
+            Veterinario v12 = new Veterinario("Francesco", "Pinto",
+                    new GregorianCalendar(1990, Calendar.MARCH, 15).getTime(),
+                    "M", "ppinto@gmail.com", passwordEncoder.encode("PPinto.90"),
+                    "3321212121", "Gatti, conigli");
+            v12.setClinica(c12);
+            c12.setVeterinario(v12);
+            aggiungiOrariStandard(c12);
+
+            Clinica c13 = new Clinica("TorinoPet", "Via Diaz, 30 - Mercato San Severino", "0899913131",
+                    40.7815, 14.7545);
+            Veterinario v13 = new Veterinario("Francesco", "Torino",
+                    new GregorianCalendar(1982, Calendar.JULY, 19).getTime(),
+                    "M", "ftorino@gmail.com", passwordEncoder.encode("FTorino.82"),
+                    "3331313131", "Cani, cavalli");
+            v13.setClinica(c13);
+            c13.setVeterinario(v13);
+            aggiungiOrariStandard(c13);
+
+            Clinica c14 = new Clinica("Pet Well", "Via San Giovanni, 18 - Pellezzano", "0899914141",
                     40.7295, 14.7510);
             Veterinario v14 = new Veterinario("Federica", "D'Amato",
                     new GregorianCalendar(1989, Calendar.SEPTEMBER, 9).getTime(),
@@ -110,7 +181,7 @@ public class VeterinariClinicheSeeder implements CommandLineRunner {
             c14.setVeterinario(v14);
             aggiungiOrariStandard(c14);
 
-            Clinica c15 = new Clinica("MarinoVet", "Via Roma, 55 - Baronissi", "0899915151",
+            Clinica c15 = new Clinica("Neo Vet", "Via Roma, 55 - Baronissi", "0899915151",
                     40.7392, 14.7685);
             Veterinario v15 = new Veterinario("Davide", "Marino",
                     new GregorianCalendar(1985, Calendar.DECEMBER, 21).getTime(),
@@ -120,7 +191,7 @@ public class VeterinariClinicheSeeder implements CommandLineRunner {
             c15.setVeterinario(v15);
             aggiungiOrariStandard(c15);
 
-            Clinica c16 = new Clinica("FerraraVet", "Via Università, 5 - Fisciano", "0899916161",
+            Clinica c16 = new Clinica("Vet Quantum", "Via Università, 5 - Fisciano", "0899916161",
                     40.7725, 14.7895);
             Veterinario v16 = new Veterinario("Alessia", "Ferrara",
                     new GregorianCalendar(1994, Calendar.APRIL, 27).getTime(),
@@ -130,7 +201,7 @@ public class VeterinariClinicheSeeder implements CommandLineRunner {
             c16.setVeterinario(v16);
             aggiungiOrariStandard(c16);
 
-            Clinica c17 = new Clinica("GrecoVet", "Via Trento, 12 - Mercato San Severino", "0899917171",
+            Clinica c17 = new Clinica("Vet Atlas", "Via Trento, 12 - Mercato San Severino", "0899917171",
                     40.7825, 14.7555);
             Veterinario v17 = new Veterinario("Stefano", "Greco",
                     new GregorianCalendar(1981, Calendar.JANUARY, 4).getTime(),
@@ -140,7 +211,7 @@ public class VeterinariClinicheSeeder implements CommandLineRunner {
             c17.setVeterinario(v17);
             aggiungiOrariStandard(c17);
 
-            Clinica c18 = new Clinica("VitaleVet", "Via San Lorenzo, 25 - Baronissi", "0899918181",
+            Clinica c18 = new Clinica("Pet Horizon", "Via San Lorenzo, 25 - Baronissi", "0899918181",
                     40.7370, 14.7675);
             Veterinario v18 = new Veterinario("Martina", "Vitale",
                     new GregorianCalendar(1992, Calendar.MAY, 6).getTime(),
@@ -150,7 +221,7 @@ public class VeterinariClinicheSeeder implements CommandLineRunner {
             c18.setVeterinario(v18);
             aggiungiOrariStandard(c18);
 
-            Clinica c19 = new Clinica("RuggieroVet", "Via Diaz, 60 - Pellezzano", "0899919191",
+            Clinica c19 = new Clinica("Vet Zen", "Via Diaz, 60 - Pellezzano", "0899919191",
                     40.7285, 14.7520);
             Veterinario v19 = new Veterinario("Paolo", "Ruggiero",
                     new GregorianCalendar(1986, Calendar.JUNE, 17).getTime(),
@@ -160,7 +231,7 @@ public class VeterinariClinicheSeeder implements CommandLineRunner {
             c19.setVeterinario(v19);
             aggiungiOrariStandard(c19);
 
-            Clinica c20 = new Clinica("ParisiVet", "Via San Vincenzo, 33 - Pellezzano", "0899921212",
+            Clinica c20 = new Clinica("Pet Logic", "Via San Vincenzo, 33 - Pellezzano", "0899921212",
                     40.7290, 14.7530);
             Veterinario v20 = new Veterinario("Lorenzo", "Parisi",
                     new GregorianCalendar(1987, Calendar.FEBRUARY, 14).getTime(),
@@ -176,7 +247,13 @@ public class VeterinariClinicheSeeder implements CommandLineRunner {
             clinicaRepository.save(c4);
             clinicaRepository.save(c5);
             clinicaRepository.save(c6);
-
+            clinicaRepository.save(c7);
+            clinicaRepository.save(c8);
+            clinicaRepository.save(c9);
+            clinicaRepository.save(c10);
+            clinicaRepository.save(c11);
+            clinicaRepository.save(c12);
+            clinicaRepository.save(c13);
             clinicaRepository.save(c14);
             clinicaRepository.save(c15);
             clinicaRepository.save(c16);
