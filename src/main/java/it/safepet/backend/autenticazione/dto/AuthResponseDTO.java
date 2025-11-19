@@ -1,15 +1,19 @@
 package it.safepet.backend.autenticazione.dto;
 
+import it.safepet.backend.autenticazione.jwt.Role;
+
 public class AuthResponseDTO {
     private String token;
     private String tokenType = "Bearer";
     private Long userId;
     private String email;
+    private Role role;
 
-    public AuthResponseDTO(String token, Long userId, String email) {
+    public AuthResponseDTO(String token, Long userId, String email, Role role) {
         this.token = token;
         this.userId = userId;
         this.email = email;
+        this.role = role;
     }
 
     public String getToken() {
@@ -43,4 +47,8 @@ public class AuthResponseDTO {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public Role getRole() { return role; }
+
+    public void setRole(Role role) { this.role = role; }
 }
