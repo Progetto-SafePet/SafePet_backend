@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @Validated
@@ -45,6 +46,9 @@ public class GestionePetServiceImpl implements GestionePetService {
                 .orElseThrow(() -> new RuntimeException("Proprietario non trovato"));
 
         //TODO: aggiungere controllo microchip univoco
+        if (petRepository.findByMicrochip(newPetDTO.getMicrochip()).isPresent()) {
+            throw new RuntimeException("Microchip già esistente");
+        }
 
         // 4. Creazione pet
         Pet pet = new Pet();
@@ -81,12 +85,42 @@ public class GestionePetServiceImpl implements GestionePetService {
         // 8. Response DTO
         return new PetResponseDTO(
                 savedPet.getId(),
-                savedPet.getRazza(),
                 savedPet.getNome(),
+                savedPet.getSpecie(),
+                savedPet.getDataNascita(),
+                savedPet.getPeso(),
+                savedPet.getColoreMantello(),
+                savedPet.getSterilizzato(),
+                savedPet.getRazza(),
                 savedPet.getMicrochip(),
                 savedPet.getSesso(),
                 savedPet.getFoto()
         );
     }
+
+    @Override
+    public List<PetResponseDTO> visualizzaMieiPet() {
+        // Recupera l’utente autenticato
+        AuthenticatedUser currentUser = AuthContext.getCurrentUser();
+        if (currentUser == null) {
+            throw new RuntimeException("Accesso non autorizzato: nessun utente autenticato");
+        }
+        //controllo ruolo
+        if (!"PROPRIETARIO".equals(currentUser.getRole())) {
+            throw new RuntimeException("Accesso negato: solo i proprietari possono visualizzare i propri animali");
+        }
+
+        return petRepository.findByProprietario_Id(currentUser.getId())
+                .stream()
+                .map(p -> new PetResponseDTO(
+                        p.getNome(),
+                        p.getSpecie(),
+                        p.getSesso(),
+                        p.getFoto(),
+                        p.getPeso()
+                ))
+                .toList();
+    }
+
 }
 
