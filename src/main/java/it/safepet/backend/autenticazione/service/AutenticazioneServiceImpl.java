@@ -40,7 +40,7 @@ public class AutenticazioneServiceImpl implements AutenticazioneService {
                 throw new UnauthorizedException("Credenziali non valide: password errata.");
             }
             String token = jwtUtil.generateToken(proprietario.getId(), proprietario.getEmail(), Role.PROPRIETARIO);
-            return new AuthResponseDTO(token, proprietario.getId(), proprietario.getEmail());
+            return new AuthResponseDTO(token, proprietario.getId(), proprietario.getEmail(), Role.PROPRIETARIO);
         }
 
         // Cerca tra i veterinari
@@ -51,7 +51,7 @@ public class AutenticazioneServiceImpl implements AutenticazioneService {
                 throw new UnauthorizedException("Credenziali non valide: password errata.");
             }
             String token = jwtUtil.generateToken(veterinario.getId(), veterinario.getEmail(), Role.VETERINARIO);
-            return new AuthResponseDTO(token, veterinario.getId(), veterinario.getEmail());
+            return new AuthResponseDTO(token, veterinario.getId(), veterinario.getEmail(), Role.VETERINARIO);
         }
 
         // Se non trovato in nessuno dei due
