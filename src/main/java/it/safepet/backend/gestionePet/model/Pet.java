@@ -18,8 +18,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -43,7 +43,7 @@ public class Pet {
     private String razza;
 
     @Column(name = "data_nascita", nullable = false)
-    private Date dataNascita;
+    private LocalDate dataNascita;
 
     @Column(name = "peso", nullable = false)
     private Double peso;
@@ -113,11 +113,11 @@ public class Pet {
         this.specie = specie;
     }
 
-    public Date getDataNascita() {
+    public LocalDate getDataNascita() {
         return dataNascita;
     }
 
-    public void setDataNascita(Date dataNascita) {
+    public void setDataNascita(LocalDate dataNascita) {
         this.dataNascita = dataNascita;
     }
 

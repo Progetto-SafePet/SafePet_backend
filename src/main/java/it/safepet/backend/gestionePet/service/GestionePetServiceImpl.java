@@ -8,6 +8,8 @@ import it.safepet.backend.gestionePet.dto.PetResponseDTO;
 import it.safepet.backend.gestionePet.model.Pet;
 import it.safepet.backend.gestionePet.repository.NoteProprietarioRepository;
 import it.safepet.backend.gestionePet.repository.PetRepository;
+import it.safepet.backend.gestioneUtente.model.Proprietario;
+import it.safepet.backend.gestioneUtente.repository.ProprietarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,25 +20,33 @@ import java.io.IOException;
 @Service
 @Validated
 public class GestionePetServiceImpl implements GestionePetService {
+
     @Autowired
     private PetRepository petRepository;
-    
+
+    @Autowired
+    private ProprietarioRepository proprietarioRepository;
+
     @Autowired
     private NoteProprietarioRepository noteProprietarioRepository;
 
     @Override
     public PetResponseDTO creaPet(@Valid NewPetDTO newPetDTO) throws IOException {
+
+        // 1. Verifica autenticazione
         AuthenticatedUser currentUser = AuthContext.getCurrentUser();
-        if (currentUser == null) {
+        if (currentUser == null || !Role.PROPRIETARIO.equals(currentUser.getRole())) {
             throw new RuntimeException("Accesso non autorizzato");
         }
 
-        if (!Role.PROPRIETARIO.equals(currentUser.getRole())){
-            throw new RuntimeException("Accesso non autorizzato");
-        }
+        // 2. Recupera il proprietario dal DB
+        Proprietario proprietario = proprietarioRepository
+                .findById(currentUser.getId())
+                .orElseThrow(() -> new RuntimeException("Proprietario non trovato"));
 
-        //TODO: controllare che il microchip non esiste già
+        //TODO: aggiungere controllo microchip univoco
 
+        // 4. Creazione pet
         Pet pet = new Pet();
         pet.setNome(newPetDTO.getNome());
         pet.setMicrochip(newPetDTO.getMicrochip());
@@ -45,21 +55,31 @@ public class GestionePetServiceImpl implements GestionePetService {
         pet.setDataNascita(newPetDTO.getDataNascita());
         pet.setSterilizzato(newPetDTO.getSterilizzato());
         pet.setSesso(newPetDTO.getSesso());
+        pet.setSpecie(newPetDTO.getSpecie());
+        pet.setColoreMantello(newPetDTO.getColoreMantello());
+        pet.setPeso(newPetDTO.getPeso());
 
-        // 5. Validazione e salvataggio foto
+        // 5. Associazione proprietario
+        pet.setProprietario(proprietario);
+
+        // 6. Validazione foto
         if (newPetDTO.getFoto() != null && !newPetDTO.getFoto().isEmpty()) {
             String contentType = newPetDTO.getFoto().getContentType();
+
             if (contentType == null ||
                     !(contentType.equalsIgnoreCase("image/jpeg") ||
                             contentType.equalsIgnoreCase("image/png"))) {
-                throw new RuntimeException("Formato immagine non valido: sono ammessi solo JPEG o PNG");
+                throw new RuntimeException("Formato immagine non valido: sono ammessi JPEG o PNG");
             }
+
             pet.setFoto(newPetDTO.getFoto().getBytes());
         }
 
+        // 7. Salvataggio
         Pet savedPet = petRepository.save(pet);
 
-        PetResponseDTO petResponseDTO = new PetResponseDTO(
+        // 8. Response DTO
+        return new PetResponseDTO(
                 savedPet.getId(),
                 savedPet.getRazza(),
                 savedPet.getNome(),
@@ -67,8 +87,6 @@ public class GestionePetServiceImpl implements GestionePetService {
                 savedPet.getSesso(),
                 savedPet.getFoto()
         );
-
-        return petResponseDTO;
     }
 }
 

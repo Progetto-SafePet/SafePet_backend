@@ -1,9 +1,10 @@
 package it.safepet.backend.gestionePet.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class NewPetDTO {
     @NotBlank
@@ -11,14 +12,17 @@ public class NewPetDTO {
     private String sesso;
     private String specie;
     private String razza;
-    private Date dataNascita;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dataNascita;
+    
     private Double peso;
     private String coloreMantello;
     private String microchip;
     private Boolean isSterilizzato;
     private MultipartFile foto;
 
-    public NewPetDTO(String nome, String sesso, String specie, String razza, Date dataNascita, Double peso, String coloreMantello, String microchip, Boolean isSterilizzato, MultipartFile foto) {
+    public NewPetDTO(String nome, String sesso, String specie, String razza, LocalDate dataNascita, Double peso, String coloreMantello, String microchip, Boolean isSterilizzato, MultipartFile foto) {
         this.nome = nome;
         this.sesso = sesso;
         this.specie = specie;
@@ -63,11 +67,11 @@ public class NewPetDTO {
         this.razza = razza;
     }
 
-    public Date getDataNascita() {
+    public LocalDate getDataNascita() {
         return dataNascita;
     }
 
-    public void setDataNascita(Date dataNascita) {
+    public void setDataNascita(LocalDate dataNascita) {
         this.dataNascita = dataNascita;
     }
 
