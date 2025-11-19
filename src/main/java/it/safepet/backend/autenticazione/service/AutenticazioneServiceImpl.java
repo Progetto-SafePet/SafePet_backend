@@ -5,8 +5,8 @@ import it.safepet.backend.autenticazione.dto.LoginRequestDTO;
 import it.safepet.backend.autenticazione.jwt.JwtUtil;
 import it.safepet.backend.autenticazione.jwt.Role;
 import it.safepet.backend.exception.UnauthorizedException;
-import it.safepet.backend.persistence.entity.User;
-import it.safepet.backend.persistence.repository.UserRepository;
+import it.safepet.backend.gestioneUtente.repository.ProprietarioRepository;
+import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +19,10 @@ import jakarta.persistence.EntityNotFoundException;
 @Validated
 public class AutenticazioneServiceImpl implements AutenticazioneService {
     @Autowired
-    private UserRepository userRepository;
+    private ProprietarioRepository proprietarioRepository;
+
+    @Autowired
+    private VeterinarioRepository veterinarioRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -29,19 +32,29 @@ public class AutenticazioneServiceImpl implements AutenticazioneService {
 
     @Override
     public AuthResponseDTO login(@Valid LoginRequestDTO loginRequestDTO) {
-        // Trova utente per email
-        User user = userRepository.findByEmail(loginRequestDTO.getEmail())
-                .orElseThrow(() -> new EntityNotFoundException("Utente non trovato con email: " + loginRequestDTO.getEmail()));
-
-        // Verifica password
-        if (!passwordEncoder.matches(loginRequestDTO.getPassword(), user.getPassword())) {
-            throw new UnauthorizedException("Credenziali non valide: password errata.");
+        // Cerca tra i proprietari
+        var proprietarioOpt = proprietarioRepository.findByEmail(loginRequestDTO.getEmail());
+        if (proprietarioOpt.isPresent()) {
+            var proprietario = proprietarioOpt.get();
+            if (!passwordEncoder.matches(loginRequestDTO.getPassword(), proprietario.getPassword())) {
+                throw new UnauthorizedException("Credenziali non valide: password errata.");
+            }
+            String token = jwtUtil.generateToken(proprietario.getId(), proprietario.getEmail(), Role.PROPRIETARIO);
+            return new AuthResponseDTO(token, proprietario.getId(), proprietario.getEmail());
         }
 
-        // Genera token JWT
-        String token = jwtUtil.generateToken(user.getId(), user.getEmail(), Role.PROPRIETARIO);
+        // Cerca tra i veterinari
+        var veterinarioOpt = veterinarioRepository.findByEmail(loginRequestDTO.getEmail());
+        if (veterinarioOpt.isPresent()) {
+            var veterinario = veterinarioOpt.get();
+            if (!passwordEncoder.matches(loginRequestDTO.getPassword(), veterinario.getPassword())) {
+                throw new UnauthorizedException("Credenziali non valide: password errata.");
+            }
+            String token = jwtUtil.generateToken(veterinario.getId(), veterinario.getEmail(), Role.VETERINARIO);
+            return new AuthResponseDTO(token, veterinario.getId(), veterinario.getEmail());
+        }
 
-        // Restituisce risposta
-        return new AuthResponseDTO(token, user.getId(), user.getEmail());
+        // Se non trovato in nessuno dei due
+        throw new EntityNotFoundException("Utente non trovato con email: " + loginRequestDTO.getEmail());
     }
 }
