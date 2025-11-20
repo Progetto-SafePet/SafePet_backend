@@ -1,8 +1,8 @@
 package it.safepet.backend.seeders;
 
-import it.safepet.backend.reportVeterinariECliniche.model.Clinica;
-import it.safepet.backend.reportVeterinariECliniche.model.OrarioDiApertura;
-import it.safepet.backend.reportVeterinariECliniche.repository.ClinicaRepository;
+import it.safepet.backend.reportCliniche.model.Clinica;
+import it.safepet.backend.reportCliniche.model.OrarioDiApertura;
+import it.safepet.backend.reportCliniche.repository.ClinicaRepository;
 import it.safepet.backend.gestioneUtente.model.Veterinario;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
