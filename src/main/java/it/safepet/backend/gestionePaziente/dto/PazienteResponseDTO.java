@@ -6,18 +6,16 @@ import java.util.Date;
 public class PazienteResponseDTO {
     private String nome;
     private String specie;
-    private int eta;
+    private Date dataNascita;
     private String proprietario;
-    private Date ultimaVisita;
     private String sesso;
     private String fotoBase64;
 
-    public PazienteResponseDTO(String specie, String nome, int eta, String proprietario, Date ultimaVisita, String sesso, byte[] foto) {
+    public PazienteResponseDTO(String specie, String nome, Date dataNascita, String proprietario, String sesso, byte[] foto) {
         this.specie = specie;
         this.nome = nome;
-        this.eta = eta;
+        this.dataNascita = dataNascita;
         this.proprietario = proprietario;
-        this.ultimaVisita = ultimaVisita;
         this.sesso = sesso;
 
         if (foto != null && foto.length > 0) {
@@ -41,12 +39,12 @@ public class PazienteResponseDTO {
         this.specie = specie;
     }
 
-    public int getEta() {
-        return eta;
+    public Date getDataNascita(){
+        return dataNascita;
     }
 
-    public void setEta(int eta) {
-        this.eta = eta;
+    public void setDataNascita(Date dataNascita) {
+        this.dataNascita = dataNascita;
     }
 
     public String getProprietario() {
@@ -55,14 +53,6 @@ public class PazienteResponseDTO {
 
     public void setProprietario(String proprietario) {
         this.proprietario = proprietario;
-    }
-
-    public Date getUltimaVisita() {
-        return ultimaVisita;
-    }
-
-    public void setUltimaVisita(Date ultimaVisita) {
-        this.ultimaVisita = ultimaVisita;
     }
 
     public String getSesso() {

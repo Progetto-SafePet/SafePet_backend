@@ -1,16 +1,23 @@
 package it.safepet.backend.gestionePaziente.service;
 
+import it.safepet.backend.autenticazione.jwt.AuthContext;
+import it.safepet.backend.autenticazione.jwt.AuthenticatedUser;
+import it.safepet.backend.gestioneCartellaClinica.model.RecordMedico;
+import it.safepet.backend.gestioneCartellaClinica.model.VisitaMedica;
 import it.safepet.backend.gestionePaziente.dto.PazienteResponseDTO;
 import it.safepet.backend.gestionePaziente.repository.LinkingCodeRepository;
-import it.safepet.backend.gestionePet.dto.PetResponseDTO;
 import it.safepet.backend.gestionePet.model.Pet;
 import it.safepet.backend.gestionePet.repository.PetRepository;
+import it.safepet.backend.gestioneUtente.model.Veterinario;
+import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Validated
@@ -21,51 +28,56 @@ public class GestionePazienteServiceImpl implements GestionePazienteService {
     @Autowired
     private LinkingCodeRepository linkingCodeRepository;
 
+    private final VeterinarioRepository veterinarioRepository;
+
+    public GestionePazienteServiceImpl(VeterinarioRepository veterinarioRepository) {
+        this.veterinarioRepository = veterinarioRepository;
+    }
+
     @Override
-    public int getEta(Pet pet) {
-        if (pet.getDataNascita() == null) {
-            return 0;
+    @Transactional
+    public List<PazienteResponseDTO> visualizzaListaPazienti() {
+
+        // Recupera l'utente loggato dal AuthContext
+        AuthenticatedUser currentUser = AuthContext.getCurrentUser();
+
+        if (currentUser == null) {
+            throw new RuntimeException("Utente non autenticato");
         }
 
-        // Convertiamo la Date in Calendar
-        Calendar nascita = Calendar.getInstance();
-        nascita.setTime(pet.getDataNascita());
+        // Estrai ID del veterinario dal contesto
+        Long idVeterinario = currentUser.getId();
 
-        Calendar oggi = Calendar.getInstance();
+        // Recupero l'entità Veterinario dal DB
+        Veterinario vet = veterinarioRepository.findById(idVeterinario)
+                .orElseThrow(() -> new RuntimeException("Veterinario non trovato"));
 
-        int eta = oggi.get(Calendar.YEAR) - nascita.get(Calendar.YEAR);
+        // Recupero i suoi pet associati
+        List<Pet> pets = vet.getPetsAssociati();
 
-        // Controlla se il compleanno non è ancora passato
-        if (oggi.get(Calendar.MONTH) < nascita.get(Calendar.MONTH) ||
-                (oggi.get(Calendar.MONTH) == nascita.get(Calendar.MONTH) &&
-                        oggi.get(Calendar.DAY_OF_MONTH) < nascita.get(Calendar.DAY_OF_MONTH))) {
-            eta--;
-        }
-
-        return eta;
+        // Conversione in DTO
+        return pets.stream()
+                .map(this::convertPetToDTO)
+                .collect(Collectors.toList());
     }
 
 
 
-    @Override
-    public List<PetResponseDTO> getAllPets() {
-        /**
-         * Recupera tutti i PET presenti nel database tramite PetRepository.
-         * Ogni entità Pet viene convertita in un DTO PetResponseDTO,
-         * che contiene solo i dati necessari alla visualizzazione.
-         * @return lista di PetResponseDTO con le informazioni dei PET
-         */
 
-        return Repository.findAll().stream().map(pet ->
-                new PazienteResponseDTO(
-                        pet.getNome(),
-                        pet.getSpecie(),
-                        getEta(pet),
-                        pet.getProprietario().getNome(),
+    private PazienteResponseDTO convertPetToDTO(Pet pet) {
 
-                        pet.getSesso(),
-                        pet.getFoto()
-                )
-        ).toList();
+        String proprietario = pet.getProprietario() != null
+                ? pet.getProprietario().getNome() + " " + pet.getProprietario().getCognome()
+                : "Sconosciuto";
+
+
+        return new PazienteResponseDTO(
+                pet.getSpecie(),
+                pet.getNome(),
+                pet.getDataNascita(),
+                proprietario,
+                pet.getSesso(),
+                pet.getFoto()
+        );
     }
 }
