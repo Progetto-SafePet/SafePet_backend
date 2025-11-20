@@ -24,6 +24,7 @@ public class NewPetDTO {
     @Size(min=3, max=30, message="La razza deve contenere dai 3 caratteri ai 30 caratteri")
     private String razza;
 
+    @NotNull(message = "La data di nascita del pet è obbligatoria")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dataNascita;
 
