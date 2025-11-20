@@ -30,5 +30,6 @@ public class GestionePetController {
         List<PetResponseDTO> pets = gestionePetService.visualizzaMieiPet();
         return ResponseEntity.ok(pets);
     }
+
     
 }
