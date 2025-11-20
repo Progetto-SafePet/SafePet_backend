@@ -39,7 +39,7 @@ public class PazienteResponseDTO {
         this.specie = specie;
     }
 
-    public Date getDataNascita(){
+    public Date getDataNascita() {
         return dataNascita;
     }
 
