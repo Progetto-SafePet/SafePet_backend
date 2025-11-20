@@ -1,4 +1,4 @@
-package it.safepet.backend.ReportVeterinariECliniche.model;
+package it.safepet.backend.reportVeterinariECliniche.model;
 
 import it.safepet.backend.gestioneUtente.model.Veterinario;
 import jakarta.persistence.CascadeType;

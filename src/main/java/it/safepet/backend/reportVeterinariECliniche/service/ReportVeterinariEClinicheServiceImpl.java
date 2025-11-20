@@ -1,7 +1,7 @@
-package it.safepet.backend.ReportVeterinariECliniche.service;
+package it.safepet.backend.reportVeterinariECliniche.service;
 
-import it.safepet.backend.ReportVeterinariECliniche.repository.ClinicaRepository;
-import it.safepet.backend.ReportVeterinariECliniche.repository.OrarioDiAperturaRepository;
+import it.safepet.backend.reportVeterinariECliniche.repository.ClinicaRepository;
+import it.safepet.backend.reportVeterinariECliniche.repository.OrarioDiAperturaRepository;
 import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
