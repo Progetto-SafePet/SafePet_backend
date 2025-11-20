@@ -16,6 +16,18 @@ public class ReportClinicheController {
     @Autowired
     private ReportClinicheService reportClinicheService;
 
+    /**
+     * Gestisce la richiesta HTTP GET per ottenere l'elenco dei veterinari.
+     * <p>
+     * Il metodo delega al servizio {@code reportClinicheService} la logica di recupero
+     * dei dati e restituisce una lista di {@link ElencoResponseDTO} incapsulata in una
+     * {@link ResponseEntity} con stato HTTP 200 (OK).
+     * </p>
+     *
+     * Endpoint: {@code /elencoVeterinari}
+     *
+     * @return {@link ResponseEntity} contenente la lista di {@link ElencoResponseDTO}
+     */
 
     @GetMapping("/elencoVeterinari")
     public ResponseEntity<List<ElencoResponseDTO>> getElencoVeterinari() {

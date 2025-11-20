@@ -8,9 +8,10 @@ public class ElencoResponseDTO {
     private String nomeClinica;
     private String indirizzoClinica;
     private String telefonoClinica;
+    private Double mediaRecensioni;
 
     public ElencoResponseDTO(Long idVeterinario, String nomeVeterinario, String cognomeVeterinario, Long idClinica,
-                             String nomeClinica, String indirizzoClinica, String telefonoClinica) {
+                             String nomeClinica, String indirizzoClinica, String telefonoClinica, Double mediaRecensioni) {
         this.idVeterinario = idVeterinario;
         this.nomeVeterinario = nomeVeterinario;
         this.cognomeVeterinario = cognomeVeterinario;
@@ -18,6 +19,7 @@ public class ElencoResponseDTO {
         this.nomeClinica = nomeClinica;
         this.indirizzoClinica = indirizzoClinica;
         this.telefonoClinica = telefonoClinica;
+        this.mediaRecensioni = mediaRecensioni;
     }
 
     public Long getIdVeterinario() {
@@ -74,5 +76,13 @@ public class ElencoResponseDTO {
 
     public void setTelefonoClinica(String telefonoClinica) {
         this.telefonoClinica = telefonoClinica;
+    }
+
+    public Double getMediaRecensioni() {
+        return mediaRecensioni;
+    }
+
+    public void setMediaRecensioni(Double mediaRecensioni) {
+        this.mediaRecensioni = mediaRecensioni;
     }
 }
