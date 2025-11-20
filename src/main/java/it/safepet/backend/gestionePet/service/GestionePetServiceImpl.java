@@ -34,27 +34,30 @@ public class GestionePetServiceImpl implements GestionePetService {
     @Override
     public PetResponseDTO creaPet(@Valid NewPetDTO newPetDTO) throws IOException {
 
-        // 1. Verifica autenticazione
+        // Verifica autenticazione
         AuthenticatedUser currentUser = AuthContext.getCurrentUser();
         if (currentUser == null || !Role.PROPRIETARIO.equals(currentUser.getRole())) {
             throw new RuntimeException("Accesso non autorizzato");
         }
 
-        // 2. Recupera il proprietario dal DB
+        // Recupera il proprietario dal DB
         Proprietario proprietario = proprietarioRepository
                 .findById(currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Proprietario non trovato"));
 
         //TODO: aggiungere controllo microchip univoco
-        if (petRepository.findByMicrochip(newPetDTO.getMicrochip()).isPresent()) {
-            throw new RuntimeException("Microchip già esistente");
+        if (newPetDTO.getMicrochip() != null) {
+            if (petRepository.findByMicrochip(newPetDTO.getMicrochip()).isPresent()) {
+                throw new RuntimeException("Microchip già esistente");
+            }
         }
 
-        // 4. Creazione pet
+
+
+        // Creazione pet
         Pet pet = new Pet();
         pet.setNome(newPetDTO.getNome());
         pet.setMicrochip(newPetDTO.getMicrochip());
-        pet.setColoreMantello(newPetDTO.getColoreMantello());
         pet.setRazza(newPetDTO.getRazza());
         pet.setDataNascita(newPetDTO.getDataNascita());
         pet.setSterilizzato(newPetDTO.getSterilizzato());
@@ -63,10 +66,10 @@ public class GestionePetServiceImpl implements GestionePetService {
         pet.setColoreMantello(newPetDTO.getColoreMantello());
         pet.setPeso(newPetDTO.getPeso());
 
-        // 5. Associazione proprietario
+        // Associazione proprietario
         pet.setProprietario(proprietario);
 
-        // 6. Validazione foto
+        // Validazione foto
         if (newPetDTO.getFoto() != null && !newPetDTO.getFoto().isEmpty()) {
             String contentType = newPetDTO.getFoto().getContentType();
 
@@ -79,10 +82,10 @@ public class GestionePetServiceImpl implements GestionePetService {
             pet.setFoto(newPetDTO.getFoto().getBytes());
         }
 
-        // 7. Salvataggio
+        // Salvataggio
         Pet savedPet = petRepository.save(pet);
 
-        // 8. Response DTO
+        // Response DTO
         return new PetResponseDTO(
                 savedPet.getId(),
                 savedPet.getNome(),
@@ -106,7 +109,7 @@ public class GestionePetServiceImpl implements GestionePetService {
             throw new RuntimeException("Accesso non autorizzato: nessun utente autenticato");
         }
         //controllo ruolo
-        if (!"PROPRIETARIO".equals(currentUser.getRole())) {
+        if (!"PROPRIETARIO".equals(currentUser.getRole().name())) {
             throw new RuntimeException("Accesso negato: solo i proprietari possono visualizzare i propri animali");
         }
 
