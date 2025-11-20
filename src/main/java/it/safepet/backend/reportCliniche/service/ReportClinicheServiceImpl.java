@@ -1,7 +1,7 @@
-package it.safepet.backend.ReportVeterinariECliniche.service;
+package it.safepet.backend.reportCliniche.service;
 
-import it.safepet.backend.ReportVeterinariECliniche.repository.ClinicaRepository;
-import it.safepet.backend.ReportVeterinariECliniche.repository.OrarioDiAperturaRepository;
+import it.safepet.backend.reportCliniche.repository.ClinicaRepository;
+import it.safepet.backend.reportCliniche.repository.OrarioDiAperturaRepository;
 import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +9,7 @@ import org.springframework.validation.annotation.Validated;
 
 @Service
 @Validated
-public class ReportVeterinariEClinicheServiceImpl implements ReportVeterinariEClinicheService {
+public class ReportClinicheServiceImpl implements ReportClinicheService {
     @Autowired
     private VeterinarioRepository veterinarioRepository;
 
