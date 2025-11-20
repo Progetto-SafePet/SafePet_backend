@@ -2,9 +2,11 @@ package it.safepet.backend.autenticazione.service;
 
 import it.safepet.backend.autenticazione.dto.AuthResponseDTO;
 import it.safepet.backend.autenticazione.dto.LoginRequestDTO;
+import it.safepet.backend.autenticazione.dto.RegistrazioneProprietarioRequestDTO;
 import it.safepet.backend.autenticazione.jwt.JwtUtil;
 import it.safepet.backend.autenticazione.jwt.Role;
 import it.safepet.backend.exception.UnauthorizedException;
+import it.safepet.backend.gestioneUtente.model.Proprietario;
 import it.safepet.backend.gestioneUtente.repository.ProprietarioRepository;
 import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
 import jakarta.validation.Valid;
@@ -56,5 +58,32 @@ public class AutenticazioneServiceImpl implements AutenticazioneService {
 
         // Se non trovato in nessuno dei due
         throw new EntityNotFoundException("Utente non trovato con email: " + loginRequestDTO.getEmail());
+    }
+
+    @Override
+    public void registraProprietario(RegistrazioneProprietarioRequestDTO registrazioneDTO) {
+        // Verifica che la password e confermaPassword coincidano
+        if (!registrazioneDTO.getPassword().equals(registrazioneDTO.getConfermaPassword())) {
+            throw new IllegalArgumentException("La password e la conferma password non coincidono");
+        }
+
+        // Verifica unicità email
+        if (proprietarioRepository.findByEmail(registrazioneDTO.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email già registrata nel sistema");
+        }
+
+        // Creazione proprietario
+        Proprietario proprietario = new Proprietario();
+        proprietario.setNome(registrazioneDTO.getNome().trim());
+        proprietario.setCognome(registrazioneDTO.getCognome().trim());
+        proprietario.setEmail(registrazioneDTO.getEmail().trim());
+        proprietario.setPassword(passwordEncoder.encode(registrazioneDTO.getPassword()));
+        proprietario.setNumeroTelefono(registrazioneDTO.getNumeroTelefono());
+        proprietario.setDataNascita(registrazioneDTO.getDataNascita());
+        proprietario.setIndirizzoDomicilio(registrazioneDTO.getIndirizzoDomicilio().trim());
+        proprietario.setGenere(registrazioneDTO.getGenere().toUpperCase());
+
+        // Salvataggio nel database
+        proprietarioRepository.save(proprietario);
     }
 }
