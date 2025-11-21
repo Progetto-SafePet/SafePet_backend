@@ -46,20 +46,19 @@ public class GestionePetController {
      * <pre>
      * [
      *   {
-     *     "id": 5,
+     *
      *     "nome": "Luna",
-     *     "razza": "Labrador",
-     *     "microchip": "123456789012345",
+     *     "specie": "Cane"
      *     "sesso": "F",
      *     "fotoBase64": "/9j/4AAQSkZJRgABAQAAAQABAAD..."
+     *     "dataNascita": "2004-09-09"
      *   },
      *   {
-     *     "id": 6,
-     *     "nome": "Rocky",
-     *     "razza": "Bulldog",
-     *     "microchip": "111222333444555",
+     *     "nome": "Luigi",
+     *     "specie": "Gatto"
      *     "sesso": "M",
-     *     "fotoBase64": "/9j/4AAQSkZJRgABAQEASABIAAD..."
+     *     "fotoBase64": "/9j/4AAQSkZJRgABAQAAAQABAAD..."
+     *     "dataNascita": "2004-09-07"
      *   }
      * ]
      * </pre>
