@@ -28,7 +28,7 @@ public class NewPetDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dataNascita;
 
-    @DecimalMin("0.0")
+    @DecimalMin("0.1")
     @DecimalMax("100.0")
     private Double peso;
 
