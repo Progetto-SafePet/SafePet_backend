@@ -120,7 +120,7 @@ public class GestionePetServiceImpl implements GestionePetService {
                         p.getSpecie(),
                         p.getSesso(),
                         p.getFoto(),
-                        p.getPeso()
+                        p.getDataNascita()
                 ))
                 .toList();
     }
