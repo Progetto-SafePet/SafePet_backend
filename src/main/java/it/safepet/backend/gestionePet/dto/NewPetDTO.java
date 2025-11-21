@@ -35,7 +35,8 @@ public class NewPetDTO {
     @Size(min=3, max=15, message="Il colore del mantello deve contenere dai 3 caratteri ai 15 caratteri")
     private String coloreMantello;
 
-    @Size(min = 15, max = 15, message = "Il microchip deve contenere 15 caratteri")
+    @Size(min = 15, max = 15, message = "Il microchip deve contenere 15 cifre numeriche")
+    @Pattern(regexp = "\\d{15}", message = "Il microchip deve contenere solo cifre numeriche")
     private String microchip;
 
     private Boolean isSterilizzato;
