@@ -28,14 +28,15 @@ public class NewPetDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dataNascita;
 
-    @DecimalMin("0.0")
+    @DecimalMin("0.1")
     @DecimalMax("100.0")
     private Double peso;
 
     @Size(min=3, max=15, message="Il colore del mantello deve contenere dai 3 caratteri ai 15 caratteri")
     private String coloreMantello;
 
-    @Size(min = 15, max = 15, message = "Il microchip deve contenere 15 caratteri")
+    @Size(min = 15, max = 15, message = "Il microchip deve contenere 15 cifre numeriche")
+    @Pattern(regexp = "\\d{15}", message = "Il microchip deve contenere solo cifre numeriche")
     private String microchip;
 
     private Boolean isSterilizzato;
