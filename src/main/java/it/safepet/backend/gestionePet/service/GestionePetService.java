@@ -38,6 +38,13 @@ public interface GestionePetService {
     public PetResponseDTO creaPet(@Valid NewPetDTO newPetDTO) throws IOException;
 
 
-
+    /**
+     * Restituisce la lista degli animali associati all’utente autenticato.
+     *
+     * <p>Ogni elemento della lista contiene le informazioni principali del pet,
+     * incluse eventuali immagini convertite in Base64.</p>
+     *
+     * @return una lista di {@link VisualizzaPetResponseDTO} appartenenti all’utente autenticato
+     */
     public List<VisualizzaPetResponseDTO> visualizzaMieiPet();
 }
