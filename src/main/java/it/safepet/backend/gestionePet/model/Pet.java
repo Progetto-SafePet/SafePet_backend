@@ -6,8 +6,8 @@ import it.safepet.backend.gestionePaziente.model.LinkingCode;
 import it.safepet.backend.gestioneCartellaClinica.model.RecordMedico;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,22 +28,22 @@ public class Pet {
     @Column(name = "specie", nullable = false)
     private String specie;
 
-    @Column(name = "razza", nullable = false)
+    @Column(name = "razza")
     private String razza;
 
     @Column(name = "data_nascita", nullable = false)
-    private Date dataNascita;
+    private LocalDate dataNascita;
 
-    @Column(name = "peso", nullable = false)
+    @Column(name = "peso")
     private Double peso;
 
-    @Column(name = "colore_mantello", nullable = false)
+    @Column(name = "colore_mantello")
     private String coloreMantello;
 
-    @Column(name = "microchip", nullable = false, unique = true)
+    @Column(name = "microchip", unique = true)
     private String microchip;
 
-    @Column(name = "sterilizzato", nullable = false)
+    @Column(name = "sterilizzato")
     private Boolean isSterilizzato;
 
     @Lob
@@ -102,11 +102,11 @@ public class Pet {
         this.specie = specie;
     }
 
-    public Date getDataNascita() {
+    public LocalDate getDataNascita() {
         return dataNascita;
     }
 
-    public void setDataNascita(Date dataNascita) {
+    public void setDataNascita(LocalDate dataNascita) {
         this.dataNascita = dataNascita;
     }
 
