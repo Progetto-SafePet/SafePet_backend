@@ -1,17 +1,18 @@
 package it.safepet.backend.gestionePaziente.dto;
 
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Date;
 
 public class PazienteResponseDTO {
     private String nome;
     private String specie;
-    private Date dataNascita;
+    private LocalDate dataNascita;
     private String proprietario;
     private String sesso;
     private String fotoBase64;
 
-    public PazienteResponseDTO(String specie, String nome, Date dataNascita, String proprietario, String sesso, byte[] foto) {
+    public PazienteResponseDTO(String specie, String nome, LocalDate dataNascita, String proprietario, String sesso, byte[] foto) {
         this.specie = specie;
         this.nome = nome;
         this.dataNascita = dataNascita;
@@ -39,11 +40,11 @@ public class PazienteResponseDTO {
         this.specie = specie;
     }
 
-    public Date getDataNascita() {
+    public LocalDate getDataNascita() {
         return dataNascita;
     }
 
-    public void setDataNascita(Date dataNascita) {
+    public void setDataNascita(LocalDate dataNascita) {
         this.dataNascita = dataNascita;
     }
 
