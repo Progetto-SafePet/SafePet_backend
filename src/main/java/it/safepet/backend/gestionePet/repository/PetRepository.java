@@ -5,6 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
 public interface PetRepository extends JpaRepository<Pet, Long> {
     /**
      * Verifica se un determinato {@code Pet} risulta associato ad uno specifico
@@ -27,4 +31,6 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
         AND v.id = :veterinarioId
     """)
     boolean verificaAssociazionePetVeterinario(@Param("petId") Long petId, @Param("veterinarioId") Long veterinarioId);
+    Optional<Pet> findByMicrochip(String microchip);
+    List<Pet> findByProprietario_Id(Long ownerId);
 }
