@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -60,7 +61,7 @@ public class ProprietariPetsSeeder implements CommandLineRunner {
             pet1.setSesso("M");
             pet1.setSpecie("Cane");
             pet1.setRazza("Golden Retriever");
-            pet1.setDataNascita(new GregorianCalendar(2020, Calendar.APRIL, 5).getTime());
+            pet1.setDataNascita(LocalDate.of(2020, 4, 5));
             pet1.setPeso(28.5);
             pet1.setColoreMantello("Marrone chiaro");
             pet1.setMicrochip("985112003457890");
