@@ -1,4 +1,4 @@
-package it.safepet.backend.autenticazione.dto;
+package it.safepet.backend.gestioneUtente.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

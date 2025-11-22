@@ -2,11 +2,8 @@ package it.safepet.backend.autenticazione.controller;
 
 import it.safepet.backend.autenticazione.dto.AuthResponseDTO;
 import it.safepet.backend.autenticazione.dto.LoginRequestDTO;
-import it.safepet.backend.autenticazione.dto.RegistrazioneProprietarioRequestDTO;
 import it.safepet.backend.autenticazione.service.AutenticazioneService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +20,7 @@ public class AutenticazioneController {
      * Autentica un utente esistente e restituisce un token JWT valido.
      *
      * <p><b>Metodo:</b> POST<br>
-     * <b>Endpoint:</b> /it.safepet.backend.gestioneUtente/login<br>
+     * <b>Endpoint:</b> /auth/login<br>
      * <b>Content-Type:</b> application/json</p>
      *
      * <p><b>Corpo richiesta (JSON):</b></p>
@@ -43,9 +40,8 @@ public class AutenticazioneController {
      * }
      * </pre>
      *
-     *
-     * @param loginRequestDTO credenziali dell’utente (email e password)
-     * @return {@link AuthResponseDTO} contenente il token JWT e i dati dell’utente autenticato
+     * @param loginRequestDTO credenziali dell'utente (email e password)
+     * @return {@link AuthResponseDTO} contenente il token JWT e i dati dell'utente autenticato
      * @see AuthResponseDTO
      */
     @PostMapping("/login")
@@ -53,18 +49,4 @@ public class AutenticazioneController {
         AuthResponseDTO responseDTO = autenticazioneService.login(loginRequestDTO);
         return ResponseEntity.ok(responseDTO);
     }
-
-    /**
-     * Registra un nuovo proprietario nel sistema.
-     * 
-     * @param RegistrazioneProprietarioRequestDTO dati di registrazione del proprietario
-     * @return ResponseEntity con messaggio di conferma
-     */
-    @PostMapping("/registraUtente")
-    public ResponseEntity<Void> registrazioneProprietario(
-            @Valid @RequestBody RegistrazioneProprietarioRequestDTO registrazioneDTO) {
-        autenticazioneService.registraProprietario(registrazioneDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
 }
