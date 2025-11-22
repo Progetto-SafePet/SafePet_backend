@@ -13,8 +13,14 @@ public class FilterConfig {
     public FilterRegistrationBean<JwtAuthFilter> jwtAuthFilter(JwtUtil jwtUtil) {
         FilterRegistrationBean<JwtAuthFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new JwtAuthFilter(jwtUtil));
-        registrationBean.addUrlPatterns(
-                "/gestionePet/*"); //Aggiungere gli endpoint REST se necessario
+        registrationBean.addUrlPatterns("/gestioneAmministrativa/*");
+        registrationBean.addUrlPatterns("/gestioneCartellaClinica/*");
+        registrationBean.addUrlPatterns("/gestioneCondivisioneDati/*");
+        registrationBean.addUrlPatterns("/gestioneListaPreferiti/*");
+        registrationBean.addUrlPatterns("/gestionePaziente/*");
+        registrationBean.addUrlPatterns("/gestionePet/*");
+        registrationBean.addUrlPatterns("/gestioneRecensioni/*");
+        registrationBean.addUrlPatterns("/gestioneUtente/*");
         registrationBean.setOrder(1);
         return registrationBean;
     }
