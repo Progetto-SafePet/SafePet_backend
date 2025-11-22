@@ -96,7 +96,7 @@ public class GestionePetController {
      * Restituisce la lista dei pet associati all’utente autenticato.
      *
      * <p><b>Metodo:</b> GET<br>
-     * <b>Endpoint:</b> /gestionePet/visualizzaPet</p>
+     * <b>Endpoint:</b> /gestionePet/visualizzaElencoPet</p>
      *
      * <p><b>Parametri richiesti:</b></p>
      * <ul>
@@ -107,7 +107,7 @@ public class GestionePetController {
      *
      * <p><b>Esempio richiesta:</b></p>
      * <pre>
-     * GET /gestionePet/visualizzaPet
+     * GET /gestionePet/visualizzaElencoPet
      * Authorization: Bearer eyJhbGciOi...
      * </pre>
      *
