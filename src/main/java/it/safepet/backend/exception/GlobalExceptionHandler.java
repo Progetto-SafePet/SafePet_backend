@@ -66,7 +66,8 @@ public class GlobalExceptionHandler {
      * 404 Not Found – risorsa non trovata
      */
     @ExceptionHandler({
-            EntityNotFoundException.class
+            EntityNotFoundException.class,
+            NotFoundException.class,
     })
     public ProblemDetail handleNotFound(Exception ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
