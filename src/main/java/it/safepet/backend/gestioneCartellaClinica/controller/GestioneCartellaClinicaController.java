@@ -2,7 +2,6 @@ package it.safepet.backend.gestioneCartellaClinica.controller;
 
 import it.safepet.backend.gestioneCartellaClinica.dto.VisitaMedicaRequestDTO;
 import it.safepet.backend.gestioneCartellaClinica.dto.VisitaMedicaResponseDTO;
-import it.safepet.backend.gestioneCartellaClinica.repository.VisitaMedicaRepository;
 import it.safepet.backend.gestioneCartellaClinica.service.visitaMedica.GestioneVisitaMedicaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -21,9 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class GestioneCartellaClinicaController {
     @Autowired
     private GestioneVisitaMedicaService gestioneVisitaMedicaService;
-
-    @Autowired
-    private VisitaMedicaRepository visitaMedicaRepository;
 
     /**
      * Crea e registra una nuova visita medica per un pet, verificando che l'utente
