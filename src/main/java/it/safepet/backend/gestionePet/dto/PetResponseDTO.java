@@ -33,16 +33,6 @@ public class PetResponseDTO {
         }
     }
 
-    public PetResponseDTO(String nome, String specie, String sesso, byte[] foto, Double peso) {
-        this.nome = nome;
-        this.specie = specie;
-        this.sesso = sesso;
-        if (foto != null && foto.length > 0) {
-            this.fotoBase64 = Base64.getEncoder().encodeToString(foto);
-        }
-        this.peso = peso;
-    }
-
     // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

@@ -20,7 +20,7 @@ public class AutenticazioneController {
      * Autentica un utente esistente e restituisce un token JWT valido.
      *
      * <p><b>Metodo:</b> POST<br>
-     * <b>Endpoint:</b> /it.safepet.backend.gestioneUtente/login<br>
+     * <b>Endpoint:</b> /auth/login<br>
      * <b>Content-Type:</b> application/json</p>
      *
      * <p><b>Corpo richiesta (JSON):</b></p>
@@ -40,9 +40,8 @@ public class AutenticazioneController {
      * }
      * </pre>
      *
-     *
-     * @param loginRequestDTO credenziali dell’utente (email e password)
-     * @return {@link AuthResponseDTO} contenente il token JWT e i dati dell’utente autenticato
+     * @param loginRequestDTO credenziali dell'utente (email e password)
+     * @return {@link AuthResponseDTO} contenente il token JWT e i dati dell'utente autenticato
      * @see AuthResponseDTO
      */
     @PostMapping("/login")
@@ -50,5 +49,4 @@ public class AutenticazioneController {
         AuthResponseDTO responseDTO = autenticazioneService.login(loginRequestDTO);
         return ResponseEntity.ok(responseDTO);
     }
-
 }

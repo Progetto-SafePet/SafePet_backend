@@ -19,7 +19,7 @@ public class VisitaMedica extends RecordMedico {
     private Date data;
 
     @Lob
-    @Column(name = "referto")
+    @Column(name = "referto", length = 5242880)
     private byte[] referto;
 
     public VisitaMedica() {

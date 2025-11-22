@@ -6,6 +6,7 @@ import it.safepet.backend.gestioneCartellaClinica.repository.TerapiaRepository;
 import it.safepet.backend.gestioneCartellaClinica.repository.VaccinazioneRepository;
 import it.safepet.backend.gestioneCartellaClinica.repository.VisitaMedicaRepository;
 import it.safepet.backend.gestionePet.repository.PetRepository;
+import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -14,20 +15,23 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class GestioneCartellaClinicaServiceImpl implements GestioneCartellaClinicaService {
     @Autowired
-    PetRepository petRepository;
+    private PetRepository petRepository;
 
     @Autowired
-    PatologiaRepository patologiaRepository;
+    private PatologiaRepository patologiaRepository;
 
     @Autowired
-    RecordMedicoRepository recordMedicoRepository;
+    private RecordMedicoRepository recordMedicoRepository;
 
     @Autowired
-    TerapiaRepository terapiaRepository;
+    private TerapiaRepository terapiaRepository;
 
     @Autowired
-    VaccinazioneRepository vaccinazioneRepository;
+    private VaccinazioneRepository vaccinazioneRepository;
 
     @Autowired
-    VisitaMedicaRepository visitaMedicaRepository;
+    private VisitaMedicaRepository visitaMedicaRepository;
+
+    @Autowired
+    private VeterinarioRepository veterinarioRepository;
 }

@@ -2,6 +2,7 @@ package it.safepet.backend.gestionePet.controller;
 
 import it.safepet.backend.gestionePet.dto.NewPetDTO;
 import it.safepet.backend.gestionePet.dto.PetResponseDTO;
+import it.safepet.backend.gestionePet.dto.VisualizzaPetResponseDTO;
 import it.safepet.backend.gestionePet.service.GestionePetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -91,11 +92,57 @@ public class GestionePetController {
         return ResponseEntity.status(HttpStatus.CREATED).body(nuovoPet);
     }
 
-    @GetMapping("/visualizzaPet")
-    public ResponseEntity<List<PetResponseDTO>> visualizzaMieiPet() {
-        List<PetResponseDTO> pets = gestionePetService.visualizzaMieiPet();
+    /**
+     * Restituisce la lista dei pet associati all’utente autenticato.
+     *
+     * <p><b>Metodo:</b> GET<br>
+     * <b>Endpoint:</b> /gestionePet/visualizzaElencoPet</p>
+     *
+     * <p><b>Parametri richiesti:</b></p>
+     * <ul>
+     *     <li><b>Authorization</b> (header): token JWT in formato
+     *         <code>Bearer &lt;token&gt;</code>
+     *     </li>
+     * </ul>
+     *
+     * <p><b>Esempio richiesta:</b></p>
+     * <pre>
+     * GET /gestionePet/visualizzaElencoPet
+     * Authorization: Bearer eyJhbGciOi...
+     * </pre>
+     *
+     * <p><b>Esempio risposta:</b></p>
+     * <pre>
+     * [
+     *   {
+     *     "id": "1",
+     *     "nome": "Luna",
+     *     "specie": "Cane"
+     *     "sesso": "F",
+     *     "fotoBase64": "/9j/4AAQSkZJRgABAQAAAQABAAD..."
+     *     "dataNascita": "2004-09-09"
+     *   },
+     *   {
+     *     "id": "2",
+     *     "nome": "Luigi",
+     *     "specie": "Gatto"
+     *     "sesso": "M",
+     *     "fotoBase64": "/9j/4AAQSkZJRgABAQAAAQABAAD..."
+     *     "dataNascita": "2004-09-07"
+     *   }
+     * ]
+     * </pre>
+     *
+     * @return una lista di {@link VisualizzaPetResponseDTO} appartenenti all’utente autenticato
+     * @see VisualizzaPetResponseDTO
+     */
+
+    @GetMapping("/visualizzaElencoPet")
+    public ResponseEntity<List<VisualizzaPetResponseDTO>> visualizzaMieiPet() {
+        List<VisualizzaPetResponseDTO> pets = gestionePetService.visualizzaMieiPet();
         return ResponseEntity.ok(pets);
     }
 
     
 }
+
