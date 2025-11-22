@@ -2,7 +2,6 @@ package it.safepet.backend.gestionePet.dto;
 
 import java.time.LocalDate;
 import java.util.Base64;
-import java.util.Date;
 
 public class PetResponseDTO {
     private Long id;
@@ -17,7 +16,8 @@ public class PetResponseDTO {
     private String sesso;
     private String fotoBase64;
 
-    public PetResponseDTO(Long id, String nome, String specie, LocalDate dataNascita, Double peso, String coloreMantello, Boolean isSterilizzato, String razza, String microchip, String sesso, byte[] foto) {
+    public PetResponseDTO(Long id, String nome, String specie, LocalDate dataNascita, Double peso, String coloreMantello,
+                          Boolean isSterilizzato, String razza, String microchip, String sesso, byte[] foto) {
         this.id = id;
         this.nome = nome;
         this.specie = specie;

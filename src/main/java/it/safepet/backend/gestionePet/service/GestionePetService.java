@@ -46,5 +46,5 @@ public interface GestionePetService {
      *
      * @return una lista di {@link VisualizzaPetResponseDTO} appartenenti all’utente autenticato
      */
-    public List<VisualizzaPetResponseDTO> visualizzaMieiPet();
+    List<VisualizzaPetResponseDTO> visualizzaMieiPet();
 }
