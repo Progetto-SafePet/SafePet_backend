@@ -35,6 +35,13 @@ public class LinkingCode {
     public LinkingCode() {
     }
 
+    public LinkingCode(String codice, LocalDate dataScadenza, Pet pet) {
+        this.codice = codice;
+        this.dataScadenza = dataScadenza;
+        this.pet = pet;
+        this.isUsato = false;
+    }
+
     public Long getId() {
         return id;
     }
@@ -73,5 +80,9 @@ public class LinkingCode {
 
     public void setPet(Pet pet) {
         this.pet = pet;
+    }
+
+    public boolean isScaduto() {
+        return dataScadenza.isBefore(LocalDate.now());
     }
 }

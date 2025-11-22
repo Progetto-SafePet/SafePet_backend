@@ -1,5 +1,7 @@
 package it.safepet.backend.seeders;
 
+import it.safepet.backend.gestionePaziente.model.LinkingCode;
+import it.safepet.backend.gestionePaziente.repository.LinkingCodeRepository;
 import it.safepet.backend.gestionePet.model.Pet;
 import it.safepet.backend.gestioneUtente.model.Proprietario;
 import it.safepet.backend.gestionePet.repository.PetRepository;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -23,15 +26,17 @@ public class ProprietariPetsSeeder implements CommandLineRunner {
     private final ProprietarioRepository proprietarioRepository;
     private final PetRepository petRepository;
     private final PasswordEncoder passwordEncoder;
+    private final LinkingCodeRepository linkingCodeRepository;
 
     @Value("true")
     private boolean resetDatabase;
 
     public ProprietariPetsSeeder(ProprietarioRepository proprietarioRepository, PetRepository petRepository,
-                                 PasswordEncoder passwordEncoder) {
+                                 PasswordEncoder passwordEncoder, LinkingCodeRepository linkingCodeRepository) {
         this.proprietarioRepository = proprietarioRepository;
         this.petRepository = petRepository;
         this.passwordEncoder = passwordEncoder;
+        this.linkingCodeRepository = linkingCodeRepository;
     }
 
     @Override
@@ -69,6 +74,9 @@ public class ProprietariPetsSeeder implements CommandLineRunner {
             pet1.setProprietario(p1);
             p1.getPets().add(pet1);
             petRepository.save(pet1);
+
+            LinkingCode linkingCode = new LinkingCode("Ciao", LocalDate.now().plusYears(1), pet1);
+            linkingCodeRepository.save(linkingCode);
         }
     }
 

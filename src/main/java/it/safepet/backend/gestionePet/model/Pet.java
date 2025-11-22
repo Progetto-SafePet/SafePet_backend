@@ -4,23 +4,12 @@ import it.safepet.backend.gestioneUtente.model.Proprietario;
 import it.safepet.backend.gestioneUtente.model.Veterinario;
 import it.safepet.backend.gestionePaziente.model.LinkingCode;
 import it.safepet.backend.gestioneCartellaClinica.model.RecordMedico;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "pets")
@@ -61,7 +50,7 @@ public class Pet {
     @Column(name = "foto", columnDefinition = "LONGBLOB")
     private byte[] foto;
 
-    @ManyToOne //(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "proprietario_id", nullable = false)
     private Proprietario proprietario;
 
@@ -207,5 +196,16 @@ public class Pet {
 
     public void setRecordMedici(List<RecordMedico> recordMedici) {
         this.recordMedici = recordMedici;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Pet pet)) return false;
+        return Objects.equals(id, pet.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

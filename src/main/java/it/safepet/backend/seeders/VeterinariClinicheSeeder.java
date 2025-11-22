@@ -1,5 +1,6 @@
 package it.safepet.backend.seeders;
 
+import it.safepet.backend.gestionePaziente.model.LinkingCode;
 import it.safepet.backend.reportCliniche.model.Clinica;
 import it.safepet.backend.reportCliniche.model.OrarioDiApertura;
 import it.safepet.backend.reportCliniche.repository.ClinicaRepository;
@@ -118,6 +119,7 @@ public class VeterinariClinicheSeeder implements CommandLineRunner {
 
             clinicaRepository.saveAll(cliniche);
             System.out.println("### Tabelle veterinari, cliniche, orari_di_apertura popolate con successo");
+
         }
     }
 
