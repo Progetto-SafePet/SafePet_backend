@@ -79,7 +79,10 @@ public class GlobalExceptionHandler {
     /**
      * 409 Conflict – violazione di vincoli di integrità (es. chiavi duplicate)
      */
-    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ExceptionHandler({
+            DataIntegrityViolationException.class,
+            ConflictException.class
+    })
     public ProblemDetail handleConflict(DataIntegrityViolationException ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "Violazione di vincoli di integrità dei dati.");
         problem.setTitle("Conflict");
