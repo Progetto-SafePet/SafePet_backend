@@ -34,9 +34,9 @@ public interface GestionePetService {
      * @throws IOException se la lettura dei byte dell’immagine fallisce
      */
 
-    public PetResponseDTO creaPet(@Valid NewPetDTO newPetDTO) throws IOException;
+    PetResponseDTO creaPet(@Valid NewPetDTO newPetDTO) throws IOException;
 
 
 
-    public List<PetResponseDTO> visualizzaMieiPet();
+    List<PetResponseDTO> visualizzaMieiPet();
 }
