@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @Validated
 public class GestionePazienteServiceImpl implements GestionePazienteService {
+
     @Autowired
     private PetRepository petRepository;
 
@@ -34,39 +37,39 @@ public class GestionePazienteServiceImpl implements GestionePazienteService {
     /**
      * Restituisce la lista dei pazienti associati al veterinario attualmente autenticato.
      *
-     * <p>Il metodo esegue i seguenti passaggi:</p>
-     * <ul>
-     *     <li>Recupera l'utente autenticato tramite {@link AuthContext#getCurrentUser()}.</li>
-     *     <li>Verifica che l'utente sia autenticato, altrimenti solleva una {@link RuntimeException}.</li>
-     *     <li>Recupera l'entità {@link Veterinario} dal database tramite il suo ID.</li>
-     *     <li>Ottiene la lista dei {@link Pet} associati al veterinario.</li>
-     *     <li>Converte ogni pet in {@link PazienteResponseDTO}.</li>
-     * </ul>
-     *
-     * @return una lista di {@link PazienteResponseDTO} contenente i dati dei pazienti del veterinario
-     *
-     * @throws RuntimeException se l'utente non è autenticato o il veterinario non viene trovato nel database
+     * @return una lista di PazienteResponseDTO
+     * @throws ResponseStatusException se non autenticato, veterinario non trovato o nessun paziente associato
      */
     @Override
     @Transactional
     public List<PazienteResponseDTO> visualizzaListaPazienti() {
 
-        // Recupera l'utente loggato dal AuthContext
+        // Recupera l'utente loggato
         AuthenticatedUser currentUser = AuthContext.getCurrentUser();
 
         if (currentUser == null) {
-            throw new RuntimeException("Utente non autenticato");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Utente non autenticato.");
         }
 
-        // Estrai ID del veterinario dal contesto
+        // Estrai ID del veterinario dal token
         Long idVeterinario = currentUser.getId();
 
-        // Recupero l'entità Veterinario dal DB
+        // Recupero del veterinario
         Veterinario vet = veterinarioRepository.findById(idVeterinario)
-                .orElseThrow(() -> new RuntimeException("Veterinario non trovato"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Veterinario non trovato."
+                ));
 
-        // Recupero i suoi pet associati
+        // Recupero lista pazienti associati
         List<Pet> pets = vet.getPetsAssociati();
+
+        // Nessun paziente associato → 404
+        if (pets.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Nessun paziente associato a questo veterinario."
+            );
+        }
 
         // Conversione in DTO
         return pets.stream()
@@ -74,15 +77,11 @@ public class GestionePazienteServiceImpl implements GestionePazienteService {
                 .collect(Collectors.toList());
     }
 
-
-
-
     private PazienteResponseDTO convertPetToDTO(Pet pet) {
 
         String proprietario = pet.getProprietario() != null
                 ? pet.getProprietario().getNome() + " " + pet.getProprietario().getCognome()
                 : "Sconosciuto";
-
 
         return new PazienteResponseDTO(
                 pet.getSpecie(),
