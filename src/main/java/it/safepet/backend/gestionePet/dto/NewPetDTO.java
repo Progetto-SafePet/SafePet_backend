@@ -18,35 +18,35 @@ public class NewPetDTO {
 
     @NotBlank(message = "Il sesso del pet è obbligatorio")
     @Pattern(
-            regexp = "^( M | F )$",
+            regexp = "^(M|F)$",
             message = "Il sesso deve essere 'MASCHIO' o 'FEMMINA'"
     )
-    private final String sesso;
+    private String sesso;
 
     @NotBlank(message = "La specie del pet è obbligatoria")
-    private final String specie;
+    private String specie;
 
     @Size(min = 3, max = 30, message = "La razza deve contenere dai 3 caratteri ai 30 caratteri")
-    private final String razza;
+    private String razza;
 
     @NotNull(message = "La data di nascita del pet è obbligatoria")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private final LocalDate dataNascita;
+    private LocalDate dataNascita;
 
     @DecimalMin("0.1")
     @DecimalMax("100.0")
-    private final Double peso;
+    private Double peso;
 
     @Size(min = 3, max = 15, message = "Il colore del mantello deve contenere dai 3 caratteri ai 15 caratteri")
-    private final String coloreMantello;
+    private String coloreMantello;
 
     @Size(min = 15, max = 15, message = "Il microchip deve contenere 15 cifre numeriche")
     @Pattern(regexp = "\\d{15}", message = "Il microchip deve contenere solo cifre numeriche")
-    private final String microchip;
+    private String microchip;
 
-    private final Boolean isSterilizzato;
+    private Boolean isSterilizzato;
 
-    private final MultipartFile foto;
+    private MultipartFile foto;
 
     public NewPetDTO(String nome, String sesso, String specie, String razza, LocalDate dataNascita, Double peso, String
                 coloreMantello, String microchip, Boolean isSterilizzato, MultipartFile foto) {
@@ -74,36 +74,72 @@ public class NewPetDTO {
         return sesso;
     }
 
+    public void setSesso() {
+        this.sesso = sesso;
+    }
+
     public String getSpecie() {
         return specie;
+    }
+
+    public void setSpecie(String specie) {
+        this.specie = specie;
     }
 
     public String getRazza() {
         return razza;
     }
 
+    public void setRazza(String razza) {
+        this.razza = razza;
+    }
+
     public LocalDate getDataNascita() {
         return dataNascita;
+    }
+
+    public void setDataNascita(LocalDate dataNascita) {
+        this.dataNascita = dataNascita;
     }
 
     public Double getPeso() {
         return peso;
     }
 
+    public void setPeso(Double peso) {
+        this.peso = peso;
+    }
+
     public String getColoreMantello() {
         return coloreMantello;
+    }
+
+    public void setColoreMantello(String coloreMantello) {
+        this.coloreMantello = coloreMantello;
     }
 
     public String getMicrochip() {
         return microchip;
     }
 
+    public void setMicrochip(String microchip) {
+        this.microchip = microchip;
+    }
+
     public Boolean getSterilizzato() {
         return isSterilizzato;
     }
 
+    public void setSterilizzato(Boolean sterilizzato) {
+        isSterilizzato = sterilizzato;
+    }
+
     public MultipartFile getFoto() {
         return foto;
+    }
+
+    public void setFoto(MultipartFile foto) {
+        this.foto = foto;
     }
 
 }
