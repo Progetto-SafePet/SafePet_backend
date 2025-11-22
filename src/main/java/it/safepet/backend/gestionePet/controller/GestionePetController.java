@@ -2,6 +2,7 @@ package it.safepet.backend.gestionePet.controller;
 
 import it.safepet.backend.gestionePet.dto.NewPetDTO;
 import it.safepet.backend.gestionePet.dto.PetResponseDTO;
+import it.safepet.backend.gestionePet.dto.VisualizzaPetResponseDTO;
 import it.safepet.backend.gestionePet.service.GestionePetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -114,7 +115,7 @@ public class GestionePetController {
      * <pre>
      * [
      *   {
-     *
+     *     "id": "1",
      *     "nome": "Luna",
      *     "specie": "Cane"
      *     "sesso": "F",
@@ -122,6 +123,7 @@ public class GestionePetController {
      *     "dataNascita": "2004-09-09"
      *   },
      *   {
+     *     "id": "2",
      *     "nome": "Luigi",
      *     "specie": "Gatto"
      *     "sesso": "M",
@@ -131,15 +133,16 @@ public class GestionePetController {
      * ]
      * </pre>
      *
-     * @return una lista di {@link PetResponseDTO} appartenenti all’utente autenticato
-     * @see PetResponseDTO
+     * @return una lista di {@link VisualizzaPetResponseDTO} appartenenti all’utente autenticato
+     * @see VisualizzaPetResponseDTO
      */
 
-    @GetMapping("/visualizzaPet")
-    public ResponseEntity<List<PetResponseDTO>> visualizzaMieiPet() {
-        List<PetResponseDTO> pets = gestionePetService.visualizzaMieiPet();
+    @GetMapping("/visualizzaElencoPet")
+    public ResponseEntity<List<VisualizzaPetResponseDTO>> visualizzaMieiPet() {
+        List<VisualizzaPetResponseDTO> pets = gestionePetService.visualizzaMieiPet();
         return ResponseEntity.ok(pets);
     }
 
     
 }
+

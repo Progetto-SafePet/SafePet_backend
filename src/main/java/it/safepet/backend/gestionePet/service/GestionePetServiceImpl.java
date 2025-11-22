@@ -5,6 +5,7 @@ import it.safepet.backend.autenticazione.jwt.AuthenticatedUser;
 import it.safepet.backend.autenticazione.jwt.Role;
 import it.safepet.backend.gestionePet.dto.NewPetDTO;
 import it.safepet.backend.gestionePet.dto.PetResponseDTO;
+import it.safepet.backend.gestionePet.dto.VisualizzaPetResponseDTO;
 import it.safepet.backend.gestionePet.model.Pet;
 import it.safepet.backend.gestionePet.repository.NoteProprietarioRepository;
 import it.safepet.backend.gestionePet.repository.PetRepository;
@@ -102,7 +103,7 @@ public class GestionePetServiceImpl implements GestionePetService {
     }
 
     @Override
-    public List<PetResponseDTO> visualizzaMieiPet() {
+    public List<VisualizzaPetResponseDTO> visualizzaMieiPet() {
         // Recupera l’utente autenticato
         AuthenticatedUser currentUser = AuthContext.getCurrentUser();
         if (currentUser == null) {
@@ -115,7 +116,8 @@ public class GestionePetServiceImpl implements GestionePetService {
 
         return petRepository.findByProprietario_Id(currentUser.getId())
                 .stream()
-                .map(p -> new PetResponseDTO(
+                .map(p -> new VisualizzaPetResponseDTO(
+                        p.getId(),
                         p.getNome(),
                         p.getSpecie(),
                         p.getSesso(),
