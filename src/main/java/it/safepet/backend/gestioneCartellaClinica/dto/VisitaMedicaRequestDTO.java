@@ -1,6 +1,7 @@
 package it.safepet.backend.gestioneCartellaClinica.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +18,7 @@ public class VisitaMedicaRequestDTO {
     @Size(max = 300, message = "Il descrizione può contenere massimo 300 caratteri")
     private String descrizione;
 
+    @NotNull(message = "La data della visita è obbligatoria")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date data;
 

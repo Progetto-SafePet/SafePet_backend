@@ -3,23 +3,35 @@ package it.safepet.backend.gestioneCartellaClinica.dto;
 import java.util.Date;
 
 public class VisitaMedicaResponseDTO {
+    private Long visitaMedicaId;
     private String nome;
     private Long petId;
     private Long veterinarioId;
     private String descrizione;
+    private String nomeCompletoVeterinario;
+    private String nomePet;
     private Date data;
-    private byte[] referto;
-    private String pdfBase64;
+    private boolean isPresentReferto;
 
-
-    public VisitaMedicaResponseDTO(String nome, Long petId, Long veterinarioId,
-                                   String descrizione, Date data, byte[] referto) {
+    public VisitaMedicaResponseDTO(Long visitaMedicaId, String nome, Long petId, Long veterinarioId,
+                                   String descrizione, String nomeCompletoVeterinario, String nomePet,
+                                   Date data) {
+        this.visitaMedicaId = visitaMedicaId;
         this.nome = nome;
-        this.descrizione = descrizione;
-        this.data = data;
-        this.referto = referto;
         this.petId = petId;
         this.veterinarioId = veterinarioId;
+        this.descrizione = descrizione;
+        this.nomeCompletoVeterinario = nomeCompletoVeterinario;
+        this.nomePet = nomePet;
+        this.data = data;
+    }
+
+    public Long getVisitaMedicaId() {
+        return visitaMedicaId;
+    }
+
+    public void setVisitaMedicaId(Long visitaMedicaId) {
+        this.visitaMedicaId = visitaMedicaId;
     }
 
     public String getNome() {
@@ -54,6 +66,22 @@ public class VisitaMedicaResponseDTO {
         this.descrizione = descrizione;
     }
 
+    public String getNomeCompletoVeterinario() {
+        return nomeCompletoVeterinario;
+    }
+
+    public void setNomeCompletoVeterinario(String nomeCompletoVeterinario) {
+        this.nomeCompletoVeterinario = nomeCompletoVeterinario;
+    }
+
+    public String getNomePet() {
+        return nomePet;
+    }
+
+    public void setNomePet(String nomePet) {
+        this.nomePet = nomePet;
+    }
+
     public Date getData() {
         return data;
     }
@@ -62,15 +90,11 @@ public class VisitaMedicaResponseDTO {
         this.data = data;
     }
 
-    public byte[] getReferto() {
-        return referto;
+    public boolean isPresentReferto() {
+        return isPresentReferto;
     }
 
-    public void setReferto(byte[] referto) {
-        this.referto = referto;
+    public void setPresentReferto(boolean presentReferto) {
+        isPresentReferto = presentReferto;
     }
-
-    public String getPdfBase64() { return pdfBase64; }
-
-    public void setPdfBase64(String pdfBase64) { this.pdfBase64 = pdfBase64; }
 }
