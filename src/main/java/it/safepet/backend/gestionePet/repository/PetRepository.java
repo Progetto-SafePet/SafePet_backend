@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface PetRepository extends JpaRepository<Pet, Long> {
     Optional<Pet> findByMicrochip(String microchip);
-    List<Pet> findByProprietario_Id(Long ownerId);
+    List<Pet> findByProprietarioId(Long ownerId);
 }
