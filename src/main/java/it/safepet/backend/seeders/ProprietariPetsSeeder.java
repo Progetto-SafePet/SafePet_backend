@@ -74,9 +74,6 @@ public class ProprietariPetsSeeder implements CommandLineRunner {
             pet1.setProprietario(p1);
             p1.getPets().add(pet1);
             petRepository.save(pet1);
-
-            LinkingCode linkingCode = new LinkingCode("Ciao", LocalDate.now().plusYears(1), pet1);
-            linkingCodeRepository.save(linkingCode);
         }
     }
 
