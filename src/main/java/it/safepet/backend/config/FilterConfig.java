@@ -20,6 +20,7 @@ public class FilterConfig {
         registrationBean.addUrlPatterns("/gestionePaziente/*");
         registrationBean.addUrlPatterns("/gestionePet/*");
         registrationBean.addUrlPatterns("/gestioneRecensioni/*");
+        registrationBean.addUrlPatterns("/gestioneUtente/*");
         registrationBean.setOrder(1);
         return registrationBean;
     }
