@@ -14,8 +14,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -33,7 +33,7 @@ public class Proprietario {
     private String cognome;
 
     @Column(name = "data_nascita", nullable = false)
-    private Date dataNascita;
+    private LocalDate dataNascita;
 
     @Column(name = "genere", nullable = false, length = 1)
     private String genere; // es: "M" o "F"
@@ -91,11 +91,11 @@ public class Proprietario {
         this.cognome = cognome;
     }
 
-    public Date getDataNascita() {
+    public LocalDate getDataNascita() {
         return dataNascita;
     }
 
-    public void setDataNascita(Date dataNascita) {
+    public void setDataNascita(LocalDate dataNascita) {
         this.dataNascita = dataNascita;
     }
 

@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 @Component
 @Order(2)
@@ -49,7 +48,7 @@ public class ProprietariPetsSeeder implements CommandLineRunner {
             p1.setNome("Gianni");
             p1.setCognome("Angel");
             p1.setGenere("M");
-            p1.setDataNascita(new GregorianCalendar(1970, Calendar.DECEMBER, 25).getTime());
+            p1.setDataNascita(LocalDate.of(1970, Calendar.DECEMBER, 25));
             p1.setIndirizzoDomicilio("Via Roma 16");
             p1.setNumeroTelefono("3333333333");
             p1.setEmail("gianniangel99@gmail.com");
@@ -61,7 +60,7 @@ public class ProprietariPetsSeeder implements CommandLineRunner {
             pet1.setSesso("M");
             pet1.setSpecie("Cane");
             pet1.setRazza("Golden Retriever");
-            pet1.setDataNascita(LocalDate.of(2020, 4, 5));
+            pet1.setDataNascita(LocalDate.of(2020, Calendar.APRIL, 5));
             pet1.setPeso(28.5);
             pet1.setColoreMantello("Marrone chiaro");
             pet1.setMicrochip("985112003457890");

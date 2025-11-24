@@ -5,14 +5,14 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "patologie")
 @DiscriminatorValue("PATOLOGIA")
 public class Patologia extends RecordMedico {
     @Column(name = "data_di_diagnosi", nullable = false)
-    private Date dataDiDiagnosi;
+    private LocalDate dataDiDiagnosi;
 
     @Column(name = "sintomi_osservati", nullable = false)
     private String sintomiOsservati;
@@ -25,11 +25,11 @@ public class Patologia extends RecordMedico {
 
     public Patologia() { }
 
-    public Date getDataDiDiagnosi() {
+    public LocalDate getDataDiDiagnosi() {
         return dataDiDiagnosi;
     }
 
-    public void setDataDiDiagnosi(Date dataDiDiagnosi) {
+    public void setDataDiDiagnosi(LocalDate dataDiDiagnosi) {
         this.dataDiDiagnosi = dataDiDiagnosi;
     }
 

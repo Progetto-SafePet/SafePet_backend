@@ -1,6 +1,6 @@
 package it.safepet.backend.gestioneCartellaClinica.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class VisitaMedicaResponseDTO {
     private Long visitaMedicaId;
@@ -10,12 +10,12 @@ public class VisitaMedicaResponseDTO {
     private String descrizione;
     private String nomeCompletoVeterinario;
     private String nomePet;
-    private Date data;
+    private LocalDate data;
     private boolean isPresentReferto;
 
     public VisitaMedicaResponseDTO(Long visitaMedicaId, String nome, Long petId, Long veterinarioId,
                                    String descrizione, String nomeCompletoVeterinario, String nomePet,
-                                   Date data) {
+                                   LocalDate data) {
         this.visitaMedicaId = visitaMedicaId;
         this.nome = nome;
         this.petId = petId;
@@ -82,11 +82,11 @@ public class VisitaMedicaResponseDTO {
         this.nomePet = nomePet;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 
