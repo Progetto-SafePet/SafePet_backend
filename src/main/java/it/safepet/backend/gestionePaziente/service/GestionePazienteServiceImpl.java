@@ -34,12 +34,7 @@ public class GestionePazienteServiceImpl implements GestionePazienteService {
         this.veterinarioRepository = veterinarioRepository;
     }
 
-    /**
-     * Restituisce la lista dei pazienti associati al veterinario attualmente autenticato.
-     *
-     * @return una lista di PazienteResponseDTO
-     * @throws ResponseStatusException se non autenticato, veterinario non trovato o nessun paziente associato
-     */
+
     @Override
     @Transactional
     public List<PazienteResponseDTO> visualizzaListaPazienti() {
