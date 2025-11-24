@@ -1,7 +1,10 @@
 package it.safepet.backend.gestioneCartellaClinica.controller;
 
+import it.safepet.backend.gestioneCartellaClinica.dto.PatologiaRequestDTO;
+import it.safepet.backend.gestioneCartellaClinica.dto.PatologiaResponseDTO;
 import it.safepet.backend.gestioneCartellaClinica.dto.VisitaMedicaRequestDTO;
 import it.safepet.backend.gestioneCartellaClinica.dto.VisitaMedicaResponseDTO;
+import it.safepet.backend.gestioneCartellaClinica.service.patologia.GestionePatologiaService;
 import it.safepet.backend.gestioneCartellaClinica.service.visitaMedica.GestioneVisitaMedicaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class GestioneCartellaClinicaController {
     @Autowired
     private GestioneVisitaMedicaService gestioneVisitaMedicaService;
+
+    @Autowired
+    private GestionePatologiaService gestionePatologiaService;
 
     /**
      * Crea e registra una nuova visita medica per un pet, verificando che l'utente
@@ -108,5 +114,58 @@ public class GestioneCartellaClinicaController {
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=\"" + "VisitaMedica - " + id + "\"")
                 .body(gestioneVisitaMedicaService.leggiPFD(id));
+    }
+
+    /**
+     * Crea e registra una nuova patologia per un pet, verificando che l'utente
+     * autenticato sia un veterinario e che il pet sia effettivamente associato a lui.
+     * Restituisce i dettagli della patologia appena creata, inclusi nome, diagnosi,
+     * sintomi osservati e terapia associata.
+     *
+     * <p><b>Metodo:</b> POST<br>
+     * <b>Endpoint:</b> /gestioneCartellaClinica/creaPatologia/{petId}<br>
+     *
+     * <p><b>Parametri di percorso:</b></p>
+     * <ul>
+     *   <li><b>petId</b> – identificativo del pet a cui associare la patologia</li>
+     * </ul>
+     *
+     * <p><b>Corpo richiesta:</b></p>
+     * <ul>
+     *   <li><b>nome</b> – nome della patologia (obbligatorio, 3–20 caratteri)</li>
+     *   <li><b>dataDiDiagnosi</b> – data della diagnosi (obbligatoria, formato yyyy-MM-dd)</li>
+     *   <li><b>sintomiOsservati</b> – sintomi osservati (obbligatorio, max 200 caratteri)</li>
+     *   <li><b>diagnosi</b> – diagnosi effettuata (obbligatoria, max 200 caratteri)</li>
+     *   <li><b>terapiaAssociata</b> – terapia associata (obbligatoria, max 200 caratteri)</li>
+     * </ul>
+     *
+     * <p><b>Esempio risposta (201 CREATED):</b></p>
+     * <pre>
+     * {
+     *   "patologiaId": 7,
+     *   "nome": "Dermatite",
+     *   "dataDiDiagnosi": "2025-11-24",
+     *   "sintomiOsservati": "Prurito intenso e perdita di pelo",
+     *   "diagnosi": "Dermatite atopica",
+     *   "terapiaAssociata": "Crema lenitiva e antistaminico",
+     *   "petId": 15,
+     *   "veterinarioId": 3
+     * }
+     * </pre>
+     *
+     * @param petId identificativo del pet a cui associare la patologia
+     * @param patologiaRequestDTO DTO contenente i dati della patologia da creare
+     * @return {@link PatologiaResponseDTO} con i dettagli della patologia appena creata
+     * @throws RuntimeException se l'utente non è un veterinario, il pet non esiste
+     *         o non è associato al veterinario
+     */
+    @PostMapping(value = "/creaPatologia/{petId}")
+    public ResponseEntity<PatologiaResponseDTO> creaPatologia(
+            @PathVariable Long petId,
+            @ModelAttribute PatologiaRequestDTO patologiaRequestDTO) {
+        patologiaRequestDTO.setPetId(petId);
+        System.out.println(patologiaRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(gestionePatologiaService.creaPatologia(patologiaRequestDTO));
     }
 }
