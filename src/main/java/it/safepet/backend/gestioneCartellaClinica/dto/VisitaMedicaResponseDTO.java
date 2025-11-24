@@ -13,6 +13,9 @@ public class VisitaMedicaResponseDTO {
     private Date data;
     private boolean isPresentReferto;
 
+    public VisitaMedicaResponseDTO() {
+    }
+
     public VisitaMedicaResponseDTO(Long visitaMedicaId, String nome, Long petId, Long veterinarioId,
                                    String descrizione, String nomeCompletoVeterinario, String nomePet,
                                    Date data) {

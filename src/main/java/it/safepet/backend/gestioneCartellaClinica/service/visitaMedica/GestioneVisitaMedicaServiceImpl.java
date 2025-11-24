@@ -14,6 +14,7 @@ import it.safepet.backend.gestioneUtente.model.Veterinario;
 import it.safepet.backend.gestioneUtente.repository.ProprietarioRepository;
 import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
@@ -155,4 +156,22 @@ public class GestioneVisitaMedicaServiceImpl implements GestioneVisitaMedicaServ
         }
 
     }
-}
+
+
+
+
+    private VisitaMedicaResponseDTO VisitaMedicatoDTO(VisitaMedica entity) {
+            VisitaMedicaResponseDTO dto = new VisitaMedicaResponseDTO();
+            dto.setVisitaMedicaId(entity.getId());
+            dto.setNome(entity.getNome());
+            dto.setPetId(entity.getPet().getId());
+            dto.setVeterinarioId(entity.getVeterinario().getId());
+            dto.setDescrizione(entity.getDescrizione());
+            dto.setNomeCompletoVeterinario(entity.getVeterinario().getNome() + " " + entity.getVeterinario().getCognome());
+            dto.setNomePet(entity.getPet().getNome());
+            dto.setData(entity.getData());
+            //dto.setPresentReferto(entity.getReferto() != null && !entity.getReferto().isEmpty());
+            return dto;
+        }
+    }
+
