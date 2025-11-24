@@ -1,13 +1,8 @@
 package it.safepet.backend.gestionePet.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "note_proprietari")
@@ -23,7 +18,7 @@ public class NoteProprietario {
     @Column(name = "descrizione", nullable = false)
     private String descrizione;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) //aggiunta del fetch LAZY per evitare problemi di caricamento, serve per caricare il Pet solo quando è richiesto
     @JoinColumn(name = "pet_id", nullable = false)
     private Pet pet;
 

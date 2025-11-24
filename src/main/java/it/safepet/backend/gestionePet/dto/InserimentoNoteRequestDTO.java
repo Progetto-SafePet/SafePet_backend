@@ -1,11 +1,12 @@
 package it.safepet.backend.gestionePet.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class InserimentoNoteRequestDTO {
     @NotBlank(message = "Il titolo della nota è obbligatorio")
-    @Size(max = 20, message = "Il titolo deve contenere massimo 20 caratteri")
+    @Size(max = 100, message = "Il titolo deve contenere massimo 100 caratteri")
     private String titolo;
 
     @NotBlank(message = "La descrizione della nota è obbligatoria")
