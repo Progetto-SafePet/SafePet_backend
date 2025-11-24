@@ -2,7 +2,6 @@ package it.safepet.backend.seeders;
 
 import it.safepet.backend.gestionePet.model.Pet;
 import it.safepet.backend.gestioneUtente.model.Proprietario;
-import it.safepet.backend.gestionePet.repository.PetRepository;
 import it.safepet.backend.gestioneUtente.repository.ProprietarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,22 +14,19 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
-import java.util.Calendar;
+import java.util.ArrayList;
 
 @Component
 @Order(2)
 public class ProprietariPetsSeeder implements CommandLineRunner {
     private final ProprietarioRepository proprietarioRepository;
-    private final PetRepository petRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Value("true")
     private boolean resetDatabase;
 
-    public ProprietariPetsSeeder(ProprietarioRepository proprietarioRepository, PetRepository petRepository,
-                                 PasswordEncoder passwordEncoder) {
+    public ProprietariPetsSeeder(ProprietarioRepository proprietarioRepository, PasswordEncoder passwordEncoder) {
         this.proprietarioRepository = proprietarioRepository;
-        this.petRepository = petRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -43,32 +39,53 @@ public class ProprietariPetsSeeder implements CommandLineRunner {
         }
 
         if (proprietarioRepository.count() == 0) {
-            System.out.println("Popolamento di proprietari e pets");
-            Proprietario p1 = new Proprietario();
-            p1.setNome("Gianni");
-            p1.setCognome("Angel");
-            p1.setGenere("M");
-            p1.setDataNascita(LocalDate.of(1970, Calendar.DECEMBER, 25));
-            p1.setIndirizzoDomicilio("Via Roma 16");
-            p1.setNumeroTelefono("3333333333");
-            p1.setEmail("gianniangel99@gmail.com");
-            p1.setPassword(passwordEncoder.encode("Password123"));
-            proprietarioRepository.save(p1);
+            ArrayList<Proprietario> proprietari =  new ArrayList<>() {{
+                add(new Proprietario("Gianni", "Angel", LocalDate.of(1970, 12, 25), "M",
+                        "gianniangel99@example.com", passwordEncoder.encode("Password123"), "3333333333", "Via Roma 16"));
+                add(new Proprietario("Maria", "Rossi", LocalDate.of(1985, 3, 14), "F",
+                        "maria.rossi@example.com", passwordEncoder.encode("MariaR123"), "3331112222", "Via Firenze 22"));
+                add(new Proprietario("Luca", "Bianchi", LocalDate.of(1992, 7, 9), "M",
+                        "luca.bianchi@example.com", passwordEncoder.encode("LucaB1992"), "3409876543", "Viale Milano 8"));
+                add(new Proprietario("Sara", "Verdi", LocalDate.of(1998, 11, 3), "F",
+                        "sara.verdi@example.com", passwordEncoder.encode("SaraV123"), "3472223344", "Corso Torino 45"));
+                add(new Proprietario("Paolo", "Neri", LocalDate.of(1975, 6, 21), "M",
+                        "paolo.neri@example.com", passwordEncoder.encode("NeriP1975"), "3485566778", "Via Napoli 10"));
+            }};
 
-            Pet pet1 = new Pet();
-            pet1.setNome("Rocky");
-            pet1.setSesso("M");
-            pet1.setSpecie("Cane");
-            pet1.setRazza("Golden Retriever");
-            pet1.setDataNascita(LocalDate.of(2020, Calendar.APRIL, 5));
-            pet1.setPeso(28.5);
-            pet1.setColoreMantello("Marrone chiaro");
-            pet1.setMicrochip("985112003457890");
-            pet1.setSterilizzato(true);
-            pet1.setFoto(loadImage("images/dog1.jpg"));
-            pet1.setProprietario(p1);
-            p1.getPets().add(pet1);
-            petRepository.save(pet1);
+            ArrayList<Pet> pets = new ArrayList<>() {{
+                add(new Pet("Rocky", "M", "Cane", "Golden Retrivier", LocalDate.of(2020, 4, 5), 28.5,
+                        "Marrone Chiaro", "985112003457890", true, loadImage("images/dog1.jpg")));
+                add(new Pet("Luna", "F", "Cane", "Beagle", LocalDate.of(2019, 9, 22), 9.4,
+                        "Tricolore", "985112003457893", true, loadImage("images/beagle1.png")));
+                add(new Pet("Bella", "F", "Gatto", "Europeo", LocalDate.of(2021, 2, 17), 4.2,
+                        "Tigrato", "985112003457891", true, loadImage("images/cat1.jpg")));
+                add(new Pet("Kira", "F", "Gatto", "Siamese", LocalDate.of(2020, 1, 30), 3.6,
+                        "Crema / Marrone", "985112003457894", true, loadImage("images/cat2.jpg")));
+                add(new Pet("Milo", "M", "Coniglio", "Nano", LocalDate.of(2022, 6, 10), 1.1,
+                        "Bianco", "985112003457892", true, loadImage("images/rabbit1.png")));
+                add(new Pet("Pippo", "M", "Porcellino d’India", "Abyssinian", LocalDate.of(2023, 3, 11), 0.7,
+                        "Arancio / Bianco", "985112003457895", true, loadImage("images/guinea1.jpg")));
+                add(new Pet("Rio", "M", "Pappagallo", "Ara Blu e Oro", LocalDate.of(2018, 8, 14), 1.0,
+                        "Blu e Giallo", "985112003457896", true, loadImage("images/parrot1.png")));
+                add(new Pet("Nala", "F", "Cane", "Labrador", LocalDate.of(2017, 12, 2), 30.0,
+                        "Nero", "985112003457897", true, loadImage("images/dog3.jpg")));
+                add(new Pet("Oscar", "M", "Gatto", "Maine Coon", LocalDate.of(2019, 4, 18), 7.8,
+                        "Grigio", "985112003457898", true, loadImage("images/cat3.png")));
+                add(new Pet("Coco", "F", "Coniglio", "Ariete", LocalDate.of(2022, 5, 25), 1.5,
+                        "Marrone", "985112003457899", true, loadImage("images/rabbit2.jpg")));
+            }};
+
+            for (int i = 0; i < proprietari.size(); i++) {
+                Proprietario p = proprietari.get(i);
+                Pet pet1 = pets.get(i * 2);
+                Pet pet2 = pets.get(i * 2 + 1);
+                pet1.setProprietario(p);
+                pet2.setProprietario(p);
+                p.getPets().add(pet1);
+                p.getPets().add(pet2);
+            }
+
+            proprietarioRepository.saveAll(proprietari);
         }
     }
 

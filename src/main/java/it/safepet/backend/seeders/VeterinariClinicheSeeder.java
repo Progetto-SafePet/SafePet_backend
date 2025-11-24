@@ -15,7 +15,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 
 @Component
 @Order(1)
@@ -66,45 +65,45 @@ public class VeterinariClinicheSeeder implements CommandLineRunner {
             }};
 
             ArrayList<Veterinario> veterinari =  new ArrayList<Veterinario>() {{
-                add(new Veterinario("Simone", "Cimmino", LocalDate.of(1985, Calendar.APRIL, 12),
+                add(new Veterinario("Simone", "Cimmino", LocalDate.of(1985, 4, 12),
                         "M", "scimmino@gmail.com", passwordEncoder.encode("SCimmino.85"), "3311111111", "Cani, gatti"));
                 add(new Veterinario("Luca", "Salvatore", LocalDate.of(1980, 6, 8),
                         "M", "lsalvatore@gmail.com", passwordEncoder.encode("LSalvatore.80"), "3322222222", "Uccelli, rettili"));
-                add(new Veterinario("Morgan", "Vitiello", LocalDate.of(1992, Calendar.FEBRUARY, 20),
+                add(new Veterinario("Morgan", "Vitiello", LocalDate.of(1992, 2, 20),
                         "M", "mvitiello@gmail.com", passwordEncoder.encode("MVitiello.92"), "3333333333", "Animali esotici"));
-                add(new Veterinario("Vincenzo", "Nappi", LocalDate.of(1978, Calendar.SEPTEMBER, 14),
+                add(new Veterinario("Vincenzo", "Nappi", LocalDate.of(1978, 9, 14),
                         "M", "vnappi@gmail.com", passwordEncoder.encode("VNappi.78"), "3344444444", "Cani, cavalli"));
-                add(new Veterinario("Chiara", "Memoli", LocalDate.of(1987, Calendar.MAY, 30),
+                add(new Veterinario("Chiara", "Memoli", LocalDate.of(1987, 5, 30),
                         "F", "cmemoli@gmail.com", passwordEncoder.encode("CMemoli.87"), "3355555555", "Gatti, conigli"));
-                add(new Veterinario("AnnaChiara", "Memoli", LocalDate.of(1991, Calendar.DECEMBER, 2),
+                add(new Veterinario("AnnaChiara", "Memoli", LocalDate.of(1991, 12, 2),
                         "F", "acmemoli@gmail.com", passwordEncoder.encode("ACMemoli.91"), "3366666666", "Animali domestici"));
-                add(new Veterinario("Rosario", "Saggese", LocalDate.of(1983, Calendar.OCTOBER, 18),
+                add(new Veterinario("Rosario", "Saggese", LocalDate.of(1983, 10, 18),
                         "M", "rsaggese@gmail.com", passwordEncoder.encode("RSaggese.83"), "3377777777", "Cani, gatti, roditori"));
-                add(new Veterinario("Giuseppe", "Rossano", LocalDate.of(1979, Calendar.JANUARY, 7),
+                add(new Veterinario("Giuseppe", "Rossano", LocalDate.of(1979, 1, 7),
                         "M", "grossano@gmail.com", passwordEncoder.encode("GRossano.79"), "3388888888", "Animali da fattoria"));
-                add(new Veterinario("Aldo", "Adinolfi", LocalDate.of(1984, Calendar.AUGUST, 25),
+                add(new Veterinario("Aldo", "Adinolfi", LocalDate.of(1984, 8, 25),
                         "M", "aadinolfi@gmail.com", passwordEncoder.encode("AAdinolfi.84"), "3399999999", "Cani, gatti, cavalli"));
-                add(new Veterinario("Gianmarco", "Amatruda", LocalDate.of(1993, Calendar.MARCH, 3),
+                add(new Veterinario("Gianmarco", "Amatruda", LocalDate.of(1993, 3, 3),
                         "M", "gamatruda2@gmail.com", passwordEncoder.encode("GAmatruda.93"), "3322222222", "Cani, cavalli, animali esotici"));
-                add(new Veterinario("Francesco", "Pinto", LocalDate.of(1990, Calendar.MARCH, 15),
+                add(new Veterinario("Francesco", "Pinto", LocalDate.of(1990, 3, 15),
                         "M", "fpinto@gmail.com", passwordEncoder.encode("fPinto.90"), "3321212121", "Gatti, conigli"));
-                add(new Veterinario("Matteo", "Emolo", LocalDate.of(1988, Calendar.JUNE, 11),
+                add(new Veterinario("Matteo", "Emolo", LocalDate.of(1988, 6, 11),
                         "M", "memolo@gmail.com", passwordEncoder.encode("MEmolo.88"), "3311111122", "Cani, gatti, uccelli"));
-                add(new Veterinario("Francesco", "Torino", LocalDate.of(1982, Calendar.JULY, 19),
+                add(new Veterinario("Francesco", "Torino", LocalDate.of(1982, 7, 19),
                         "M", "ftorino@gmail.com", passwordEncoder.encode("FTorino.82"), "3331313131", "Cani, cavalli"));
-                add(new Veterinario("Federica", "D'Amato", LocalDate.of(1989, Calendar.SEPTEMBER, 9),
+                add(new Veterinario("Federica", "D'Amato", LocalDate.of(1989, 8, 9),
                         "F", "fdamato@gmail.com", passwordEncoder.encode("FDamato.89"), "3341414141", "Animali esotici"));
-                add(new Veterinario("Davide", "Marino", LocalDate.of(1985, Calendar.DECEMBER, 21),
+                add(new Veterinario("Davide", "Marino", LocalDate.of(1985, 12, 21),
                         "M", "dmarino@gmail.com", passwordEncoder.encode("DMarino.85"), "3351515151", "Cani, gatti, roditori"));
-                add(new Veterinario("Alessia", "Ferrara", LocalDate.of(1994, Calendar.APRIL, 27),
+                add(new Veterinario("Alessia", "Ferrara", LocalDate.of(1994, 4, 27),
                         "F", "aferrara@gmail.com", passwordEncoder.encode("AFerrara.94"), "3361616161", "Cani, gatti, conigli"));
-                add(new Veterinario("Stefano", "Greco", LocalDate.of(1981, Calendar.JANUARY, 4),
+                add(new Veterinario("Stefano", "Greco", LocalDate.of(1981, 1, 4),
                         "M", "sgreco@gmail.com", passwordEncoder.encode("SGreco.81"), "3371717171", "Animali da fattoria"));
-                add(new Veterinario("Martina", "Vitale", LocalDate.of(1992, Calendar.MAY, 6),
+                add(new Veterinario("Martina", "Vitale", LocalDate.of(1992, 5, 6),
                         "F", "mvitale@gmail.com", passwordEncoder.encode("MVitale.92"), "3381818181", "Cani, gatti, cavalli"));
-                add(new Veterinario("Paolo", "Ruggiero", LocalDate.of(1986, Calendar.JUNE, 17),
+                add(new Veterinario("Paolo", "Ruggiero", LocalDate.of(1986, 6, 17),
                         "M", "pruggiero@gmail.com", passwordEncoder.encode("PRuggiero.86"), "3391919191", "Uccelli, rettili"));
-                add(new Veterinario("Lorenzo", "Parisi", LocalDate.of(1987, Calendar.FEBRUARY, 14),
+                add(new Veterinario("Lorenzo", "Parisi", LocalDate.of(1987, 2, 14),
                         "M", "lparisi@gmail.com", passwordEncoder.encode("LParisi.87"), "3312121212", "Cani, gatti, roditori"));
             }};
 

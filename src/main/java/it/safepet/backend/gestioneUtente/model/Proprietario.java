@@ -67,6 +67,18 @@ public class Proprietario {
     public Proprietario() {
     }
 
+    public Proprietario(String nome, String cognome, LocalDate dataNascita, String genere,
+                        String email, String password, String numeroTelefono, String indirizzoDomicilio) {
+        this.nome = nome;
+        this.cognome = cognome;
+        this.dataNascita = dataNascita;
+        this.genere = genere;
+        this.email = email;
+        this.password = password;
+        this.numeroTelefono = numeroTelefono;
+        this.indirizzoDomicilio = indirizzoDomicilio;
+    }
+
     public Long getId() {
         return id;
     }
