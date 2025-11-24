@@ -3,6 +3,7 @@ package it.safepet.backend.gestionePaziente.service;
 import it.safepet.backend.autenticazione.jwt.AuthContext;
 import it.safepet.backend.autenticazione.jwt.AuthenticatedUser;
 import it.safepet.backend.gestionePaziente.dto.PazienteResponseDTO;
+import it.safepet.backend.gestionePaziente.dto.DettagliResponseDTO;
 import it.safepet.backend.gestionePaziente.repository.LinkingCodeRepository;
 import it.safepet.backend.gestionePet.model.Pet;
 import it.safepet.backend.gestionePet.repository.PetRepository;
@@ -92,4 +93,54 @@ public class GestionePazienteServiceImpl implements GestionePazienteService {
                 pet.getFoto()
         );
     }
+
+    @Override
+    @Transactional
+    public DettagliResponseDTO visualizzaDettagliPaziente(Long petId) {
+
+        // 1. Recupera l'utente loggato
+        AuthenticatedUser currentUser = AuthContext.getCurrentUser();
+        if (currentUser == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Utente non autenticato.");
+        }
+
+        // 2. Recupera il Pet
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Pet non trovato."
+                ));
+
+        // 3. Controllo autorizzazione → il veterinario deve essere associato al pet
+        boolean autorizzato = pet.getVeterinariAssociati().stream()
+                .anyMatch(v -> v.getId().equals(currentUser.getId()));
+
+        if (!autorizzato) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Non puoi visualizzare i dettagli di un animale che non segui."
+            );
+        }
+
+        // 4. Nome completo del proprietario
+        String proprietario = pet.getProprietario() != null
+                ? pet.getProprietario().getNome() + " " + pet.getProprietario().getCognome()
+                : "Sconosciuto";
+
+        // 5. Conversione in DTO
+        return new DettagliResponseDTO(
+                pet.getId(),
+                pet.getNome(),
+                pet.getSesso(),
+                pet.getSpecie(),
+                pet.getRazza(),
+                pet.getDataNascita(),
+                pet.getPeso(),
+                pet.getColoreMantello(),
+                pet.getMicrochip(),
+                pet.getSterilizzato(),
+                proprietario,
+                pet.getFoto()
+        );
+    }
+
 }
