@@ -1,19 +1,27 @@
 package it.safepet.backend.gestioneCartellaClinica.dto;
 
+import it.safepet.backend.gestioneCartellaClinica.model.Patologia;
+
 import java.util.Date;
 
 public class PatologiaResponseDTO {
     private Long patologiaId;
-    private String nome; // nuovo campo
+    private String nome;
+    private Long petId;
+    private Long veterinarioId;
+
     private Date dataDiDiagnosi;
     private String sintomiOsservati;
     private String diagnosi;
     private String terapiaAssociata;
-    private Long petId;
-    private Long veterinarioId;
+
+    private String nomeVeterinarioCompleto;
+
+    public PatologiaResponseDTO() {
+    }
 
     public PatologiaResponseDTO(Long patologiaId, String nome, Date dataDiDiagnosi, String sintomiOsservati,
-                                String diagnosi, String terapiaAssociata, Long petId, Long veterinarioId) {
+                                String diagnosi, String terapiaAssociata, Long petId, Long veterinarioId, String nomeVeterinarioCompleto) {
         this.patologiaId = patologiaId;
         this.nome = nome;
         this.dataDiDiagnosi = dataDiDiagnosi;
@@ -22,6 +30,7 @@ public class PatologiaResponseDTO {
         this.terapiaAssociata = terapiaAssociata;
         this.petId = petId;
         this.veterinarioId = veterinarioId;
+        this.nomeVeterinarioCompleto = nomeVeterinarioCompleto;
     }
 
     public Long getPatologiaId() { return patologiaId; }
@@ -47,4 +56,21 @@ public class PatologiaResponseDTO {
 
     public Long getVeterinarioId() { return veterinarioId; }
     public void setVeterinarioId(Long veterinarioId) { this.veterinarioId = veterinarioId; }
+
+    public String getNomeVeterinarioCompleto() { return nomeVeterinarioCompleto; }
+    public void setNomeVeterinarioCompleto(String nomeVeterinarioCompleto) { this.nomeVeterinarioCompleto = nomeVeterinarioCompleto; }
+
+    public static PatologiaResponseDTO from(Patologia patologia) {
+        return new PatologiaResponseDTO(
+                patologia.getId(),
+                patologia.getNome(),
+                patologia.getDataDiDiagnosi(),
+                patologia.getSintomiOsservati(),
+                patologia.getDiagnosi(),
+                patologia.getTerapiaAssociata(),
+                patologia.getPet().getId(),
+                patologia.getVeterinario().getId(),
+                patologia.getVeterinario().getNome() + " " + patologia.getVeterinario().getCognome()
+        );
+    }
 }

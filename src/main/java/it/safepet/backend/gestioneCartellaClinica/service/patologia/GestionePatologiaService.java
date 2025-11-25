@@ -2,9 +2,6 @@ package it.safepet.backend.gestioneCartellaClinica.service.patologia;
 
 import it.safepet.backend.gestioneCartellaClinica.dto.PatologiaRequestDTO;
 import it.safepet.backend.gestioneCartellaClinica.dto.PatologiaResponseDTO;
-import it.safepet.backend.gestioneCartellaClinica.dto.VisitaMedicaRequestDTO;
-import it.safepet.backend.gestioneCartellaClinica.dto.VisitaMedicaResponseDTO;
-import jakarta.validation.Valid;
 
 public interface GestionePatologiaService {
     /**
@@ -28,6 +25,5 @@ public interface GestionePatologiaService {
      *             <li>si verificano errori durante la creazione della patologia.</li>
      *         </ul>
      */
-
-    public PatologiaResponseDTO creaPatologia(PatologiaRequestDTO richiesta);
+    PatologiaResponseDTO creaPatologia(PatologiaRequestDTO richiesta);
 }

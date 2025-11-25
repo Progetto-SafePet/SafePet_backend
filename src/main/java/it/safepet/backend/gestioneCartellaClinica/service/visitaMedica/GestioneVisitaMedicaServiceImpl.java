@@ -13,6 +13,7 @@ import it.safepet.backend.gestioneUtente.model.Proprietario;
 import it.safepet.backend.gestioneUtente.model.Veterinario;
 import it.safepet.backend.gestioneUtente.repository.ProprietarioRepository;
 import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -38,6 +39,7 @@ public class GestioneVisitaMedicaServiceImpl implements GestioneVisitaMedicaServ
     private ProprietarioRepository proprietarioRepository;
 
     @Override
+    @Transactional
     public VisitaMedicaResponseDTO creaVisitaMedica(VisitaMedicaRequestDTO visitaMedicaRequestDTO) {
         AuthenticatedUser currentUser = AuthContext.getCurrentUser();
 
