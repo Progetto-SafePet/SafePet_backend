@@ -1,13 +1,8 @@
 package it.safepet.backend.gestioneCartellaClinica.controller;
 
-import it.safepet.backend.gestioneCartellaClinica.dto.CartellaClinicaResponseDTO;
-import it.safepet.backend.gestioneCartellaClinica.dto.PatologiaRequestDTO;
-import it.safepet.backend.gestioneCartellaClinica.dto.PatologiaResponseDTO;
-import it.safepet.backend.gestioneCartellaClinica.dto.VaccinazioneRequestDTO;
-import it.safepet.backend.gestioneCartellaClinica.dto.VaccinazioneResponseDTO;
-import it.safepet.backend.gestioneCartellaClinica.dto.VisitaMedicaRequestDTO;
-import it.safepet.backend.gestioneCartellaClinica.dto.VisitaMedicaResponseDTO;
+import it.safepet.backend.gestioneCartellaClinica.dto.*;
 import it.safepet.backend.gestioneCartellaClinica.service.GestioneCartellaClinicaService;
+import it.safepet.backend.gestioneCartellaClinica.service.terapia.GestioneTerapiaService;
 import it.safepet.backend.gestioneCartellaClinica.service.vaccinazione.GestioneVaccinazioneService;
 
 import it.safepet.backend.gestioneCartellaClinica.service.patologia.GestionePatologiaService;
@@ -38,6 +33,9 @@ public class GestioneCartellaClinicaController {
 
     @Autowired
     private GestioneVaccinazioneService gestioneVaccinazioneService;
+
+    @Autowired
+    private GestioneTerapiaService gestioneTerapiaService;
 
     @Autowired
     private GestioneCartellaClinicaService gestioneCartellaClinicaService;
@@ -257,7 +255,16 @@ public class GestioneCartellaClinicaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    //aggiungi terapia endPoint
+    @PostMapping ("/aggiungiTerapia/{petId}")
+    public ResponseEntity<TerapiaResponseDTO> aggiungiTerapia(
+            @PathVariable Long petId,
+            @RequestBody TerapiaRequestDTO terapiaRequestDTO){
+        terapiaRequestDTO.setPetId(petId);
+
+        TerapiaResponseDTO terapiaResponseDTO=
+                gestioneTerapiaService.aggiungiTerapia(terapiaRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(terapiaResponseDTO);
+    }
 
     //momentaneo, per provare su PostMan (quindi non serve Javadoc)
     @GetMapping("/cartellaClinica/{petId}")
