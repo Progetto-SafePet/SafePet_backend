@@ -85,6 +85,7 @@ public class GestionePazienteServiceImpl implements GestionePazienteService {
                 : "Sconosciuto";
 
         return new PazienteResponseDTO(
+                pet.getId(),
                 pet.getSpecie(),
                 pet.getNome(),
                 pet.getDataNascita(),
