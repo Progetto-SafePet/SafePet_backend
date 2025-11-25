@@ -13,8 +13,8 @@ import it.safepet.backend.gestioneUtente.model.Proprietario;
 import it.safepet.backend.gestioneUtente.model.Veterinario;
 import it.safepet.backend.gestioneUtente.repository.ProprietarioRepository;
 import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +39,7 @@ public class GestioneVisitaMedicaServiceImpl implements GestioneVisitaMedicaServ
     private ProprietarioRepository proprietarioRepository;
 
     @Override
+    @Transactional
     public VisitaMedicaResponseDTO creaVisitaMedica(VisitaMedicaRequestDTO visitaMedicaRequestDTO) {
         AuthenticatedUser currentUser = AuthContext.getCurrentUser();
 
@@ -160,7 +161,7 @@ public class GestioneVisitaMedicaServiceImpl implements GestioneVisitaMedicaServ
 
 
 
-    private VisitaMedicaResponseDTO VisitaMedicatoDTO(VisitaMedica entity) {
+    private VisitaMedicaResponseDTO visitaMedicatoDTO(VisitaMedica entity) {
             VisitaMedicaResponseDTO dto = new VisitaMedicaResponseDTO();
             dto.setVisitaMedicaId(entity.getId());
             dto.setNome(entity.getNome());

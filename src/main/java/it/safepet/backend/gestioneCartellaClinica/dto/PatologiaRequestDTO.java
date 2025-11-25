@@ -31,7 +31,9 @@ public class PatologiaRequestDTO {
 
     private Long petId;
 
-    public PatologiaRequestDTO() {}
+    public PatologiaRequestDTO() {
+
+    }
 
     public PatologiaRequestDTO(String nome, Date dataDiDiagnosi, String sintomiOsservati,
                                String diagnosi, String terapiaAssociata, Long petId) {

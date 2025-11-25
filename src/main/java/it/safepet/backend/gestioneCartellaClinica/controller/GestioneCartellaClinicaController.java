@@ -1,13 +1,15 @@
 package it.safepet.backend.gestioneCartellaClinica.controller;
 
+import it.safepet.backend.gestioneCartellaClinica.dto.CartellaClinicaResponseDTO;
 import it.safepet.backend.gestioneCartellaClinica.dto.PatologiaRequestDTO;
 import it.safepet.backend.gestioneCartellaClinica.dto.PatologiaResponseDTO;
 import it.safepet.backend.gestioneCartellaClinica.dto.VaccinazioneRequestDTO;
 import it.safepet.backend.gestioneCartellaClinica.dto.VaccinazioneResponseDTO;
-import it.safepet.backend.gestioneCartellaClinica.service.vaccinazione.GestioneVaccinazioneService;
-
 import it.safepet.backend.gestioneCartellaClinica.dto.VisitaMedicaRequestDTO;
 import it.safepet.backend.gestioneCartellaClinica.dto.VisitaMedicaResponseDTO;
+import it.safepet.backend.gestioneCartellaClinica.service.GestioneCartellaClinicaService;
+import it.safepet.backend.gestioneCartellaClinica.service.vaccinazione.GestioneVaccinazioneService;
+
 import it.safepet.backend.gestioneCartellaClinica.service.patologia.GestionePatologiaService;
 import it.safepet.backend.gestioneCartellaClinica.service.visitaMedica.GestioneVisitaMedicaService;
 
@@ -16,7 +18,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,7 +26,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 
 @RestController
 @RequestMapping("/gestioneCartellaClinica")
@@ -38,6 +38,9 @@ public class GestioneCartellaClinicaController {
 
     @Autowired
     private GestioneVaccinazioneService gestioneVaccinazioneService;
+
+    @Autowired
+    private GestioneCartellaClinicaService gestioneCartellaClinicaService;
 
     /**
      * Crea e registra una nuova visita medica per un pet, verificando che l'utente
@@ -128,10 +131,10 @@ public class GestioneCartellaClinicaController {
                 .body(gestioneVisitaMedicaService.leggiPFD(id));
     }
 
-
     /**
      * Crea e registra una nuova patologia per un pet, verificando che l'utente autenticato
      * sia un veterinario e che il pet sia effettivamente associato a lui.
+     *
      * <p>
      * Restituisce i dettagli della patologia appena creata, inclusi nome, diagnosi,
      * sintomi osservati e terapia associata.
@@ -144,14 +147,16 @@ public class GestioneCartellaClinicaController {
      *   <li><b>petId</b> – identificativo del pet a cui associare la patologia</li>
      * </ul>
      *
-     * <p><b>Corpo richiesta:</b></p>
-     * <ul>
-     *   <li><b>nome</b> – nome della patologia (obbligatorio, 3–20 caratteri)</li>
-     *   <li><b>dataDiDiagnosi</b> – data della diagnosi (obbligatoria, formato yyyy-MM-dd)</li>
-     *   <li><b>sintomiOsservati</b> – sintomi osservati (obbligatorio, max 200 caratteri)</li>
-     *   <li><b>diagnosi</b> – diagnosi effettuata (obbligatoria, max 200 caratteri)</li>
-     *   <li><b>terapiaAssociata</b> – terapia associata (obbligatoria, max 200 caratteri)</li>
-     * </ul>
+     * <p><b>Corpo richiesta (JSON):</b></p>
+     * <pre>
+     * {
+     *   "nome": "Dermatite",
+     *   "dataDiDiagnosi": "2025-11-24",
+     *   "sintomiOsservati": "Prurito intenso e perdita di pelo",
+     *   "diagnosi": "Dermatite atopica",
+     *   "terapiaAssociata": "Crema lenitiva e antistaminico"
+     * }
+     * </pre>
      *
      * <p><b>Esempio risposta (201 CREATED):</b></p>
      * <pre>
@@ -173,16 +178,15 @@ public class GestioneCartellaClinicaController {
      * @throws RuntimeException se l'utente non è un veterinario, se il pet non esiste
      *                          o se non è associato al veterinario
      */
-    @PostMapping(value = "/creaPatologia/{petId}")
+    @PostMapping("/aggiungiPatologia/{petId}")
     public ResponseEntity<PatologiaResponseDTO> creaPatologia(
             @PathVariable Long petId,
-            @ModelAttribute PatologiaRequestDTO patologiaRequestDTO) {
+            @RequestBody PatologiaRequestDTO patologiaRequestDTO) {
         patologiaRequestDTO.setPetId(petId);
         System.out.println(patologiaRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(gestionePatologiaService.creaPatologia(patologiaRequestDTO));
     }
-
 
     /**
      * Permette al veterinario autenticato di aggiungere una nuova vaccinazione nella
@@ -243,7 +247,7 @@ public class GestioneCartellaClinicaController {
     @PostMapping("/aggiungiVaccinazione/{petId}")
     public ResponseEntity<VaccinazioneResponseDTO> aggiungiVaccinazione(
             @PathVariable Long petId,
-            @RequestBody @Validated VaccinazioneRequestDTO request) {
+            @RequestBody VaccinazioneRequestDTO request) {
 
         request.setPetId(petId); // imposta automaticamente il petId nel DTO
 
@@ -251,5 +255,14 @@ public class GestioneCartellaClinicaController {
                 gestioneVaccinazioneService.aggiungiVaccinazione(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    //aggiungi terapia endPoint
+
+    //momentaneo, per provare su PostMan (quindi non serve Javadoc)
+    @GetMapping("/cartellaClinica/{petId}")
+    public ResponseEntity<CartellaClinicaResponseDTO> getCartellaClinica(@PathVariable Long petId) {
+        CartellaClinicaResponseDTO dto = gestioneCartellaClinicaService.getCartellaClinica(petId);
+        return ResponseEntity.ok(dto);
     }
 }
