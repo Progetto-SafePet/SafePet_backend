@@ -10,12 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -192,10 +187,10 @@ public class GestionePetController {
      * @throws RuntimeException se l'utente non è un proprietario, il pet non esiste
      *         o non appartiene al proprietario autenticato
      */
-    @PostMapping(value = "/creaNota/{petId}",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/creaNota/{petId}",  consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InserimentoNoteResponseDTO> creaNota(
             @PathVariable Long petId,
-            @ModelAttribute InserimentoNoteRequestDTO inserimentoNoteRequestDTO) throws IOException {
+            @RequestBody InserimentoNoteRequestDTO inserimentoNoteRequestDTO) throws IOException {
         inserimentoNoteRequestDTO.setPetId(petId);
         System.out.println(inserimentoNoteRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
