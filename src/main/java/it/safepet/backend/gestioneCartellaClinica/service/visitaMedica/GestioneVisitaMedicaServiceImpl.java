@@ -157,22 +157,4 @@ public class GestioneVisitaMedicaServiceImpl implements GestioneVisitaMedicaServ
         }
 
     }
-
-
-
-
-    private VisitaMedicaResponseDTO visitaMedicatoDTO(VisitaMedica entity) {
-            VisitaMedicaResponseDTO dto = new VisitaMedicaResponseDTO();
-            dto.setVisitaMedicaId(entity.getId());
-            dto.setNome(entity.getNome());
-            dto.setPetId(entity.getPet().getId());
-            dto.setVeterinarioId(entity.getVeterinario().getId());
-            dto.setDescrizione(entity.getDescrizione());
-            dto.setNomeCompletoVeterinario(entity.getVeterinario().getNome() + " " + entity.getVeterinario().getCognome());
-            dto.setNomePet(entity.getPet().getNome());
-            dto.setData(entity.getData());
-            //dto.setPresentReferto(entity.getReferto() != null && !entity.getReferto().isEmpty());
-            return dto;
-        }
-    }
-
+}
