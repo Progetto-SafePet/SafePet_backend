@@ -34,9 +34,7 @@ public interface GestionePetService {
      * @return un {@link PetResponseDTO} contenente tutte le informazioni del pet salvato
      * @throws IOException se la lettura dei byte dell’immagine fallisce
      */
-
     public PetResponseDTO creaPet(@Valid NewPetDTO newPetDTO) throws IOException;
-
 
     /**
      * Restituisce la lista degli animali associati all’utente autenticato.
@@ -47,4 +45,29 @@ public interface GestionePetService {
      * @return una lista di {@link VisualizzaPetResponseDTO} appartenenti all’utente autenticato
      */
     public List<VisualizzaPetResponseDTO> visualizzaMieiPet();
+
+    /**
+     * Recupera i dati anagrafici di un pet, garantendo che l'utente autenticato
+     * sia autorizzato a visualizzarli (solo i proprietari possono accedere).
+     *
+     * <p><b>Logica:</b></p>
+     * <ul>
+     *   <li>Verifica che l'utente sia autenticato.</li>
+     *   <li>Controlla che il ruolo dell'utente sia {@code PROPRIETARIO}; in caso contrario, viene sollevata un'eccezione.</li>
+     *   <li>Recupera il pet dal database tramite {@code petRepository} e verifica la sua esistenza.</li>
+     *   <li>Costruisce e restituisce un {@link PetResponseDTO} contenente:
+     *       id, nome, specie, data di nascita, peso, colore del mantello,
+     *       stato di sterilizzazione, razza, microchip, sesso e foto codificata in Base64.</li>
+     * </ul>
+     *
+     * <p><b>Sicurezza:</b> l'accesso è limitato ai proprietari autenticati per proteggere dati sensibili.</p>
+     *
+     * <p><b>Transazione:</b> il metodo è annotato con {@code @Transactional(readOnly = true)}
+     * per garantire la consistenza dei dati durante la lettura.</p>
+     *
+     * @param petId identificativo univoco del pet da recuperare
+     * @return {@link PetResponseDTO} con i dati anagrafici del pet
+     * @throws RuntimeException se l'utente non è autenticato, non è un proprietario o il pet non esiste
+     */
+    public PetResponseDTO getAnagraficaPet(Long petId);
 }
