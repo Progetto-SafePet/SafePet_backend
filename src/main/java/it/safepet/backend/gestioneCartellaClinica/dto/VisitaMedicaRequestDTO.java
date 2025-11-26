@@ -15,7 +15,7 @@ public class VisitaMedicaRequestDTO {
 
     private Long petId;
 
-    @Size(max = 300, message = "Il descrizione può contenere massimo 300 caratteri")
+    @Size(max = 300, message = "La descrizione può contenere massimo 300 caratteri")
     private String descrizione;
 
     @NotNull(message = "La data della visita è obbligatoria")
