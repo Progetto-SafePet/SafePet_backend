@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class RegistrazioneProprietarioRequestDTO {
     @NotBlank(message = "Il nome è obbligatorio")
@@ -37,7 +37,7 @@ public class RegistrazioneProprietarioRequestDTO {
 
     @NotNull(message = "La data di nascita è obbligatoria")
     @Past(message = "La data di nascita deve essere una data passata")
-    private Date dataNascita;
+    private LocalDate dataNascita;
 
     @NotBlank(message = "L'indirizzo è obbligatorio")
     @Size(min = 5, max = 100, message = "L'indirizzo deve contenere tra 5 e 100 caratteri")
@@ -49,7 +49,7 @@ public class RegistrazioneProprietarioRequestDTO {
 
     public RegistrazioneProprietarioRequestDTO(String nome, String cognome, String email, 
                                                String password, String confermaPassword, 
-                                               String numeroTelefono, Date dataNascita, 
+                                               String numeroTelefono, LocalDate dataNascita,
                                                String indirizzoDomicilio, String genere) {
         this.nome = nome;
         this.cognome = cognome;
@@ -110,11 +110,11 @@ public class RegistrazioneProprietarioRequestDTO {
         this.numeroTelefono = numeroTelefono;
     }
 
-    public Date getDataNascita() {
+    public LocalDate getDataNascita() {
         return dataNascita;
     }
 
-    public void setDataNascita(Date dataNascita) {
+    public void setDataNascita(LocalDate dataNascita) {
         this.dataNascita = dataNascita;
     }
 
