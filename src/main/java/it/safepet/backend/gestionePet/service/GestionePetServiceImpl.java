@@ -3,9 +3,8 @@ package it.safepet.backend.gestionePet.service;
 import it.safepet.backend.autenticazione.jwt.AuthContext;
 import it.safepet.backend.autenticazione.jwt.AuthenticatedUser;
 import it.safepet.backend.autenticazione.jwt.Role;
-import it.safepet.backend.gestionePet.dto.NewPetDTO;
-import it.safepet.backend.gestionePet.dto.PetResponseDTO;
-import it.safepet.backend.gestionePet.dto.VisualizzaPetResponseDTO;
+import it.safepet.backend.gestionePet.dto.*;
+import it.safepet.backend.gestionePet.model.NoteProprietario;
 import it.safepet.backend.gestionePet.model.Pet;
 import it.safepet.backend.gestionePet.repository.NoteProprietarioRepository;
 import it.safepet.backend.gestionePet.repository.PetRepository;
@@ -19,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Validated
@@ -156,6 +156,50 @@ public class GestionePetServiceImpl implements GestionePetService {
                 pet.getMicrochip(),
                 pet.getSesso(),
                 pet.getFoto()
+        );
+    }
+
+    public InserimentoNoteResponseDTO creaNota(InserimentoNoteRequestDTO inserimentoNoteRequestDTO) {
+        //utente autenticato
+        AuthenticatedUser currentUser = AuthContext.getCurrentUser();
+
+        //controllo che l'utente sia un proprietario
+        if (currentUser == null || !Role.PROPRIETARIO.equals(currentUser.getRole())) {
+            throw new RuntimeException("Accesso non autorizzato");
+        }
+        Proprietario proprietario = proprietarioRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new RuntimeException("Proprietario non trovato"));
+
+        //controllo se esiste il pet
+        Optional<Pet> opPet = petRepository.findById(inserimentoNoteRequestDTO.getPetId());
+        if (opPet.isEmpty()) {
+            throw new RuntimeException("Pet non trovato");
+        }
+
+        //controllo che il pet appartenga al proprietario loggato
+        if (!petRepository.findById(opPet.get().getId()).get().getProprietario().getId().equals(proprietario.getId())) {
+            throw new RuntimeException("Il pet non appartiene all'utente corrente");
+        }
+
+        //arrivato qui, se si è un proprietario, e se il pet appartiene ad esso
+        //potrà inserire la nota
+
+        NoteProprietario noteProprietario = new NoteProprietario();
+        noteProprietario.setTitolo(inserimentoNoteRequestDTO.getTitolo());
+        noteProprietario.setDescrizione(inserimentoNoteRequestDTO.getDescrizione());
+        noteProprietario.setPet(opPet.get());
+
+        NoteProprietario newNota = noteProprietarioRepository.save(noteProprietario);
+
+        return new InserimentoNoteResponseDTO(
+                newNota.getId(),
+                newNota.getTitolo(),
+                newNota.getDescrizione(),
+                newNota.getPet().getId(),
+                newNota.getPet().getNome(),
+                newNota.getPet().getProprietario().getId(),
+                newNota.getPet().getProprietario().getNome() + " " +
+                        newNota.getPet().getProprietario().getCognome()
         );
     }
 }

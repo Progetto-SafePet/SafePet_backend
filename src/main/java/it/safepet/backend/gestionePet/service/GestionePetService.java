@@ -1,5 +1,7 @@
 package it.safepet.backend.gestionePet.service;
 
+import it.safepet.backend.gestionePet.dto.InserimentoNoteRequestDTO;
+import it.safepet.backend.gestionePet.dto.InserimentoNoteResponseDTO;
 import it.safepet.backend.gestionePet.dto.NewPetDTO;
 import it.safepet.backend.gestionePet.dto.PetResponseDTO;
 import it.safepet.backend.gestionePet.dto.VisualizzaPetResponseDTO;
@@ -70,4 +72,18 @@ public interface GestionePetService {
      * @throws RuntimeException se l'utente non è autenticato, non è un proprietario o il pet non esiste
      */
     public PetResponseDTO getAnagraficaPet(Long petId);
+
+    /**
+     * Crea una nuova nota associata a un pet, validando i dati forniti dal proprietario
+     * e verificando che l’utente autenticato sia effettivamente il proprietario del pet.
+     * Restituisce i dettagli completi della nota appena registrata.
+     *
+     * @param inserimentoNoteRequestDTO DTO contenente titolo, descrizione della nota e
+     *                                  identificativo del pet a cui associarla
+     * @return InserimentoNoteResponseDTO con le informazioni della nota creata,
+     *         inclusi nome del pet e dati del proprietario
+     * @throws IOException se si verificano errori durante l’elaborazione dei dati
+     * @throws RuntimeException se il pet non esiste oppure non appartiene al proprietario autenticato
+     */
+    InserimentoNoteResponseDTO creaNota(@Valid InserimentoNoteRequestDTO inserimentoNoteRequestDTO) throws IOException;
 }
