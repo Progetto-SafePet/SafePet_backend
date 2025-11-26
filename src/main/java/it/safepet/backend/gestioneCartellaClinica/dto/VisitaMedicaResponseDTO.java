@@ -1,5 +1,7 @@
 package it.safepet.backend.gestioneCartellaClinica.dto;
 
+import it.safepet.backend.gestioneCartellaClinica.model.VisitaMedica;
+
 import java.util.Date;
 
 public class VisitaMedicaResponseDTO {
@@ -7,11 +9,16 @@ public class VisitaMedicaResponseDTO {
     private String nome;
     private Long petId;
     private Long veterinarioId;
+
     private String descrizione;
-    private String nomeCompletoVeterinario;
     private String nomePet;
     private Date data;
     private boolean isPresentReferto;
+
+    private String nomeCompletoVeterinario;
+
+    public VisitaMedicaResponseDTO() {
+    }
 
     public VisitaMedicaResponseDTO(Long visitaMedicaId, String nome, Long petId, Long veterinarioId,
                                    String descrizione, String nomeCompletoVeterinario, String nomePet,
@@ -96,5 +103,22 @@ public class VisitaMedicaResponseDTO {
 
     public void setPresentReferto(boolean presentReferto) {
         isPresentReferto = presentReferto;
+    }
+
+    public static VisitaMedicaResponseDTO from(VisitaMedica visita) {
+        VisitaMedicaResponseDTO dto = new VisitaMedicaResponseDTO(
+                visita.getId(),
+                visita.getNome(),
+                visita.getPet().getId(),
+                visita.getVeterinario().getId(),
+                visita.getDescrizione(),
+                visita.getVeterinario().getNome() + " " + visita.getVeterinario().getCognome(),
+                visita.getPet().getNome(),
+                visita.getData()
+        );
+
+        // Gestione del referto: true se presente
+        dto.setPresentReferto(visita.getReferto() != null);
+        return dto;
     }
 }

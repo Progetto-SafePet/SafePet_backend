@@ -13,6 +13,7 @@ import it.safepet.backend.gestioneUtente.model.Veterinario;
 import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.Optional;
@@ -31,6 +32,7 @@ public class GestionePatologiaServiceImpl implements GestionePatologiaService {
     private VeterinarioRepository veterinarioRepository;
 
     @Override
+    @Transactional
     public PatologiaResponseDTO creaPatologia(PatologiaRequestDTO richiesta) {
 
         AuthenticatedUser currentUser = AuthContext.getCurrentUser();
@@ -67,7 +69,8 @@ public class GestionePatologiaServiceImpl implements GestionePatologiaService {
                 nuovaPatologia.getDiagnosi(),
                 nuovaPatologia.getTerapiaAssociata(),
                 nuovaPatologia.getPet().getId(),
-                nuovaPatologia.getVeterinario().getId()
+                nuovaPatologia.getVeterinario().getId(),
+                nuovaPatologia.getVeterinario().getNome() + " " + nuovaPatologia.getVeterinario().getCognome()
         );
     }
 }

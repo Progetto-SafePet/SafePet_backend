@@ -1,5 +1,7 @@
 package it.safepet.backend.gestioneCartellaClinica.dto;
 
+import it.safepet.backend.gestioneCartellaClinica.model.Vaccinazione;
+
 import java.util.Date;
 
 public class VaccinazioneResponseDTO {
@@ -17,6 +19,9 @@ public class VaccinazioneResponseDTO {
     private Date richiamoPrevisto;
 
     private String nomeVeterinarioCompleto;
+
+    public VaccinazioneResponseDTO() {
+    }
 
     public VaccinazioneResponseDTO(
             Long vaccinazioneId,
@@ -130,5 +135,21 @@ public class VaccinazioneResponseDTO {
 
     public void setNomeVeterinarioCompleto(String nomeVeterinarioCompleto) {
         this.nomeVeterinarioCompleto = nomeVeterinarioCompleto;
+    }
+
+    public static VaccinazioneResponseDTO from(Vaccinazione vaccinazione) {
+        return new VaccinazioneResponseDTO(
+                vaccinazione.getId(),
+                vaccinazione.getNome(),
+                vaccinazione.getPet().getId(),
+                vaccinazione.getVeterinario().getId(),
+                vaccinazione.getTipologia(),
+                vaccinazione.getDataDiSomministrazione(),
+                vaccinazione.getDoseSomministrata(),
+                vaccinazione.getViaDiSomministrazione().name(),
+                vaccinazione.getEffettiCollaterali(),
+                vaccinazione.getRichiamoPrevisto(),
+                vaccinazione.getVeterinario().getNome() + " " + vaccinazione.getVeterinario().getCognome()
+        );
     }
 }
