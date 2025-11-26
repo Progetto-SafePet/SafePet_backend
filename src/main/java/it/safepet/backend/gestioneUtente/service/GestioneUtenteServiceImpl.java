@@ -1,17 +1,21 @@
 package it.safepet.backend.gestioneUtente.service;
 
 import it.safepet.backend.autenticazione.jwt.AuthContext;
+import it.safepet.backend.gestioneRecensioni.dto.RecensioneResponseDTO;
 import it.safepet.backend.gestioneUtente.dto.RegistrazioneProprietarioRequestDTO;
 import it.safepet.backend.gestioneUtente.dto.VisualizzaDettagliVeterinariResponseDTO;
 import it.safepet.backend.gestioneUtente.model.Proprietario;
 import it.safepet.backend.gestioneUtente.model.Veterinario;
 import it.safepet.backend.gestioneUtente.repository.ProprietarioRepository;
 import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
+import it.safepet.backend.reportCliniche.dto.OrariClinicaResponseDTO;
+import it.safepet.backend.reportCliniche.model.Clinica;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import java.util.List;
 import it.safepet.backend.autenticazione.jwt.AuthenticatedUser;
@@ -57,7 +61,8 @@ public class GestioneUtenteServiceImpl implements GestioneUtenteService {
     }
 
     @Override
-    public List<VisualizzaDettagliVeterinariResponseDTO> visualizzaDettagliVeterinari(Long idVet) {
+    @Transactional(readOnly = true)
+    public VisualizzaDettagliVeterinariResponseDTO visualizzaDettagliVeterinari(Long idVet) {
         AuthenticatedUser currentUser = AuthContext.getCurrentUser();
 
         if (currentUser == null) {
@@ -69,22 +74,47 @@ public class GestioneUtenteServiceImpl implements GestioneUtenteService {
 
         Double mediaRecensioni = veterinarioRepository.calcolaMediaRecensioniVeterinario(idVet);
 
-        return veterinarioRepository.findById(idVet)
-                .stream()
-                .map(p -> new VisualizzaDettagliVeterinariResponseDTO(
-                        veterinario.getId(),
-                        veterinario.getNome(),
-                        veterinario.getCognome(),
-                        veterinario.getDataNascita(),
-                        veterinario.getGenere(),
-                        veterinario.getEmail(),
-                        veterinario.getNumeroTelefono(),
-                        veterinario.getSpecializzazioniAnimali(),
-                        veterinario.getClinica().getId(),
-                        veterinario.getClinica().getNome(),
-                        veterinario.getClinica().getIndirizzo(),
-                        mediaRecensioni
+        Clinica clinica = veterinario.getClinica();
+
+        List<OrariClinicaResponseDTO> orariDTO = clinica.getOrariApertura().stream()
+                .map(o -> new OrariClinicaResponseDTO(
+                        o.getGiorno(), //creato un dto per avere solo queste informazioni specifiche
+                        o.getOrarioApertura(),
+                        o.getOrarioChiusura(),
+                        o.getAperto24h()
                 ))
                 .toList();
+
+        List<RecensioneResponseDTO> recensioniDTO = veterinario.getRecensioni()
+                .stream()
+                .map(r -> new RecensioneResponseDTO(
+                        r.getId(),  //creato un dto per avere solo queste informazioni specifiche
+                        r.getPunteggio(),
+                        r.getDescrizione(),
+                        r.getProprietario().getId(),
+                        r.getVeterinario().getId()
+                ))
+                .toList();
+
+
+        return new VisualizzaDettagliVeterinariResponseDTO(
+                veterinario.getId(),
+                veterinario.getNome(),
+                veterinario.getCognome(),
+                veterinario.getDataNascita(),
+                veterinario.getGenere(),
+                veterinario.getEmail(),
+                veterinario.getNumeroTelefono(),
+                veterinario.getSpecializzazioniAnimali(),
+                clinica.getId(),
+                clinica.getNome(),
+                clinica.getIndirizzo(),
+                clinica.getNumeroTelefono(),
+                clinica.getLatitudine(),
+                clinica.getLongitudine(),
+                orariDTO,
+                recensioniDTO,
+                mediaRecensioni
+        );
     }
 }

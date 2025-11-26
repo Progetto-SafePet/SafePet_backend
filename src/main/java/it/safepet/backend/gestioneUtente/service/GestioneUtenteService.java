@@ -4,8 +4,6 @@ import it.safepet.backend.gestioneUtente.dto.RegistrazioneProprietarioRequestDTO
 import it.safepet.backend.gestioneUtente.dto.VisualizzaDettagliVeterinariResponseDTO;
 import jakarta.validation.Valid;
 
-import java.util.List;
-
 public interface GestioneUtenteService {
     /**
      * Registra un nuovo proprietario nel sistema.
@@ -16,12 +14,13 @@ public interface GestioneUtenteService {
     void registraProprietario(@Valid RegistrazioneProprietarioRequestDTO registrazioneDTO);
 
     /**
-     * Recupera i dettagli completi di un veterinario, inclusi informazioni personali,
-     * contatti, clinica associata e media delle recensioni ricevute.
+     * Recupera i dettagli completi di un veterinario, includendo informazioni personali,
+     * contatti, clinica associata, orari di apertura e chiusura, recensioni ricevute e la media
+     * complessiva delle valutazioni. L’accesso richiede che l’utente sia autenticato.
      *
      * @param idVet identificativo del veterinario di cui recuperare i dettagli
-     * @return una lista contenente un unico {@link VisualizzaDettagliVeterinariResponseDTO}
-     *         con tutte le informazioni del veterinario richiesto
+     * @return un {@link VisualizzaDettagliVeterinariResponseDTO} contenente tutte le informazioni
+     *         anagrafiche, cliniche e relative alle recensioni del veterinario richiesto
      */
-    List<VisualizzaDettagliVeterinariResponseDTO> visualizzaDettagliVeterinari(Long idVet);
+    VisualizzaDettagliVeterinariResponseDTO visualizzaDettagliVeterinari(Long idVet);
 }
