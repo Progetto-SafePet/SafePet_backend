@@ -1,5 +1,7 @@
 package it.safepet.backend.gestionePet.controller;
 
+import it.safepet.backend.gestionePet.dto.InserimentoNoteRequestDTO;
+import it.safepet.backend.gestionePet.dto.InserimentoNoteResponseDTO;
 import it.safepet.backend.gestionePet.dto.NewPetDTO;
 import it.safepet.backend.gestionePet.dto.PetResponseDTO;
 import it.safepet.backend.gestionePet.dto.VisualizzaPetResponseDTO;
@@ -143,6 +145,57 @@ public class GestionePetController {
         return ResponseEntity.ok(pets);
     }
 
+    /**
+     * Crea e registra una nuova nota per un pet, verificando che l'utente autenticato
+     * sia un proprietario e che il pet sia effettivamente associato a lui.
+     * Permette al proprietario di aggiungere informazioni testuali relative al proprio animale.
+     * Restituisce i dettagli completi della nota appena creata.
+     *
+     * <p><b>Metodo:</b> POST<br>
+     * <b>Endpoint:</b> /it.safepet.backend.gestionePet/creaNota/{petId}<br>
+     * <b>Content-Type:</b> application/json</p>
+     *
+     * <p><b>Parametri di percorso:</b></p>
+     * <ul>
+     *   <li><b>petId</b> – identificativo del pet a cui associare la nota</li>
+     * </ul>
+     *
+     * <p><b>Corpo richiesta (application/json):</b></p>
+     * <ul>
+     *   <li><b>titolo</b> – titolo della nota</li>
+     *   <li><b>descrizione</b> – contenuto testuale della nota</li>
+     *   <li><b>petId</b> – impostato automaticamente tramite il parametro di percorso</li>
+     * </ul>
+     *
+     * <p><b>Esempio risposta (201 CREATED):</b></p>
+     * <pre>
+     * {
+     *   "idNota": 7,
+     *   "titolo": "Alimentazione",
+     *   "descrizione": "Ricordarsi di acquistare il nuovo mangime ipoallergenico.",
+     *   "idPet": 3,
+     *   "nomePet": "Luna",
+     *   "idProprietario": 12,
+     *   "nomeCompletoProprietario": "Mario Rossi"
+     * }
+     * </pre>
+     *
+     * @param petId identificativo del pet a cui associare la nota
+     * @param inserimentoNoteRequestDTO DTO contenente titolo e descrizione della nota
+     * @return {@link InserimentoNoteResponseDTO} con i dettagli della nota creata
+     * @throws IOException se si verificano errori durante la gestione dei dati
+     * @throws RuntimeException se l'utente non è un proprietario, il pet non esiste
+     *         o non appartiene al proprietario autenticato
+     */
+    @PostMapping(value = "/creaNota/{petId}",  consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<InserimentoNoteResponseDTO> creaNota(
+            @PathVariable Long petId,
+            @RequestBody InserimentoNoteRequestDTO inserimentoNoteRequestDTO) throws IOException {
+        inserimentoNoteRequestDTO.setPetId(petId);
+        System.out.println(inserimentoNoteRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(gestionePetService.creaNota(inserimentoNoteRequestDTO));
+    }
     
 }
 
