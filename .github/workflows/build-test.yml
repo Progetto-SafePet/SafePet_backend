@@ -1,0 +1,49 @@
+name: Build, Checkstyle & Test
+
+on:
+  push:
+    branches: [ "main", "CI-Test" ]
+  pull_request:
+    branches: [ "main", "CI-Test" ]
+
+jobs:
+  build:
+    name: Build & Verify Maven Project
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout del codice sorgente
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Setup di Java
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      # Build del progetto
+      - name: Maven Build
+        run: mvn -B clean compile
+
+      # Checkstyle
+      - name: Run Checkstyle
+        run: mvn -B checkstyle:check
+
+      # Test
+      - name: Run Tests
+        run: mvn -B test
+
+      # Report Checkstyle
+      - name: Generate Checkstyle Report
+        if: always()
+        run: mvn -B checkstyle:checkstyle
+
+      - name: Upload Checkstyle Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: checkstyle-report
+          path: target/site/checkstyle.html
