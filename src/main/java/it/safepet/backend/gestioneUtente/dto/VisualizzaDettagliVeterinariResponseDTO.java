@@ -17,8 +17,8 @@ public class VisualizzaDettagliVeterinariResponseDTO {
     private String specializzazioniAnimali;
 
     private Long idClinica;
-    private String nomeClinica; //inserisci tutti i dettagli della clinica
-    private String indirizzoClinica; //aggiungere Lista di recensioni
+    private String nomeClinica;
+    private String indirizzoClinica;
     private String numeroTelefonoClinica;
     private Double latitudineClinica;
     private Double longitudineClinica;
