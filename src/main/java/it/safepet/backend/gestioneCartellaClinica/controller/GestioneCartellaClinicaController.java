@@ -1,13 +1,8 @@
 package it.safepet.backend.gestioneCartellaClinica.controller;
 
-import it.safepet.backend.gestioneCartellaClinica.dto.CartellaClinicaResponseDTO;
-import it.safepet.backend.gestioneCartellaClinica.dto.PatologiaRequestDTO;
-import it.safepet.backend.gestioneCartellaClinica.dto.PatologiaResponseDTO;
-import it.safepet.backend.gestioneCartellaClinica.dto.VaccinazioneRequestDTO;
-import it.safepet.backend.gestioneCartellaClinica.dto.VaccinazioneResponseDTO;
-import it.safepet.backend.gestioneCartellaClinica.dto.VisitaMedicaRequestDTO;
-import it.safepet.backend.gestioneCartellaClinica.dto.VisitaMedicaResponseDTO;
+import it.safepet.backend.gestioneCartellaClinica.dto.*;
 import it.safepet.backend.gestioneCartellaClinica.service.GestioneCartellaClinicaService;
+import it.safepet.backend.gestioneCartellaClinica.service.terapia.GestioneTerapiaService;
 import it.safepet.backend.gestioneCartellaClinica.service.vaccinazione.GestioneVaccinazioneService;
 
 import it.safepet.backend.gestioneCartellaClinica.service.patologia.GestionePatologiaService;
@@ -38,6 +33,9 @@ public class GestioneCartellaClinicaController {
 
     @Autowired
     private GestioneVaccinazioneService gestioneVaccinazioneService;
+
+    @Autowired
+    private GestioneTerapiaService gestioneTerapiaService;
 
     @Autowired
     private GestioneCartellaClinicaService gestioneCartellaClinicaService;
@@ -257,7 +255,59 @@ public class GestioneCartellaClinicaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    //aggiungi terapia endPoint
+    /**
+     * Permette al veterinario autenticato di aggiungere una nuova terapia alla
+     * cartella clinica del pet indicato. Il sistema verifica che:
+     * <ul>
+     *   <li>l'utente autenticato sia un veterinario;</li>
+     *   <li>il pet esista nel sistema;</li>
+     *   <li>il pet sia effettivamente associato al veterinario;</li>
+     *   <li>i dati della terapia rispettino i vincoli previsti dallo use case
+     *       (nome, forma farmaceutica, dosaggio, posologia, via di somministrazione,
+     *       durata, frequenza e motivo).</li>
+     * </ul>
+     *
+     * <p><b>Metodo:</b> POST<br>
+     * <b>Endpoint:</b> /gestioneCartellaClinica/aggiungiTerapia/{petId}<br>
+     * <b>Content-Type:</b> application/json</p>
+     *
+     * <p><b>Parametri di percorso:</b></p>
+     * <ul>
+     *   <li><b>petId</b> – identificativo del pet a cui associare la terapia</li>
+     * </ul>
+     *
+     * <p><b>Corpo richiesta (JSON):</b></p>
+     * <pre>
+     * {
+     *   "nome": "Antinfiammatorio per artrite",
+     *   "formaFarmaceutica": "Compresse",
+     *   "dosaggio": "50mg",
+     *   "posologia": "1 compressa ogni 24 ore",
+     *   "viaDiSomministrazione": "Orale",
+     *   "durata": "10 giorni",
+     *   "frequenza": "Una volta al giorno",
+     *   "motivo": "Trattamento dell'infiammazione articolare"
+     * }
+     * </pre>
+     *
+     * @param petId identificativo del pet a cui associare la terapia
+     * @param terapiaRequestDTO DTO contenente i dati della terapia da creare
+     * @return {@link TerapiaResponseDTO} con i dettagli della terapia creata
+     * @throws org.springframework.web.server.ResponseStatusException se l'utente non è un veterinario,
+     *         il pet non esiste, non è associato al veterinario, oppure i dati
+     *         non rispettano i vincoli previsti
+     */
+
+    @PostMapping ("/aggiungiTerapia/{petId}")
+    public ResponseEntity<TerapiaResponseDTO> aggiungiTerapia(
+            @PathVariable Long petId,
+            @RequestBody TerapiaRequestDTO terapiaRequestDTO){
+        terapiaRequestDTO.setPetId(petId);
+
+        TerapiaResponseDTO terapiaResponseDTO=
+                gestioneTerapiaService.aggiungiTerapia(terapiaRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(terapiaResponseDTO);
+    }
 
     //momentaneo, per provare su PostMan (quindi non serve Javadoc)
     @GetMapping("/cartellaClinica/{petId}")
