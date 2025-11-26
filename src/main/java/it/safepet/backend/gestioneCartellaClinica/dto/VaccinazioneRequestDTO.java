@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class VaccinazioneRequestDTO {
 
@@ -25,7 +25,7 @@ public class VaccinazioneRequestDTO {
 
     @NotNull(message = "La data di somministrazione è obbligatoria")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date dataDiSomministrazione;
+    private LocalDate dataDiSomministrazione;
 
     @NotNull(message = "La dose somministrata è obbligatoria")
     @DecimalMin(value = "0.1", message = "La dose minima è 0.1 ml")
@@ -44,7 +44,7 @@ public class VaccinazioneRequestDTO {
 
     @NotNull(message = "Il richiamo previsto è obbligatorio")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date richiamoPrevisto;
+    private LocalDate richiamoPrevisto;
 
     public VaccinazioneRequestDTO() {
     }
@@ -53,11 +53,11 @@ public class VaccinazioneRequestDTO {
             String nomeVaccino,
             Long petId,
             String tipologia,
-            Date dataDiSomministrazione,
+            LocalDate dataDiSomministrazione,
             Float doseSomministrata,
             String viaDiSomministrazione,
             String effettiCollaterali,
-            Date richiamoPrevisto) {
+            LocalDate richiamoPrevisto) {
 
         this.nomeVaccino = nomeVaccino;
         this.petId = petId;
@@ -70,7 +70,7 @@ public class VaccinazioneRequestDTO {
     }
 
 
-    public @NotNull(message = "La data di somministrazione è obbligatoria") Date getDataDiSomministrazione() {
+    public @NotNull(message = "La data di somministrazione è obbligatoria") LocalDate getDataDiSomministrazione() {
         return dataDiSomministrazione;
     }
 
@@ -89,7 +89,7 @@ public class VaccinazioneRequestDTO {
         return effettiCollaterali;
     }
 
-    public @NotNull(message = "Il richiamo previsto è obbligatorio") Date getRichiamoPrevisto() {
+    public @NotNull(message = "Il richiamo previsto è obbligatorio") LocalDate getRichiamoPrevisto() {
         return richiamoPrevisto;
     }
 
@@ -118,7 +118,7 @@ public class VaccinazioneRequestDTO {
         this.tipologia = tipologia;
     }
 
-    public void setDataDiSomministrazione(@NotNull(message = "La data di somministrazione è obbligatoria") Date dataDiSomministrazione) {
+    public void setDataDiSomministrazione(@NotNull(message = "La data di somministrazione è obbligatoria") LocalDate dataDiSomministrazione) {
         this.dataDiSomministrazione = dataDiSomministrazione;
     }
 
@@ -137,7 +137,7 @@ public class VaccinazioneRequestDTO {
         this.effettiCollaterali = effettiCollaterali;
     }
 
-    public void setRichiamoPrevisto(@NotNull(message = "Il richiamo previsto è obbligatorio") Date richiamoPrevisto) {
+    public void setRichiamoPrevisto(@NotNull(message = "Il richiamo previsto è obbligatorio") LocalDate richiamoPrevisto) {
         this.richiamoPrevisto = richiamoPrevisto;
     }
 }
