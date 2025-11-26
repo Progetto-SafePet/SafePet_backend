@@ -3,7 +3,11 @@ package it.safepet.backend.gestionePet.service;
 import it.safepet.backend.autenticazione.jwt.AuthContext;
 import it.safepet.backend.autenticazione.jwt.AuthenticatedUser;
 import it.safepet.backend.autenticazione.jwt.Role;
-import it.safepet.backend.gestionePet.dto.*;
+import it.safepet.backend.gestionePet.dto.InserimentoNoteRequestDTO;
+import it.safepet.backend.gestionePet.dto.InserimentoNoteResponseDTO;
+import it.safepet.backend.gestionePet.dto.NewPetDTO;
+import it.safepet.backend.gestionePet.dto.PetResponseDTO;
+import it.safepet.backend.gestionePet.dto.VisualizzaPetResponseDTO;
 import it.safepet.backend.gestionePet.model.NoteProprietario;
 import it.safepet.backend.gestionePet.model.Pet;
 import it.safepet.backend.gestionePet.repository.NoteProprietarioRepository;
@@ -53,8 +57,6 @@ public class GestionePetServiceImpl implements GestionePetService {
                 throw new RuntimeException("Microchip già esistente");
             }
         }
-
-
 
         // Creazione pet
         Pet pet = new Pet();
@@ -203,4 +205,3 @@ public class GestionePetServiceImpl implements GestionePetService {
         );
     }
 }
-

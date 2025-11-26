@@ -73,6 +73,8 @@ public interface GestionePetService {
      */
     public PetResponseDTO getAnagraficaPet(Long petId);
 
+    //fare get note del pet
+
     /**
      * Crea una nuova nota associata a un pet, validando i dati forniti dal proprietario
      * e verificando che l’utente autenticato sia effettivamente il proprietario del pet.

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -98,7 +99,6 @@ public class GestionePetController {
      * @throws IOException se si verifica un errore nella lettura o conversione dell’immagine
      * @see PetResponseDTO
      */
-
     @PostMapping(value = "/creaPet", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<PetResponseDTO> creaPet(@ModelAttribute NewPetDTO newPetDTO) throws IOException {
         PetResponseDTO nuovoPet = gestionePetService.creaPet(newPetDTO);
@@ -149,7 +149,6 @@ public class GestionePetController {
      * @return una lista di {@link VisualizzaPetResponseDTO} appartenenti all’utente autenticato
      * @see VisualizzaPetResponseDTO
      */
-
     @GetMapping("/visualizzaElencoPet")
     public ResponseEntity<List<VisualizzaPetResponseDTO>> visualizzaMieiPet() {
         List<VisualizzaPetResponseDTO> pets = gestionePetService.visualizzaMieiPet();
@@ -267,6 +266,4 @@ public class GestionePetController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(gestionePetService.creaNota(inserimentoNoteRequestDTO));
     }
-
 }
-
