@@ -5,7 +5,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "vaccinazioni")
@@ -15,7 +15,7 @@ public class Vaccinazione extends RecordMedico {
     private String tipologia;
 
     @Column(name = "data_di_somministrazione", nullable = false)
-    private Date dataDiSomministrazione;
+    private LocalDate dataDiSomministrazione;
 
     @Column(name = "dose_somministrata", nullable = false)
     private Float doseSomministrata;
@@ -27,7 +27,7 @@ public class Vaccinazione extends RecordMedico {
     private String effettiCollaterali;
 
     @Column(name = "richiamo_previsto", nullable = false)
-    private Date richiamoPrevisto;
+    private LocalDate richiamoPrevisto;
 
     public enum Somministrazione {
         SOTTOCUTANEA,
@@ -49,11 +49,11 @@ public class Vaccinazione extends RecordMedico {
         this.tipologia = tipologia;
     }
 
-    public Date getDataDiSomministrazione() {
+    public LocalDate getDataDiSomministrazione() {
         return dataDiSomministrazione;
     }
 
-    public void setDataDiSomministrazione(Date dataDiSomministrazione) {
+    public void setDataDiSomministrazione(LocalDate dataDiSomministrazione) {
         this.dataDiSomministrazione = dataDiSomministrazione;
     }
 
@@ -81,11 +81,11 @@ public class Vaccinazione extends RecordMedico {
         this.effettiCollaterali = effettiCollaterali;
     }
 
-    public Date getRichiamoPrevisto() {
+    public LocalDate getRichiamoPrevisto() {
         return richiamoPrevisto;
     }
 
-    public void setRichiamoPrevisto(Date richiamoPrevisto) {
+    public void setRichiamoPrevisto(LocalDate richiamoPrevisto) {
         this.richiamoPrevisto = richiamoPrevisto;
     }
 }

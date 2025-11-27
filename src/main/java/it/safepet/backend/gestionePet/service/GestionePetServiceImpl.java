@@ -51,7 +51,6 @@ public class GestionePetServiceImpl implements GestionePetService {
                 .findById(currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Proprietario non trovato"));
 
-        //TODO: aggiungere controllo microchip univoco
         if (newPetDTO.getMicrochip() != null) {
             if (petRepository.findByMicrochip(newPetDTO.getMicrochip()).isPresent()) {
                 throw new RuntimeException("Microchip già esistente");
@@ -161,7 +160,7 @@ public class GestionePetServiceImpl implements GestionePetService {
         );
     }
 
-    public InserimentoNoteResponseDTO creaNota(InserimentoNoteRequestDTO inserimentoNoteRequestDTO) {
+    public InserimentoNoteResponseDTO creaNota(@Valid InserimentoNoteRequestDTO inserimentoNoteRequestDTO) {
         //utente autenticato
         AuthenticatedUser currentUser = AuthContext.getCurrentUser();
 
