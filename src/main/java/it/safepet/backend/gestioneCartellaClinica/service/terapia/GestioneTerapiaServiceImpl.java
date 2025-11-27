@@ -17,11 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Optional;
 
 @Service
 @Validated
-public class GestioneTerapiaServiceImpl implements GestioneTerapiaService{
+public class GestioneTerapiaServiceImpl implements GestioneTerapiaService {
     @Autowired
     private PetRepository petRepository;
 
@@ -48,7 +47,7 @@ public class GestioneTerapiaServiceImpl implements GestioneTerapiaService{
         Pet pet = petRepository.findById(dto.getPetId())
                 .orElseThrow(() -> new RuntimeException("Pet non trovato"));
 
-        if(!petRepository.verificaAssociazionePetVeterinario(pet.getId(), veterinario.getId())) {
+        if (!petRepository.verificaAssociazionePetVeterinario(pet.getId(), veterinario.getId())) {
             throw new RuntimeException("Il pet non è un paziente del veterinario");
         }
 
@@ -64,7 +63,7 @@ public class GestioneTerapiaServiceImpl implements GestioneTerapiaService{
         terapia.setFrequenza(dto.getFrequenza());
         terapia.setMotivo(dto.getMotivo());
 
-        Terapia saved= terapiaRepository.save(terapia);
+        Terapia saved = terapiaRepository.save(terapia);
 
         return new TerapiaResponseDTO(
                 saved.getId(),
