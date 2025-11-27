@@ -10,7 +10,7 @@ import java.util.Date;
 public class PatologiaRequestDTO {
 
     @NotBlank(message = "Il nome della patologia è obbligatorio")
-    @Size(min = 3, max = 20, message = "Il nome deve contenere tra 3 e 25 caratteri")
+    @Size(min = 3, max = 25, message = "Il nome deve contenere tra 3 e 25 caratteri")
     private String nome;
 
     @NotNull(message = "La data della diagnosi è obbligatoria")
