@@ -1,6 +1,5 @@
 package it.safepet.backend.gestioneUtente.service;
 
-import it.safepet.backend.autenticazione.jwt.AuthContext;
 import it.safepet.backend.gestioneRecensioni.dto.RecensioneResponseDTO;
 import it.safepet.backend.gestioneUtente.dto.RegistrazioneProprietarioRequestDTO;
 import it.safepet.backend.gestioneUtente.dto.VisualizzaDettagliVeterinariResponseDTO;
@@ -18,8 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import java.util.List;
-import it.safepet.backend.autenticazione.jwt.AuthenticatedUser;
 import org.springframework.web.server.ResponseStatusException;
+
 
 @Service
 @Validated
@@ -63,12 +62,6 @@ public class GestioneUtenteServiceImpl implements GestioneUtenteService {
     @Override
     @Transactional(readOnly = true)
     public VisualizzaDettagliVeterinariResponseDTO visualizzaDettagliVeterinari(Long idVet) {
-        AuthenticatedUser currentUser = AuthContext.getCurrentUser();
-
-        if (currentUser == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Utente non autenticato.");
-        }
-
         Veterinario veterinario = veterinarioRepository.findById(idVet)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Veterinario non trovato"));
 
