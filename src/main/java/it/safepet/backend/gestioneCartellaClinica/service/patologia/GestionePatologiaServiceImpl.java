@@ -55,7 +55,7 @@ public class GestionePatologiaServiceImpl implements GestionePatologiaService {
         patologia.setDataDiDiagnosi(richiesta.getDataDiDiagnosi());
         patologia.setSintomiOsservati(richiesta.getSintomiOsservati());
         patologia.setDiagnosi(richiesta.getDiagnosi());
-        patologia.setTerapiaAssociata(richiesta.getTerapiaAssociata());
+        patologia.setTrattamento(richiesta.getTerapiaAssociata());
         patologia.setPet(pet);
         patologia.setVeterinario(veterinario);
 
@@ -67,7 +67,7 @@ public class GestionePatologiaServiceImpl implements GestionePatologiaService {
                 nuovaPatologia.getDataDiDiagnosi(),
                 nuovaPatologia.getSintomiOsservati(),
                 nuovaPatologia.getDiagnosi(),
-                nuovaPatologia.getTerapiaAssociata(),
+                nuovaPatologia.getTrattamento(),
                 nuovaPatologia.getPet().getId(),
                 nuovaPatologia.getVeterinario().getId(),
                 nuovaPatologia.getVeterinario().getNome() + " " + nuovaPatologia.getVeterinario().getCognome()

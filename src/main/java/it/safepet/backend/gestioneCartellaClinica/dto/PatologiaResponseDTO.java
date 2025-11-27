@@ -67,7 +67,7 @@ public class PatologiaResponseDTO {
                 patologia.getDataDiDiagnosi(),
                 patologia.getSintomiOsservati(),
                 patologia.getDiagnosi(),
-                patologia.getTerapiaAssociata(),
+                patologia.getTrattamento(),
                 patologia.getPet().getId(),
                 patologia.getVeterinario().getId(),
                 patologia.getVeterinario().getNome() + " " + patologia.getVeterinario().getCognome()

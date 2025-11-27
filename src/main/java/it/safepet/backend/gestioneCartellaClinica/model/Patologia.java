@@ -20,8 +20,8 @@ public class Patologia extends RecordMedico {
     @Column(name = "diagnosi", nullable = false)
     private String diagnosi;
 
-    @Column(name = "terapia_associata", nullable = false)
-    private String terapiaAssociata;
+    @Column(name = "trattamento", nullable = false)
+    private String trattamento;
 
     public Patologia() { }
 
@@ -49,11 +49,11 @@ public class Patologia extends RecordMedico {
         this.diagnosi = diagnosi;
     }
 
-    public String getTerapiaAssociata() {
-        return terapiaAssociata;
+    public String getTrattamento() {
+        return trattamento;
     }
 
-    public void setTerapiaAssociata(String terapiaAssociata) {
-        this.terapiaAssociata = terapiaAssociata;
+    public void setTrattamento(String trattamento) {
+        this.trattamento = trattamento;
     }
 }
