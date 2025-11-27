@@ -38,6 +38,9 @@ public class TerapiaRequestDTO {
     @Size(min= 5, max= 160, message = "Il motivo deve contenere tra 5 e 160 caratteri")
     private String motivo;
 
+    public TerapiaRequestDTO() {
+    }
+
     public TerapiaRequestDTO(String nome, Long petId, String formaFarmaceutica, String dosaggio, String posologia, String viaDiSomministrazione, String durata, String frequenza, String motivo) {
         this.nome = nome;
         this.petId = petId;

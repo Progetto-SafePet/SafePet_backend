@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Base64;
 
 public class PazienteResponseDTO {
+    private Long id;
     private String nome;
     private String specie;
     private LocalDate dataNascita;
@@ -11,7 +12,8 @@ public class PazienteResponseDTO {
     private String sesso;
     private String fotoBase64;
 
-    public PazienteResponseDTO(String specie, String nome, LocalDate dataNascita, String proprietario, String sesso, byte[] foto) {
+    public PazienteResponseDTO(Long id, String specie, String nome, LocalDate dataNascita, String proprietario, String sesso, byte[] foto) {
+        this.id = id;
         this.specie = specie;
         this.nome = nome;
         this.dataNascita = dataNascita;
@@ -22,6 +24,10 @@ public class PazienteResponseDTO {
             this.fotoBase64 = Base64.getEncoder().encodeToString(foto);
         }
     }
+
+    public Long getId() { return id; }
+
+    public void setId(Long id) { this.id = id; }
 
     public String getNome() {
         return nome;
