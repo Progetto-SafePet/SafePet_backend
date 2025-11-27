@@ -19,7 +19,6 @@ import org.springframework.validation.annotation.Validated;
 import java.util.List;
 import org.springframework.web.server.ResponseStatusException;
 
-
 @Service
 @Validated
 public class GestioneUtenteServiceImpl implements GestioneUtenteService {
@@ -62,7 +61,7 @@ public class GestioneUtenteServiceImpl implements GestioneUtenteService {
     @Override
     @Transactional(readOnly = true)
     public VisualizzaDettagliVeterinariResponseDTO visualizzaDettagliVeterinari(Long idVet) {
-        Veterinario veterinario = veterinarioRepository.findById(idVet)
+       Veterinario veterinario = veterinarioRepository.findById(idVet)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Veterinario non trovato"));
 
         Double mediaRecensioni = veterinarioRepository.calcolaMediaRecensioniVeterinario(idVet);
