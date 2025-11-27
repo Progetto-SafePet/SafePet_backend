@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -209,12 +208,12 @@ public class GestionePetController {
     public ResponseEntity<DettagliPetResponseDTO> getDettaglioPet(@PathVariable Long petId) {
         PetResponseDTO anagrafica = gestionePetService.getAnagraficaPet(petId);
         CartellaClinicaResponseDTO cartellaClinica = gestioneCartellaClinicaService.getCartellaClinica(petId);
-        //InserimentoNoteResponseDTO note = gestioneNoteService.getNoteProprietario(petId);
+        List<InserimentoNoteResponseDTO> note = gestionePetService.getNoteProprietario(petId);
 
-        DettagliPetResponseDTO response = new DettagliPetResponseDTO(anagrafica, cartellaClinica); //note non ancora integrate
-        //DettagliPetResponseDTO response = new DettagliPetResponseDTO(anagrafica, cartellaClinica, note);
+        DettagliPetResponseDTO response = new DettagliPetResponseDTO(anagrafica, cartellaClinica, note);
         return ResponseEntity.ok(response);
     }
+
     /**
      * Crea e registra una nuova nota per un pet, verificando che l'utente autenticato
      * sia un proprietario e che il pet sia effettivamente associato a lui.

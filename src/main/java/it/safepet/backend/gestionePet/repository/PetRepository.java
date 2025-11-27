@@ -31,4 +31,6 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
     boolean verificaAssociazionePetVeterinario(@Param("petId") Long petId, @Param("veterinarioId") Long veterinarioId);
     Optional<Pet> findByMicrochip(String microchip);
     List<Pet> findByProprietario_Id(Long ownerId);
+
+    boolean existsByIdAndProprietarioId(Long petId, Long id);
 }

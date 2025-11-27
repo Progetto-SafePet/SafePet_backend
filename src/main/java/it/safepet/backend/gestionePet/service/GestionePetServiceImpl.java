@@ -203,4 +203,37 @@ public class GestionePetServiceImpl implements GestionePetService {
                         newNota.getPet().getProprietario().getCognome()
         );
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<InserimentoNoteResponseDTO> getNoteProprietario(Long petId) {
+        AuthenticatedUser currentUser = AuthContext.getCurrentUser();
+        if (currentUser == null) {
+            throw new RuntimeException("Accesso non autorizzato: nessun utente autenticato");
+        }
+
+        if (!"PROPRIETARIO".equals(currentUser.getRole().name())) {
+            throw new RuntimeException("Accesso negato: solo i proprietari possono visualizzare le note");
+        }
+
+        // Verifica che il pet appartenga al proprietario
+        boolean autorizzato = petRepository.existsByIdAndProprietarioId(petId, currentUser.getId());
+        if (!autorizzato) {
+            throw new RuntimeException("Accesso negato: il pet non appartiene al proprietario autenticato");
+        }
+
+        List<NoteProprietario> noteList = noteProprietarioRepository.findByPetId(petId);
+
+        return noteList.stream()
+                .map(n -> new InserimentoNoteResponseDTO(
+                        n.getId(),
+                        n.getTitolo(),
+                        n.getDescrizione(),
+                        n.getPet().getId(),
+                        n.getPet().getNome(),
+                        n.getPet().getProprietario().getId(),
+                        n.getPet().getProprietario().getNome() + " " + n.getPet().getProprietario().getCognome()
+                ))
+                .toList();
+    }
 }

@@ -1,27 +1,22 @@
 package it.safepet.backend.gestionePet.dto;
 
 import it.safepet.backend.gestioneCartellaClinica.dto.CartellaClinicaResponseDTO;
+import java.util.List;
 
 public class DettagliPetResponseDTO {
     private PetResponseDTO anagraficaDTO;
     private CartellaClinicaResponseDTO cartellaClinicaDTO;
-//    private InserimentoNoteResponseDTO noteProprietarioDTO;
+    private List<InserimentoNoteResponseDTO> noteProprietarioDTO;
 
     public DettagliPetResponseDTO() {
     }
 
-    //momentaneamente senza note per test
-    public DettagliPetResponseDTO(PetResponseDTO anagraficaDTO, CartellaClinicaResponseDTO cartellaClinicaDTO) {
+    public DettagliPetResponseDTO(PetResponseDTO anagraficaDTO, CartellaClinicaResponseDTO cartellaClinicaDTO,
+                                  List<InserimentoNoteResponseDTO> noteProprietarioDTO) {
         this.anagraficaDTO = anagraficaDTO;
         this.cartellaClinicaDTO = cartellaClinicaDTO;
+        this.noteProprietarioDTO = noteProprietarioDTO;
     }
-
-    //    public DettagliPetResponseDTO(PetResponseDTO anagraficaDTO, CartellaClinicaResponseDTO cartellaClinicaDTO,
-//                                  InserimentoNoteResponseDTO noteProprietarioDTO) {
-//        this.anagraficaDTO = anagraficaDTO;
-//        this.cartellaClinicaDTO = cartellaClinicaDTO;
-//        this.noteProprietarioDTO = noteProprietarioDTO;
-//    }
 
     public PetResponseDTO getAnagraficaDTO() {
         return anagraficaDTO;
@@ -39,11 +34,11 @@ public class DettagliPetResponseDTO {
         this.cartellaClinicaDTO = cartellaClinicaDTO;
     }
 
-//    public InserimentoNoteResponseDTO getNoteProprietarioDTO() {
-//        return noteProprietarioDTO;
-//    }
-//
-//    public void setNoteProprietarioDTO(InserimentoNoteResponseDTO noteProprietarioDTO) {
-//        this.noteProprietarioDTO = noteProprietarioDTO;
-//    }
+    public List<InserimentoNoteResponseDTO> getNoteProprietarioDTO() {
+        return noteProprietarioDTO;
+    }
+
+    public void setNoteProprietarioDTO(List<InserimentoNoteResponseDTO> noteProprietarioDTO) {
+        this.noteProprietarioDTO = noteProprietarioDTO;
+    }
 }

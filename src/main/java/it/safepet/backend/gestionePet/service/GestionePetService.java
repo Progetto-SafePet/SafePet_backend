@@ -36,7 +36,7 @@ public interface GestionePetService {
      * @return un {@link PetResponseDTO} contenente tutte le informazioni del pet salvato
      * @throws IOException se la lettura dei byte dell’immagine fallisce
      */
-    public PetResponseDTO creaPet(@Valid NewPetDTO newPetDTO) throws IOException;
+    PetResponseDTO creaPet(@Valid NewPetDTO newPetDTO) throws IOException;
 
     /**
      * Restituisce la lista degli animali associati all’utente autenticato.
@@ -46,7 +46,7 @@ public interface GestionePetService {
      *
      * @return una lista di {@link VisualizzaPetResponseDTO} appartenenti all’utente autenticato
      */
-    public List<VisualizzaPetResponseDTO> visualizzaMieiPet();
+    List<VisualizzaPetResponseDTO> visualizzaMieiPet();
 
     /**
      * Recupera i dati anagrafici di un pet, garantendo che l'utente autenticato
@@ -71,9 +71,7 @@ public interface GestionePetService {
      * @return {@link PetResponseDTO} con i dati anagrafici del pet
      * @throws RuntimeException se l'utente non è autenticato, non è un proprietario o il pet non esiste
      */
-    public PetResponseDTO getAnagraficaPet(Long petId);
-
-    //fare get note del pet
+    PetResponseDTO getAnagraficaPet(Long petId);
 
     /**
      * Crea una nuova nota associata a un pet, validando i dati forniti dal proprietario
@@ -88,4 +86,40 @@ public interface GestionePetService {
      * @throws RuntimeException se il pet non esiste oppure non appartiene al proprietario autenticato
      */
     InserimentoNoteResponseDTO creaNota(@Valid InserimentoNoteRequestDTO inserimentoNoteRequestDTO) throws IOException;
+
+    /**
+     * DTO di risposta per le note inserite dal proprietario relative a un pet.
+     *
+     * <p>Contiene tutte le informazioni necessarie per visualizzare una nota,
+     * inclusi i dettagli del pet e del proprietario associati.</p>
+     *
+     * <p><b>Campi:</b></p>
+     * <ul>
+     *   <li><b>idNota</b> – identificativo univoco della nota.</li>
+     *   <li><b>titolo</b> – titolo della nota (es. "Alimentazione", "Comportamento").</li>
+     *   <li><b>descrizione</b> – contenuto dettagliato della nota.</li>
+     *   <li><b>idPet</b> – identificativo del pet a cui la nota è associata.</li>
+     *   <li><b>nomePet</b> – nome del pet.</li>
+     *   <li><b>idProprietario</b> – identificativo del proprietario che ha inserito la nota.</li>
+     *   <li><b>nomeCompletoProprietario</b> – nome e cognome del proprietario.</li>
+     * </ul>
+     *
+     * <p><b>Utilizzo:</b> questo DTO viene restituito dai servizi e dai controller
+     * quando si richiedono le note associate a un pet, per esempio nell'endpoint
+     * <code>/gestioneNote/visualizzaNote/{petId}</code>.</p>
+     *
+     * <p><b>Esempio JSON di risposta:</b></p>
+     * <pre>
+     * {
+     *   "idNota": 10,
+     *   "titolo": "Alimentazione",
+     *   "descrizione": "Preferisce crocchette senza cereali",
+     *   "idPet": 1,
+     *   "nomePet": "Luna",
+     *   "idProprietario": 5,
+     *   "nomeCompletoProprietario": "Mario Rossi"
+     * }
+     * </pre>
+     */
+    List<InserimentoNoteResponseDTO> getNoteProprietario(Long petId);
 }
