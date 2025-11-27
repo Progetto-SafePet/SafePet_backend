@@ -2,7 +2,7 @@ package it.safepet.backend.gestioneCartellaClinica.dto;
 
 import it.safepet.backend.gestioneCartellaClinica.model.Vaccinazione;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class VaccinazioneResponseDTO {
 
@@ -12,11 +12,11 @@ public class VaccinazioneResponseDTO {
     private Long veterinarioId;
 
     private String tipologia;
-    private Date dataDiSomministrazione;
+    private LocalDate dataDiSomministrazione;
     private Float doseSomministrata;
     private String viaDiSomministrazione;
     private String effettiCollaterali;
-    private Date richiamoPrevisto;
+    private LocalDate richiamoPrevisto;
 
     private String nomeVeterinarioCompleto;
 
@@ -29,11 +29,11 @@ public class VaccinazioneResponseDTO {
             Long petId,
             Long veterinarioId,
             String tipologia,
-            Date dataDiSomministrazione,
+            LocalDate dataDiSomministrazione,
             Float doseSomministrata,
             String viaDiSomministrazione,
             String effettiCollaterali,
-            Date richiamoPrevisto,
+            LocalDate richiamoPrevisto,
             String nomeVeterinarioCompleto) {
 
         this.vaccinazioneId = vaccinazioneId;
@@ -89,11 +89,11 @@ public class VaccinazioneResponseDTO {
         this.tipologia = tipologia;
     }
 
-    public Date getDataDiSomministrazione() {
+    public LocalDate getDataDiSomministrazione() {
         return dataDiSomministrazione;
     }
 
-    public void setDataDiSomministrazione(Date dataDiSomministrazione) {
+    public void setDataDiSomministrazione(LocalDate dataDiSomministrazione) {
         this.dataDiSomministrazione = dataDiSomministrazione;
     }
 
@@ -121,11 +121,11 @@ public class VaccinazioneResponseDTO {
         this.effettiCollaterali = effettiCollaterali;
     }
 
-    public Date getRichiamoPrevisto() {
+    public LocalDate getRichiamoPrevisto() {
         return richiamoPrevisto;
     }
 
-    public void setRichiamoPrevisto(Date richiamoPrevisto) {
+    public void setRichiamoPrevisto(LocalDate richiamoPrevisto) {
         this.richiamoPrevisto = richiamoPrevisto;
     }
 

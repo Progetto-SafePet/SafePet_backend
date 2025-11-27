@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class VisitaMedicaRequestDTO {
     @NotBlank(message = "Il nome della visita è obbligatorio")
@@ -18,16 +18,16 @@ public class VisitaMedicaRequestDTO {
     @Size(max = 300, message = "La descrizione può contenere massimo 300 caratteri")
     private String descrizione;
 
-    @NotNull(message = "La data della visita è obbligatoria")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date data;
+    private @NotNull(message = "La data della visita è obbligatoria") LocalDate data;
 
     private MultipartFile referto;
 
     public VisitaMedicaRequestDTO() {
     }
 
-    public VisitaMedicaRequestDTO(String nome, Long petId, String descrizione, Date data,
+    public VisitaMedicaRequestDTO(String nome, Long petId, String descrizione,
+                                  @NotNull(message = "La data della visita è obbligatoria") LocalDate data,
                                   MultipartFile referto) {
         this.nome = nome;
         this.petId = petId;
@@ -60,11 +60,11 @@ public class VisitaMedicaRequestDTO {
         this.descrizione = descrizione;
     }
 
-    public Date getData() {
+    public @NotNull(message = "La data della visita è obbligatoria") LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(@NotNull(message = "La data della visita è obbligatoria") LocalDate data) {
         this.data = data;
     }
 

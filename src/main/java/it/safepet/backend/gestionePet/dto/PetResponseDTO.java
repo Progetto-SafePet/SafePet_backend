@@ -2,7 +2,6 @@ package it.safepet.backend.gestionePet.dto;
 
 import java.time.LocalDate;
 import java.util.Base64;
-import java.util.Date;
 
 public class PetResponseDTO {
     private Long id;

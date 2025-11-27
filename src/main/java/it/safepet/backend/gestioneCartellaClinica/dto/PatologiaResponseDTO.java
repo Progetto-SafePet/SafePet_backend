@@ -2,7 +2,7 @@ package it.safepet.backend.gestioneCartellaClinica.dto;
 
 import it.safepet.backend.gestioneCartellaClinica.model.Patologia;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class PatologiaResponseDTO {
     private Long patologiaId;
@@ -10,7 +10,7 @@ public class PatologiaResponseDTO {
     private Long petId;
     private Long veterinarioId;
 
-    private Date dataDiDiagnosi;
+    private LocalDate dataDiDiagnosi;
     private String sintomiOsservati;
     private String diagnosi;
     private String terapiaAssociata;
@@ -20,7 +20,7 @@ public class PatologiaResponseDTO {
     public PatologiaResponseDTO() {
     }
 
-    public PatologiaResponseDTO(Long patologiaId, String nome, Date dataDiDiagnosi, String sintomiOsservati,
+    public PatologiaResponseDTO(Long patologiaId, String nome, LocalDate dataDiDiagnosi, String sintomiOsservati,
                                 String diagnosi, String terapiaAssociata, Long petId, Long veterinarioId, String nomeVeterinarioCompleto) {
         this.patologiaId = patologiaId;
         this.nome = nome;
@@ -39,8 +39,8 @@ public class PatologiaResponseDTO {
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
 
-    public Date getDataDiDiagnosi() { return dataDiDiagnosi; }
-    public void setDataDiDiagnosi(Date dataDiDiagnosi) { this.dataDiDiagnosi = dataDiDiagnosi; }
+    public LocalDate getDataDiDiagnosi() { return dataDiDiagnosi; }
+    public void setDataDiDiagnosi(LocalDate dataDiDiagnosi) { this.dataDiDiagnosi = dataDiDiagnosi; }
 
     public String getSintomiOsservati() { return sintomiOsservati; }
     public void setSintomiOsservati(String sintomiOsservati) { this.sintomiOsservati = sintomiOsservati; }

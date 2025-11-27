@@ -5,17 +5,17 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class PatologiaRequestDTO {
 
     @NotBlank(message = "Il nome della patologia è obbligatorio")
-    @Size(min = 3, max = 20, message = "Il nome deve contenere tra 3 e 20 caratteri")
+    @Size(min = 3, max = 25, message = "Il nome deve contenere tra 3 e 25 caratteri")
     private String nome;
 
     @NotNull(message = "La data della diagnosi è obbligatoria")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dataDiDiagnosi;
+    private LocalDate dataDiDiagnosi;
 
     @NotBlank(message = "I sintomi osservati sono obbligatori")
     @Size(max = 200, message = "I sintomi osservati possono contenere massimo 200 caratteri")
@@ -35,7 +35,7 @@ public class PatologiaRequestDTO {
 
     }
 
-    public PatologiaRequestDTO(String nome, Date dataDiDiagnosi, String sintomiOsservati,
+    public PatologiaRequestDTO(String nome, LocalDate dataDiDiagnosi, String sintomiOsservati,
                                String diagnosi, String terapiaAssociata, Long petId) {
         this.nome = nome;
         this.dataDiDiagnosi = dataDiDiagnosi;
@@ -49,9 +49,9 @@ public class PatologiaRequestDTO {
 
     public void setNome(String nome) { this.nome = nome; }
 
-    public Date getDataDiDiagnosi() { return dataDiDiagnosi; }
+    public LocalDate getDataDiDiagnosi() { return dataDiDiagnosi; }
 
-    public void setDataDiDiagnosi(Date dataDiDiagnosi) { this.dataDiDiagnosi = dataDiDiagnosi; }
+    public void setDataDiDiagnosi(LocalDate dataDiDiagnosi) { this.dataDiDiagnosi = dataDiDiagnosi; }
 
     public String getSintomiOsservati() { return sintomiOsservati; }
 

@@ -153,14 +153,14 @@ public class GestionePetController {
      *
      * <p><b>Metodo:</b> POST<br>
      * <b>Endpoint:</b> /it.safepet.backend.gestionePet/creaNota/{petId}<br>
-     * <b>Content-Type:</b> multipart/form-data</p>
+     * <b>Content-Type:</b> application/json</p>
      *
      * <p><b>Parametri di percorso:</b></p>
      * <ul>
      *   <li><b>petId</b> – identificativo del pet a cui associare la nota</li>
      * </ul>
      *
-     * <p><b>Corpo richiesta (multipart/form-data):</b></p>
+     * <p><b>Corpo richiesta (application/json):</b></p>
      * <ul>
      *   <li><b>titolo</b> – titolo della nota</li>
      *   <li><b>descrizione</b> – contenuto testuale della nota</li>
