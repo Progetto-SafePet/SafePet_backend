@@ -4,7 +4,20 @@ import it.safepet.backend.gestioneUtente.model.Proprietario;
 import it.safepet.backend.gestioneUtente.model.Veterinario;
 import it.safepet.backend.gestionePaziente.model.LinkingCode;
 import it.safepet.backend.gestioneCartellaClinica.model.RecordMedico;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -214,7 +227,9 @@ public class Pet {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Pet pet)) return false;
+        if (!(o instanceof Pet pet)) {
+            return false;
+        }
         return Objects.equals(id, pet.id);
     }
 

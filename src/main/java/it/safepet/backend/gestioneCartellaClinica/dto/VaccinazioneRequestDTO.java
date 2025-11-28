@@ -74,7 +74,10 @@ public class VaccinazioneRequestDTO {
         return dataDiSomministrazione;
     }
 
-    public @NotNull(message = "La dose somministrata è obbligatoria") @DecimalMin(value = "0.1", inclusive = true, message = "La dose minima è 0.1 ml") @DecimalMax(value = "10.0", inclusive = true, message = "La dose massima è 10 ml") Float getDoseSomministrata() {
+    public @NotNull(message = "La dose somministrata è obbligatoria")
+        @DecimalMin(value = "0.1", inclusive = true, message = "La dose minima è 0.1 ml")
+        @DecimalMax(value = "10.0", inclusive = true, message = "La dose massima è 10 ml")
+        Float getDoseSomministrata() {
         return doseSomministrata;
     }
 
@@ -93,11 +96,15 @@ public class VaccinazioneRequestDTO {
         return richiamoPrevisto;
     }
 
-    public @NotBlank(message = "La tipologia è obbligatoria") @Size(min = 3, max = 20, message = "La tipologia deve contenere tra 3 e 20 caratteri") String getTipologia() {
+    public @NotBlank(message = "La tipologia è obbligatoria")
+        @Size(min = 3, max = 20, message = "La tipologia deve contenere tra 3 e 20 caratteri")
+        String getTipologia() {
         return tipologia;
     }
 
-    public @NotBlank(message = "Il nome del vaccino è obbligatorio") @Size(min = 3, max = 20, message = "Il nome del vaccino deve contenere tra 3 e 20 caratteri") String getNomeVaccino() {
+    public @NotBlank(message = "Il nome del vaccino è obbligatorio")
+        @Size(min = 3, max = 20, message = "Il nome del vaccino deve contenere tra 3 e 20 caratteri")
+        String getNomeVaccino() {
         return nomeVaccino;
     }
 
@@ -106,7 +113,9 @@ public class VaccinazioneRequestDTO {
     }
 
 
-    public void setNomeVaccino(@NotBlank(message = "Il nome del vaccino è obbligatorio") @Size(min = 3, max = 20, message = "Il nome del vaccino deve contenere tra 3 e 20 caratteri") String nomeVaccino) {
+    public void setNomeVaccino(@NotBlank(message = "Il nome del vaccino è obbligatorio")
+                               @Size(min = 3, max = 20, message = "Il nome del vaccino deve contenere tra 3 e 20 caratteri")
+                               String nomeVaccino) {
         this.nomeVaccino = nomeVaccino;
     }
 
@@ -114,7 +123,9 @@ public class VaccinazioneRequestDTO {
         this.petId = petId;
     }
 
-    public void setTipologia(@NotBlank(message = "La tipologia è obbligatoria") @Size(min = 3, max = 20, message = "La tipologia deve contenere tra 3 e 20 caratteri") String tipologia) {
+    public void setTipologia(@NotBlank(message = "La tipologia è obbligatoria")
+                             @Size(min = 3, max = 20, message = "La tipologia deve contenere tra 3 e 20 caratteri")
+                             String tipologia) {
         this.tipologia = tipologia;
     }
 
@@ -122,7 +133,10 @@ public class VaccinazioneRequestDTO {
         this.dataDiSomministrazione = dataDiSomministrazione;
     }
 
-    public void setDoseSomministrata(@NotNull(message = "La dose somministrata è obbligatoria") @DecimalMin(value = "0.1", inclusive = true, message = "La dose minima è 0.1 ml") @DecimalMax(value = "10.0", inclusive = true, message = "La dose massima è 10 ml") Float doseSomministrata) {
+    public void setDoseSomministrata(@NotNull(message = "La dose somministrata è obbligatoria")
+                                     @DecimalMin(value = "0.1", inclusive = true, message = "La dose minima è 0.1 ml")
+                                     @DecimalMax(value = "10.0", inclusive = true, message = "La dose massima è 10 ml")
+                                     Float doseSomministrata) {
         this.doseSomministrata = doseSomministrata;
     }
 
@@ -133,7 +147,9 @@ public class VaccinazioneRequestDTO {
         this.viaDiSomministrazione = viaDiSomministrazione;
     }
 
-    public void setEffettiCollaterali(@Size(max = 200, message = "Gli effetti collaterali possono contenere massimo 200 caratteri") String effettiCollaterali) {
+    public void setEffettiCollaterali(
+            @Size(max = 200, message = "Gli effetti collaterali possono contenere massimo 200 caratteri")
+            String effettiCollaterali) {
         this.effettiCollaterali = effettiCollaterali;
     }
 

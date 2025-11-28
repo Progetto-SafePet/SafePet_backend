@@ -1,14 +1,19 @@
 package it.safepet.backend.gestionePet.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
 public class NewPetDTO {
     @NotBlank(message = "Il nome del pet è obbligatorio")
-    @Size(min = 3, max = 20, message="Il nome deve contenere dai 3 caratteri ai 20 caratteri")
+    @Size(min = 3, max = 20, message = "Il nome deve contenere dai 3 caratteri ai 20 caratteri")
     private String nome;
 
     @NotBlank(message = "Il sesso del pet è obbligatorio")
@@ -21,7 +26,7 @@ public class NewPetDTO {
     @NotBlank(message = "La specie del pet è obbligatoria")
     private String specie;
 
-    @Size(min=3, max=30, message="La razza deve contenere dai 3 caratteri ai 30 caratteri")
+    @Size(min = 3, max = 30, message = "La razza deve contenere dai 3 caratteri ai 30 caratteri")
     private String razza;
 
     @NotNull(message = "La data di nascita del pet è obbligatoria")
@@ -32,7 +37,7 @@ public class NewPetDTO {
     @DecimalMax("100.0")
     private Double peso;
 
-    @Size(min=3, max=15, message="Il colore del mantello deve contenere dai 3 caratteri ai 15 caratteri")
+    @Size(min = 3, max = 15, message = "Il colore del mantello deve contenere dai 3 caratteri ai 15 caratteri")
     private String coloreMantello;
 
     @Size(min = 15, max = 15, message = "Il microchip deve contenere 15 cifre numeriche")
@@ -43,7 +48,8 @@ public class NewPetDTO {
 
     private MultipartFile foto;
 
-    public NewPetDTO(String nome, String sesso, String specie, String razza, LocalDate dataNascita, Double peso, String coloreMantello, String microchip, Boolean isSterilizzato, MultipartFile foto) {
+    public NewPetDTO(String nome, String sesso, String specie, String razza, LocalDate dataNascita, Double peso,
+                     String coloreMantello, String microchip, Boolean isSterilizzato, MultipartFile foto) {
         this.nome = nome;
         this.sesso = sesso;
         this.specie = specie;
