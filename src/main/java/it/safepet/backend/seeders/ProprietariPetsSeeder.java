@@ -3,6 +3,7 @@ package it.safepet.backend.seeders;
 import it.safepet.backend.gestionePaziente.model.LinkingCode;
 import it.safepet.backend.gestionePaziente.repository.LinkingCodeRepository;
 import it.safepet.backend.gestionePet.model.Pet;
+import it.safepet.backend.gestionePet.repository.PetRepository;
 import it.safepet.backend.gestioneUtente.model.Proprietario;
 import it.safepet.backend.gestioneUtente.repository.ProprietarioRepository;
 import jakarta.transaction.Transactional;
@@ -24,13 +25,15 @@ public class ProprietariPetsSeeder implements CommandLineRunner {
     private final ProprietarioRepository proprietarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final LinkingCodeRepository linkingCodeRepository;
+    private final PetRepository petRepository;
 
     @Value("true")
     private boolean resetDatabase;
 
-    public ProprietariPetsSeeder(ProprietarioRepository proprietarioRepository, PetRepository petRepository,
-                                 PasswordEncoder passwordEncoder, LinkingCodeRepository linkingCodeRepository) {
+    public ProprietariPetsSeeder(ProprietarioRepository proprietarioRepository, PasswordEncoder passwordEncoder,
+                                 LinkingCodeRepository linkingCodeRepository, PetRepository petRepository) {
         this.proprietarioRepository = proprietarioRepository;
+        this.petRepository = petRepository;
         this.passwordEncoder = passwordEncoder;
         this.linkingCodeRepository = linkingCodeRepository;
     }
