@@ -6,13 +6,18 @@ public class RecensioneResponseDTO {
     private String descrizione;
     private Long idVeterinario;
     private Long idProprietario;
+    private String nomeProprietario;
+    private String cognomeProprietario;
 
-    public RecensioneResponseDTO(Long idRecensione, int punteggio, String descrizione, Long idVeterinario, Long idProprietario) {
+    public RecensioneResponseDTO(Long idRecensione, int punteggio, String descrizione, Long idVeterinario,
+                                 Long idProprietario, String nomeProprietario, String cognomeProprietario) {
         this.idRecensione = idRecensione;
         this.punteggio = punteggio;
         this.descrizione = descrizione;
         this.idVeterinario = idVeterinario;
         this.idProprietario = idProprietario;
+        this.nomeProprietario = nomeProprietario;
+        this.cognomeProprietario = cognomeProprietario;
     }
 
     public Long getIdRecensione() {
@@ -53,5 +58,21 @@ public class RecensioneResponseDTO {
 
     public void setIdProprietario(Long idProprietario) {
         this.idProprietario = idProprietario;
+    }
+
+    public String getNomeProprietario() {
+        return nomeProprietario;
+    }
+
+    public void setNomeProprietario(String nomeProprietario) {
+        this.nomeProprietario = nomeProprietario;
+    }
+
+    public String getCognomeProprietario() {
+        return cognomeProprietario;
+    }
+
+    public void setCognomeProprietario(String cognomeProprietario) {
+        this.cognomeProprietario = cognomeProprietario;
     }
 }

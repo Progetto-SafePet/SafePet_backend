@@ -84,7 +84,9 @@ public class GestioneUtenteServiceImpl implements GestioneUtenteService {
                         r.getPunteggio(),
                         r.getDescrizione(),
                         r.getVeterinario().getId(),
-                        r.getProprietario().getId()
+                        r.getProprietario().getId(),
+                        r.getProprietario().getNome(),
+                        r.getProprietario().getCognome()
                 ))
                 .toList();
 

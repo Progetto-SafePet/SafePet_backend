@@ -68,7 +68,9 @@ public class GestioneRecensioniServiceImpl implements GestioneRecensioniService 
                 saved.getPunteggio(),
                 saved.getDescrizione(),
                 veterinario.getId(),
-                proprietario.getId()
+                proprietario.getId(),
+                proprietario.getNome(),
+                proprietario.getCognome()
         );
     }
 }
