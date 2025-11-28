@@ -6,6 +6,8 @@ import it.safepet.backend.exception.UnauthorizedException;
 import it.safepet.backend.gestionePaziente.dto.LinkingCodeRequestDTO;
 import it.safepet.backend.gestionePaziente.dto.LinkingCodeResponseDTO;
 import it.safepet.backend.gestionePaziente.dto.PazienteRequestDTO;
+import it.safepet.backend.gestionePaziente.dto.DettagliResponseDTO;
+import org.springframework.web.bind.annotation.PathVariable;
 import it.safepet.backend.gestionePaziente.dto.PazienteResponseDTO;
 import it.safepet.backend.gestionePaziente.service.GestionePazienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,4 +148,19 @@ public class GestionePazienteController {
     public List<PazienteResponseDTO> visualizzaPazientiDelVeterinario() {
         return gestionePazienteService.visualizzaListaPazienti();
     }
+
+    /**
+     * Restituisce tutti i dettagli di un paziente (Pet) associato al veterinario.
+     *
+     * <p>Questo endpoint viene usato dal frontend nella pagina:
+     * /dettagli-paziente/{id}</p>
+     *
+     * @param petId ID del Pet di cui mostrare i dettagli
+     * @return DettagliResponseDTO con tutte le informazioni anagrafiche e foto
+     */
+    @GetMapping("/dettagli/{petId}")
+    public DettagliResponseDTO visualizzaDettagliPaziente(@PathVariable Long petId) {
+        return gestionePazienteService.visualizzaDettagliPaziente(petId);
+    }
+
 }

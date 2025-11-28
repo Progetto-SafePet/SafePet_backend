@@ -1,10 +1,12 @@
 package it.safepet.backend.gestioneUtente.controller;
 
+import it.safepet.backend.gestioneUtente.dto.ProfiloProprietarioResponseDTO;
 import it.safepet.backend.gestioneUtente.dto.RegistrazioneProprietarioRequestDTO;
 import it.safepet.backend.gestioneUtente.service.GestioneUtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,5 +48,22 @@ public class GestioneUtenteController {
             @RequestBody RegistrazioneProprietarioRequestDTO registrazioneDTO) {
         gestioneUtenteService.registraProprietario(registrazioneDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    /**
+     * Visualizza il profilo completo del proprietario autenticato.
+     *
+     * <p><b>Metodo:</b> GET<br>
+     * <b>Endpoint:</b> /gestioneUtente/visualizzaProfiloProprietario<br>
+     * <b>Autenticazione:</b> Richiesta (JWT)</p>
+     *
+     * <p><b>Autorizzazione:</b> Solo proprietari autenticati</p>
+     *
+     * @return ResponseEntity con ProfiloProprietarioResponseDTO
+     */
+    @GetMapping("/visualizzaProfiloProprietario")
+    public ResponseEntity<ProfiloProprietarioResponseDTO> visualizzaProfiloProprietario() {
+        ProfiloProprietarioResponseDTO profilo = gestioneUtenteService.visualizzaProfiloProprietario();
+        return ResponseEntity.ok(profilo);
     }
 }

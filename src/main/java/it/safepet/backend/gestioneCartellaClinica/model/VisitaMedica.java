@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "visite_mediche")
@@ -16,7 +16,7 @@ public class VisitaMedica extends RecordMedico {
     private String descrizione;
 
     @Column(name = "data", nullable = false)
-    private Date data;
+    private LocalDate data;
 
     @Lob
     @Column(name = "referto", length = 5242880)
@@ -34,11 +34,11 @@ public class VisitaMedica extends RecordMedico {
         this.descrizione = descrizione;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 

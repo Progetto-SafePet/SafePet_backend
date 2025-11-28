@@ -1,21 +1,27 @@
 package it.safepet.backend.gestioneCartellaClinica.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
+import it.safepet.backend.gestioneCartellaClinica.model.VisitaMedica;
 
 public class VisitaMedicaResponseDTO {
     private Long visitaMedicaId;
     private String nome;
     private Long petId;
     private Long veterinarioId;
+
     private String descrizione;
-    private String nomeCompletoVeterinario;
     private String nomePet;
-    private Date data;
+    private LocalDate data;
     private boolean isPresentReferto;
+
+    private String nomeCompletoVeterinario;
+
+    public VisitaMedicaResponseDTO() {
+    }
 
     public VisitaMedicaResponseDTO(Long visitaMedicaId, String nome, Long petId, Long veterinarioId,
                                    String descrizione, String nomeCompletoVeterinario, String nomePet,
-                                   Date data) {
+                                   LocalDate data) {
         this.visitaMedicaId = visitaMedicaId;
         this.nome = nome;
         this.petId = petId;
@@ -82,11 +88,11 @@ public class VisitaMedicaResponseDTO {
         this.nomePet = nomePet;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 
@@ -96,5 +102,22 @@ public class VisitaMedicaResponseDTO {
 
     public void setPresentReferto(boolean presentReferto) {
         isPresentReferto = presentReferto;
+    }
+
+    public static VisitaMedicaResponseDTO from(VisitaMedica visita) {
+        VisitaMedicaResponseDTO dto = new VisitaMedicaResponseDTO(
+                visita.getId(),
+                visita.getNome(),
+                visita.getPet().getId(),
+                visita.getVeterinario().getId(),
+                visita.getDescrizione(),
+                visita.getVeterinario().getNome() + " " + visita.getVeterinario().getCognome(),
+                visita.getPet().getNome(),
+                visita.getData()
+        );
+
+        // Gestione del referto: true se presente
+        dto.setPresentReferto(visita.getReferto() != null);
+        return dto;
     }
 }

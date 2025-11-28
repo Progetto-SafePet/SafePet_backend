@@ -70,6 +70,20 @@ public class Pet {
     public Pet() {
     }
 
+    public Pet(String nome, String sesso, String specie, String razza, LocalDate dataNascita,
+               Double peso, String coloreMantello, String microchip, Boolean isSterilizzato, byte[] foto) {
+        this.nome = nome;
+        this.sesso = sesso;
+        this.specie = specie;
+        this.razza = razza;
+        this.dataNascita = dataNascita;
+        this.peso = peso;
+        this.coloreMantello = coloreMantello;
+        this.microchip = microchip;
+        this.isSterilizzato = isSterilizzato;
+        this.foto = foto;
+    }
+
     public Long getId() {
         return id;
     }
