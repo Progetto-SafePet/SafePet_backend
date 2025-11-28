@@ -3,14 +3,14 @@ package it.safepet.backend.gestioneUtente.dto;
 import it.safepet.backend.gestioneRecensioni.dto.RecensioneResponseDTO;
 import it.safepet.backend.reportCliniche.dto.OrariClinicaResponseDTO;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public class VisualizzaDettagliVeterinariResponseDTO {
     private Long idVeterinario;
     private String nomeVeterinario;
     private String cognome;
-    private Date dataNascita;
+    private LocalDate dataNascita;
     private String genere; // es: "M" o "F"
     private String email;
     private String numeroTelefonoVeterinario;
@@ -28,7 +28,7 @@ public class VisualizzaDettagliVeterinariResponseDTO {
     private Double mediaRecensione;
 
     public VisualizzaDettagliVeterinariResponseDTO(Long idVeterinario, String nomeVeterinario, String cognome,
-                                                   Date dataNascita, String genere, String email,
+                                                   LocalDate dataNascita, String genere, String email,
                                                    String numeroTelefonoVeterinario, String specializzazioniAnimali,
                                                    Long idClinica, String nomeClinica, String indirizzoClinica,
                                                    String numeroTelefonoClinica, Double latitudineClinica,
@@ -79,11 +79,11 @@ public class VisualizzaDettagliVeterinariResponseDTO {
         this.cognome = cognome;
     }
 
-    public Date getDataNascita() {
+    public LocalDate getDataNascita() {
         return dataNascita;
     }
 
-    public void setDataNascita(Date dataNascita) {
+    public void setDataNascita(LocalDate dataNascita) {
         this.dataNascita = dataNascita;
     }
 

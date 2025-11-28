@@ -83,8 +83,8 @@ public class GestioneUtenteServiceImpl implements GestioneUtenteService {
                         r.getId(),  //creato un dto per avere solo queste informazioni specifiche
                         r.getPunteggio(),
                         r.getDescrizione(),
-                        r.getProprietario().getId(),
-                        r.getVeterinario().getId()
+                        r.getVeterinario().getId(),
+                        r.getProprietario().getId()
                 ))
                 .toList();
 
