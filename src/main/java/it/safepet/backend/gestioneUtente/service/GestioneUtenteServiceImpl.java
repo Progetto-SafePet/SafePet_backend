@@ -1,14 +1,19 @@
 package it.safepet.backend.gestioneUtente.service;
 
+import it.safepet.backend.gestioneRecensioni.dto.RecensioneResponseDTO;
 import it.safepet.backend.autenticazione.jwt.AuthContext;
 import it.safepet.backend.autenticazione.jwt.AuthenticatedUser;
 import it.safepet.backend.autenticazione.jwt.Role;
 import it.safepet.backend.gestionePet.dto.PetResponseDTO;
 import it.safepet.backend.gestioneUtente.dto.ProfiloProprietarioResponseDTO;
 import it.safepet.backend.gestioneUtente.dto.RegistrazioneProprietarioRequestDTO;
+import it.safepet.backend.gestioneUtente.dto.VisualizzaDettagliVeterinariResponseDTO;
 import it.safepet.backend.gestioneUtente.model.Proprietario;
+import it.safepet.backend.gestioneUtente.model.Veterinario;
 import it.safepet.backend.gestioneUtente.repository.ProprietarioRepository;
 import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
+import it.safepet.backend.reportCliniche.dto.OrariClinicaResponseDTO;
+import it.safepet.backend.reportCliniche.model.Clinica;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -62,6 +68,56 @@ public class GestioneUtenteServiceImpl implements GestioneUtenteService {
 
     @Override
     @Transactional(readOnly = true)
+    public VisualizzaDettagliVeterinariResponseDTO visualizzaDettagliVeterinari(Long idVet) {
+       Veterinario veterinario = veterinarioRepository.findById(idVet)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Veterinario non trovato"));
+
+        Double mediaRecensioni = veterinarioRepository.calcolaMediaRecensioniVeterinario(idVet);
+
+        Clinica clinica = veterinario.getClinica();
+
+        List<OrariClinicaResponseDTO> orariDTO = clinica.getOrariApertura().stream()
+                .map(o -> new OrariClinicaResponseDTO(
+                        o.getGiorno(), //creato un dto per avere solo queste informazioni specifiche
+                        o.getOrarioApertura(),
+                        o.getOrarioChiusura(),
+                        o.getAperto24h()
+                ))
+                .toList();
+
+        List<RecensioneResponseDTO> recensioniDTO = veterinario.getRecensioni()
+                .stream()
+                .map(r -> new RecensioneResponseDTO(
+                        r.getId(),  //creato un dto per avere solo queste informazioni specifiche
+                        r.getPunteggio(),
+                        r.getDescrizione(),
+                        r.getVeterinario().getId(),
+                        r.getProprietario().getId(),
+                        r.getProprietario().getNome(),
+                        r.getProprietario().getCognome()
+                ))
+                .toList();
+
+        return new VisualizzaDettagliVeterinariResponseDTO(
+                veterinario.getId(),
+                veterinario.getNome(),
+                veterinario.getCognome(),
+                veterinario.getDataNascita(),
+                veterinario.getGenere(),
+                veterinario.getEmail(),
+                veterinario.getNumeroTelefono(),
+                veterinario.getSpecializzazioniAnimali(),
+                clinica.getId(),
+                clinica.getNome(),
+                clinica.getIndirizzo(),
+                clinica.getNumeroTelefono(),
+                clinica.getLatitudine(),
+                clinica.getLongitudine(),
+                orariDTO,
+                recensioniDTO,
+                mediaRecensioni);
+    }
+  
     public ProfiloProprietarioResponseDTO visualizzaProfiloProprietario() {
         // Recupera l'utente autenticato
         AuthenticatedUser currentUser = AuthContext.getCurrentUser();
