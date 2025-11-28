@@ -1,5 +1,10 @@
 package it.safepet.backend.gestionePet.controller;
 
+import it.safepet.backend.gestioneCartellaClinica.dto.CartellaClinicaResponseDTO;
+import it.safepet.backend.gestioneCartellaClinica.service.GestioneCartellaClinicaService;
+import it.safepet.backend.gestionePet.dto.DettagliPetResponseDTO;
+import it.safepet.backend.gestionePet.dto.InserimentoNoteRequestDTO;
+import it.safepet.backend.gestionePet.dto.InserimentoNoteResponseDTO;
 import it.safepet.backend.gestionePet.dto.NewPetDTO;
 import it.safepet.backend.gestionePet.dto.PetResponseDTO;
 import it.safepet.backend.gestionePet.dto.VisualizzaPetResponseDTO;
@@ -8,8 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.List;
 
@@ -18,6 +28,9 @@ import java.util.List;
 public class GestionePetController {
     @Autowired
     private GestionePetService gestionePetService;
+
+    @Autowired
+    private GestioneCartellaClinicaService gestioneCartellaClinicaService;
 
     /**
      * Crea un nuovo animale domestico per l’utente autenticato.
@@ -85,7 +98,6 @@ public class GestionePetController {
      * @throws IOException se si verifica un errore nella lettura o conversione dell’immagine
      * @see PetResponseDTO
      */
-
     @PostMapping(value = "/creaPet", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<PetResponseDTO> creaPet(@ModelAttribute NewPetDTO newPetDTO) throws IOException {
         PetResponseDTO nuovoPet = gestionePetService.creaPet(newPetDTO);
@@ -136,13 +148,121 @@ public class GestionePetController {
      * @return una lista di {@link VisualizzaPetResponseDTO} appartenenti all’utente autenticato
      * @see VisualizzaPetResponseDTO
      */
-
     @GetMapping("/visualizzaElencoPet")
     public ResponseEntity<List<VisualizzaPetResponseDTO>> visualizzaMieiPet() {
         List<VisualizzaPetResponseDTO> pets = gestionePetService.visualizzaMieiPet();
         return ResponseEntity.ok(pets);
     }
 
-    
-}
+    /**
+     * Recupera i dettagli completi di un pet, aggregando le informazioni anagrafiche,
+     * la cartella clinica e le eventuali note del proprietario.
+     *
+     * <p><b>Logica:</b></p>
+     * <ul>
+     *   <li>Recupera i dati anagrafici del pet tramite {@code gestionePetService.getAnagraficaPet()}.</li>
+     *   <li>Recupera la cartella clinica associata al pet tramite {@code gestioneCartellaClinicaService.getCartellaClinica()}.</li>
+     *   <li>Recupera le note del proprietario tramite {@code gestioneNoteService.getNoteProprietario()}.</li>
+     *   <li>Aggrega tutte le informazioni in un {@link DettagliPetResponseDTO}.</li>
+     * </ul>
+     *
+     * <p><b>Endpoint:</b> GET /dettaglioPet/{petId}</p>
+     *
+     * <p><b>Parametri di percorso:</b></p>
+     * <ul>
+     *   <li><b>petId</b> – identificativo del pet di cui recuperare i dettagli.</li>
+     * </ul>
+     *
+     * <p><b>Risposta (200 OK):</b></p>
+     * <pre>
+     * {
+     *   "anagraficaDTO": {
+     *     "id": 1,
+     *     "nome": "Fido",
+     *     "specie": "Cane",
+     *     "dataNascita": "2020-05-10",
+     *     "peso": 12.5,
+     *     "coloreMantello": "Marrone",
+     *     "isSterilizzato": true,
+     *     "razza": "Labrador",
+     *     "microchip": "123456789",
+     *     "sesso": "MASCHIO",
+     *     "fotoBase64": "iVBORw0KGgoAAAANSUhEUgAA..."
+     *   },
+     *   "cartellaClinicaDTO": {
+     *     "vaccinazioni": [...],
+     *     "visiteMediche": [...],
+     *     "patologie": [...],
+     *     "terapie": [...]
+     *   },
+     *   "noteProprietarioDTO": {
+     *     "note": "Il cane è molto vivace e ama correre."
+     *   }
+     * }
+     * </pre>
+     *
+     * @param petId identificativo del pet
+     * @return {@link DettagliPetResponseDTO} contenente anagrafica, cartella clinica e note del proprietario
+     */
+    @GetMapping("/dettaglioPet/{petId}")
+    public ResponseEntity<DettagliPetResponseDTO> getDettaglioPet(@PathVariable Long petId) {
+        PetResponseDTO anagrafica = gestionePetService.getAnagraficaPet(petId);
+        CartellaClinicaResponseDTO cartellaClinica = gestioneCartellaClinicaService.getCartellaClinica(petId);
+        List<InserimentoNoteResponseDTO> note = gestionePetService.getNoteProprietario(petId);
 
+        DettagliPetResponseDTO response = new DettagliPetResponseDTO(anagrafica, cartellaClinica, note);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Crea e registra una nuova nota per un pet, verificando che l'utente autenticato
+     * sia un proprietario e che il pet sia effettivamente associato a lui.
+     * Permette al proprietario di aggiungere informazioni testuali relative al proprio animale.
+     * Restituisce i dettagli completi della nota appena creata.
+     *
+     * <p><b>Metodo:</b> POST<br>
+     * <b>Endpoint:</b> /it.safepet.backend.gestionePet/creaNota/{petId}<br>
+     * <b>Content-Type:</b> application/json</p>
+     *
+     * <p><b>Parametri di percorso:</b></p>
+     * <ul>
+     *   <li><b>petId</b> – identificativo del pet a cui associare la nota</li>
+     * </ul>
+     *
+     * <p><b>Corpo richiesta (application/json):</b></p>
+     * <ul>
+     *   <li><b>titolo</b> – titolo della nota</li>
+     *   <li><b>descrizione</b> – contenuto testuale della nota</li>
+     *   <li><b>petId</b> – impostato automaticamente tramite il parametro di percorso</li>
+     * </ul>
+     *
+     * <p><b>Esempio risposta (201 CREATED):</b></p>
+     * <pre>
+     * {
+     *   "idNota": 7,
+     *   "titolo": "Alimentazione",
+     *   "descrizione": "Ricordarsi di acquistare il nuovo mangime ipoallergenico.",
+     *   "idPet": 3,
+     *   "nomePet": "Luna",
+     *   "idProprietario": 12,
+     *   "nomeCompletoProprietario": "Mario Rossi"
+     * }
+     * </pre>
+     *
+     * @param petId identificativo del pet a cui associare la nota
+     * @param inserimentoNoteRequestDTO DTO contenente titolo e descrizione della nota
+     * @return {@link InserimentoNoteResponseDTO} con i dettagli della nota creata
+     * @throws IOException se si verificano errori durante la gestione dei dati
+     * @throws RuntimeException se l'utente non è un proprietario, il pet non esiste
+     *         o non appartiene al proprietario autenticato
+     */
+    @PostMapping(value = "/creaNota/{petId}",  consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<InserimentoNoteResponseDTO> creaNota(
+            @PathVariable Long petId,
+            @RequestBody InserimentoNoteRequestDTO inserimentoNoteRequestDTO) throws IOException {
+        inserimentoNoteRequestDTO.setPetId(petId);
+        System.out.println(inserimentoNoteRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(gestionePetService.creaNota(inserimentoNoteRequestDTO));
+    }
+}

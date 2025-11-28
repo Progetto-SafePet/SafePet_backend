@@ -5,14 +5,14 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "patologie")
 @DiscriminatorValue("PATOLOGIA")
 public class Patologia extends RecordMedico {
     @Column(name = "data_di_diagnosi", nullable = false)
-    private Date dataDiDiagnosi;
+    private LocalDate dataDiDiagnosi;
 
     @Column(name = "sintomi_osservati", nullable = false)
     private String sintomiOsservati;
@@ -20,16 +20,16 @@ public class Patologia extends RecordMedico {
     @Column(name = "diagnosi", nullable = false)
     private String diagnosi;
 
-    @Column(name = "terapia_associata", nullable = false)
-    private String terapiaAssociata;
+    @Column(name = "trattamento", nullable = false)
+    private String trattamento;
 
     public Patologia() { }
 
-    public Date getDataDiDiagnosi() {
+    public LocalDate getDataDiDiagnosi() {
         return dataDiDiagnosi;
     }
 
-    public void setDataDiDiagnosi(Date dataDiDiagnosi) {
+    public void setDataDiDiagnosi(LocalDate dataDiDiagnosi) {
         this.dataDiDiagnosi = dataDiDiagnosi;
     }
 
@@ -49,11 +49,11 @@ public class Patologia extends RecordMedico {
         this.diagnosi = diagnosi;
     }
 
-    public String getTerapiaAssociata() {
-        return terapiaAssociata;
+    public String getTrattamento() {
+        return trattamento;
     }
 
-    public void setTerapiaAssociata(String terapiaAssociata) {
-        this.terapiaAssociata = terapiaAssociata;
+    public void setTrattamento(String trattamento) {
+        this.trattamento = trattamento;
     }
 }
