@@ -1,5 +1,6 @@
 package it.safepet.backend.gestioneUtente.controller;
 
+import it.safepet.backend.gestioneUtente.dto.ProfiloProprietarioResponseDTO;
 import it.safepet.backend.gestioneUtente.dto.RegistrazioneProprietarioRequestDTO;
 import it.safepet.backend.gestioneUtente.dto.VisualizzaDettagliVeterinariResponseDTO;
 import it.safepet.backend.gestioneUtente.service.GestioneUtenteService;
@@ -113,5 +114,21 @@ public class GestioneUtenteController {
     public ResponseEntity<VisualizzaDettagliVeterinariResponseDTO> visualizzaDettagliVeterinari(@PathVariable Long vetId) {
         VisualizzaDettagliVeterinariResponseDTO dettagliVeterinario = gestioneUtenteService.visualizzaDettagliVeterinari(vetId);
         return ResponseEntity.ok(dettagliVeterinario);
+      
+    /**  
+     * Visualizza il profilo completo del proprietario autenticato.
+     *
+     * <p><b>Metodo:</b> GET<br>
+     * <b>Endpoint:</b> /gestioneUtente/visualizzaProfiloProprietario<br>
+     * <b>Autenticazione:</b> Richiesta (JWT)</p>
+     *
+     * <p><b>Autorizzazione:</b> Solo proprietari autenticati</p>
+     *
+     * @return ResponseEntity con ProfiloProprietarioResponseDTO
+     */
+    @GetMapping("/visualizzaProfiloProprietario")
+    public ResponseEntity<ProfiloProprietarioResponseDTO> visualizzaProfiloProprietario() {
+        ProfiloProprietarioResponseDTO profilo = gestioneUtenteService.visualizzaProfiloProprietario();
+        return ResponseEntity.ok(profilo);
     }
 }

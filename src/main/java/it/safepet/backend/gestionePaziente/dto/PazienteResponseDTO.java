@@ -76,6 +76,4 @@ public class PazienteResponseDTO {
     public void setFotoBase64(String fotoBase64) {
         this.fotoBase64 = fotoBase64;
     }
-
-
 }
