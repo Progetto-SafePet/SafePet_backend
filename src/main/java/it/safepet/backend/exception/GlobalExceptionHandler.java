@@ -66,7 +66,8 @@ public class GlobalExceptionHandler {
      * 404 Not Found – risorsa non trovata
      */
     @ExceptionHandler({
-            EntityNotFoundException.class
+            EntityNotFoundException.class,
+            NotFoundException.class,
     })
     public ProblemDetail handleNotFound(Exception ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
@@ -79,7 +80,10 @@ public class GlobalExceptionHandler {
     /**
      * 409 Conflict – violazione di vincoli di integrità (es. chiavi duplicate)
      */
-    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ExceptionHandler({
+            DataIntegrityViolationException.class,
+            ConflictException.class
+    })
     public ProblemDetail handleConflict(DataIntegrityViolationException ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "Violazione di vincoli di integrità dei dati.");
         problem.setTitle("Conflict");
