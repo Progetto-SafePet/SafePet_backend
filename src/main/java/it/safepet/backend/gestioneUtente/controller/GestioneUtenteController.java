@@ -114,7 +114,8 @@ public class GestioneUtenteController {
     public ResponseEntity<VisualizzaDettagliVeterinariResponseDTO> visualizzaDettagliVeterinari(@PathVariable Long vetId) {
         VisualizzaDettagliVeterinariResponseDTO dettagliVeterinario = gestioneUtenteService.visualizzaDettagliVeterinari(vetId);
         return ResponseEntity.ok(dettagliVeterinario);
-      
+    }
+
     /**  
      * Visualizza il profilo completo del proprietario autenticato.
      *
