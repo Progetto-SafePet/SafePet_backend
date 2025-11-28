@@ -14,11 +14,12 @@ public interface GestioneUtenteService {
     void registraProprietario(@Valid RegistrazioneProprietarioRequestDTO registrazioneDTO);
 
     /**
-     * Recupera il profilo completo di un proprietario inclusi i suoi pet.
+     * Recupera il profilo completo del proprietario autenticato inclusi i suoi pet.
      *
-     * @param id ID del proprietario
      * @return DTO contenente tutti i dati del proprietario e la lista dei pet
-     * @throws IllegalArgumentException se il proprietario non viene trovato
+     * @throws org.springframework.web.server.ResponseStatusException con status 401 se l'utente non è autenticato
+     * @throws org.springframework.web.server.ResponseStatusException con status 403 se l'utente non è un proprietario
+     * @throws org.springframework.web.server.ResponseStatusException con status 404 se il proprietario non viene trovato
      */
-    ProfiloProprietarioResponseDTO visualizzaProfiloProprietario(Long id);
+    ProfiloProprietarioResponseDTO visualizzaProfiloProprietario();
 }
