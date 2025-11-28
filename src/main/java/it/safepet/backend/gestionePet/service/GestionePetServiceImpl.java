@@ -3,7 +3,11 @@ package it.safepet.backend.gestionePet.service;
 import it.safepet.backend.autenticazione.jwt.AuthContext;
 import it.safepet.backend.autenticazione.jwt.AuthenticatedUser;
 import it.safepet.backend.autenticazione.jwt.Role;
-import it.safepet.backend.gestionePet.dto.*;
+import it.safepet.backend.gestionePet.dto.InserimentoNoteRequestDTO;
+import it.safepet.backend.gestionePet.dto.InserimentoNoteResponseDTO;
+import it.safepet.backend.gestionePet.dto.NewPetDTO;
+import it.safepet.backend.gestionePet.dto.PetResponseDTO;
+import it.safepet.backend.gestionePet.dto.VisualizzaPetResponseDTO;
 import it.safepet.backend.gestionePet.model.NoteProprietario;
 import it.safepet.backend.gestionePet.model.Pet;
 import it.safepet.backend.gestionePet.repository.NoteProprietarioRepository;
@@ -13,6 +17,7 @@ import it.safepet.backend.gestioneUtente.repository.ProprietarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.IOException;
@@ -51,8 +56,6 @@ public class GestionePetServiceImpl implements GestionePetService {
                 throw new RuntimeException("Microchip già esistente");
             }
         }
-
-
 
         // Creazione pet
         Pet pet = new Pet();
@@ -126,6 +129,36 @@ public class GestionePetServiceImpl implements GestionePetService {
                 .toList();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public PetResponseDTO getAnagraficaPet(Long petId) {
+        // Recupera l’utente autenticato
+        AuthenticatedUser currentUser = AuthContext.getCurrentUser();
+        if (currentUser == null) {
+            throw new RuntimeException("Accesso non autorizzato: nessun utente autenticato");
+        }
+        //controllo ruolo
+        if (!"PROPRIETARIO".equals(currentUser.getRole().name())) {
+            throw new RuntimeException("Accesso negato: solo i proprietari possono visualizzare i propri animali");
+        }
+        // Recupera il pet dal repository
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new RuntimeException("Pet non trovato"));
+
+        return new PetResponseDTO(
+                pet.getId(),
+                pet.getNome(),
+                pet.getSpecie(),
+                pet.getDataNascita(),
+                pet.getPeso(),
+                pet.getColoreMantello(),
+                pet.getSterilizzato(),
+                pet.getRazza(),
+                pet.getMicrochip(),
+                pet.getSesso(),
+                pet.getFoto()
+        );
+    }
 
     public InserimentoNoteResponseDTO creaNota(@Valid InserimentoNoteRequestDTO inserimentoNoteRequestDTO) {
         //utente autenticato
@@ -170,5 +203,37 @@ public class GestionePetServiceImpl implements GestionePetService {
                         newNota.getPet().getProprietario().getCognome()
         );
     }
-}
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<InserimentoNoteResponseDTO> getNoteProprietario(Long petId) {
+        AuthenticatedUser currentUser = AuthContext.getCurrentUser();
+        if (currentUser == null) {
+            throw new RuntimeException("Accesso non autorizzato: nessun utente autenticato");
+        }
+
+        if (!"PROPRIETARIO".equals(currentUser.getRole().name())) {
+            throw new RuntimeException("Accesso negato: solo i proprietari possono visualizzare le note");
+        }
+
+        // Verifica che il pet appartenga al proprietario
+        boolean autorizzato = petRepository.existsByIdAndProprietarioId(petId, currentUser.getId());
+        if (!autorizzato) {
+            throw new RuntimeException("Accesso negato: il pet non appartiene al proprietario autenticato");
+        }
+
+        List<NoteProprietario> noteList = noteProprietarioRepository.findByPetId(petId);
+
+        return noteList.stream()
+                .map(n -> new InserimentoNoteResponseDTO(
+                        n.getId(),
+                        n.getTitolo(),
+                        n.getDescrizione(),
+                        n.getPet().getId(),
+                        n.getPet().getNome(),
+                        n.getPet().getProprietario().getId(),
+                        n.getPet().getProprietario().getNome() + " " + n.getPet().getProprietario().getCognome()
+                ))
+                .toList();
+    }
+}
