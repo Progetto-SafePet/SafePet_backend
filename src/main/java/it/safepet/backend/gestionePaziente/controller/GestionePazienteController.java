@@ -104,7 +104,7 @@ public class GestionePazienteController {
      *   "nomePet": "Rocky",
      *   "codice": "ABC12345",
      *   "dataScadenza": "2026-05-14",
-     *   "isScaduto": false,
+     *   "scaduto": false,
      *   "usato": false
      *
      * }
