@@ -160,6 +160,7 @@ public class GestionePetServiceImpl implements GestionePetService {
         );
     }
 
+    @Transactional
     public InserimentoNoteResponseDTO creaNota(@Valid InserimentoNoteRequestDTO inserimentoNoteRequestDTO) {
         //utente autenticato
         AuthenticatedUser currentUser = AuthContext.getCurrentUser();
