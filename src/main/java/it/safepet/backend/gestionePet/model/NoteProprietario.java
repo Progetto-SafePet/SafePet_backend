@@ -25,7 +25,8 @@ public class NoteProprietario {
     @Column(name = "descrizione", nullable = false)
     private String descrizione;
 
-    @ManyToOne(fetch = FetchType.LAZY) //aggiunta del fetch LAZY per evitare problemi di caricamento, serve per caricare il Pet solo quando è richiesto
+    //aggiunta del fetch LAZY per evitare problemi di caricamento, serve per caricare il Pet solo quando è richiesto
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", nullable = false)
     private Pet pet;
 

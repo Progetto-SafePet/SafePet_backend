@@ -7,9 +7,7 @@ import it.safepet.backend.gestionePaziente.dto.LinkingCodeRequestDTO;
 import it.safepet.backend.gestionePaziente.dto.LinkingCodeResponseDTO;
 import it.safepet.backend.gestionePaziente.dto.PazienteRequestDTO;
 import it.safepet.backend.gestionePaziente.dto.PazienteResponseDTO;
-import it.safepet.backend.gestionePet.dto.PetResponseDTO;
 import it.safepet.backend.gestionePaziente.dto.DettagliResponseDTO;
-import it.safepet.backend.gestionePet.model.Pet;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;

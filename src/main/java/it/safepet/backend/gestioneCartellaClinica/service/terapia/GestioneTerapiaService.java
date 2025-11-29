@@ -8,7 +8,6 @@ import it.safepet.backend.gestioneCartellaClinica.model.Terapia;
 import it.safepet.backend.gestioneCartellaClinica.repository.TerapiaRepository;
 import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
 
-
 public interface GestioneTerapiaService {
     /**
      * Aggiunge una nuova terapia alla cartella clinica di un pet, verificando che

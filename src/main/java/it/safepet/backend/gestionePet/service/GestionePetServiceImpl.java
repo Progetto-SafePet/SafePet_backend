@@ -116,7 +116,7 @@ public class GestionePetServiceImpl implements GestionePetService {
             throw new RuntimeException("Accesso negato: solo i proprietari possono visualizzare i propri animali");
         }
 
-        return petRepository.findByProprietario_Id(currentUser.getId())
+        return petRepository.findByProprietarioId(currentUser.getId())
                 .stream()
                 .map(p -> new VisualizzaPetResponseDTO(
                         p.getId(),
@@ -160,6 +160,7 @@ public class GestionePetServiceImpl implements GestionePetService {
         );
     }
 
+    @Transactional
     public InserimentoNoteResponseDTO creaNota(@Valid InserimentoNoteRequestDTO inserimentoNoteRequestDTO) {
         //utente autenticato
         AuthenticatedUser currentUser = AuthContext.getCurrentUser();

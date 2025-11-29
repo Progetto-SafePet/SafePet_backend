@@ -10,18 +10,15 @@ import it.safepet.backend.gestioneCartellaClinica.repository.TerapiaRepository;
 import it.safepet.backend.gestionePet.model.Pet;
 import it.safepet.backend.gestionePet.repository.PetRepository;
 import it.safepet.backend.gestioneUtente.model.Veterinario;
-import it.safepet.backend.gestioneUtente.repository.ProprietarioRepository;
 import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Optional;
-
 @Service
 @Validated
-public class GestioneTerapiaServiceImpl implements GestioneTerapiaService{
+public class GestioneTerapiaServiceImpl implements GestioneTerapiaService {
     @Autowired
     private PetRepository petRepository;
 
@@ -30,9 +27,6 @@ public class GestioneTerapiaServiceImpl implements GestioneTerapiaService{
 
     @Autowired
     private VeterinarioRepository veterinarioRepository;
-
-    @Autowired
-    private ProprietarioRepository proprietarioRepository;
 
     @Override
     @Transactional
@@ -48,7 +42,7 @@ public class GestioneTerapiaServiceImpl implements GestioneTerapiaService{
         Pet pet = petRepository.findById(dto.getPetId())
                 .orElseThrow(() -> new RuntimeException("Pet non trovato"));
 
-        if(!petRepository.verificaAssociazionePetVeterinario(pet.getId(), veterinario.getId())) {
+        if (!petRepository.verificaAssociazionePetVeterinario(pet.getId(), veterinario.getId())) {
             throw new RuntimeException("Il pet non è un paziente del veterinario");
         }
 
@@ -64,7 +58,7 @@ public class GestioneTerapiaServiceImpl implements GestioneTerapiaService{
         terapia.setFrequenza(dto.getFrequenza());
         terapia.setMotivo(dto.getMotivo());
 
-        Terapia saved= terapiaRepository.save(terapia);
+        Terapia saved = terapiaRepository.save(terapia);
 
         return new TerapiaResponseDTO(
                 saved.getId(),
@@ -79,8 +73,6 @@ public class GestioneTerapiaServiceImpl implements GestioneTerapiaService{
                 saved.getFrequenza(),
                 saved.getMotivo(),
                 veterinario.getNome() + " " + veterinario.getCognome()
-
         );
-
     }
 }

@@ -1,6 +1,14 @@
 package it.safepet.backend.gestioneCartellaClinica.controller;
 
-import it.safepet.backend.gestioneCartellaClinica.dto.*;
+import it.safepet.backend.gestioneCartellaClinica.dto.CartellaClinicaResponseDTO;
+import it.safepet.backend.gestioneCartellaClinica.dto.PatologiaRequestDTO;
+import it.safepet.backend.gestioneCartellaClinica.dto.PatologiaResponseDTO;
+import it.safepet.backend.gestioneCartellaClinica.dto.TerapiaRequestDTO;
+import it.safepet.backend.gestioneCartellaClinica.dto.TerapiaResponseDTO;
+import it.safepet.backend.gestioneCartellaClinica.dto.VaccinazioneRequestDTO;
+import it.safepet.backend.gestioneCartellaClinica.dto.VaccinazioneResponseDTO;
+import it.safepet.backend.gestioneCartellaClinica.dto.VisitaMedicaRequestDTO;
+import it.safepet.backend.gestioneCartellaClinica.dto.VisitaMedicaResponseDTO;
 import it.safepet.backend.gestioneCartellaClinica.service.GestioneCartellaClinicaService;
 import it.safepet.backend.gestioneCartellaClinica.service.terapia.GestioneTerapiaService;
 import it.safepet.backend.gestioneCartellaClinica.service.vaccinazione.GestioneVaccinazioneService;
@@ -301,10 +309,10 @@ public class GestioneCartellaClinicaController {
     @PostMapping ("/aggiungiTerapia/{petId}")
     public ResponseEntity<TerapiaResponseDTO> aggiungiTerapia(
             @PathVariable Long petId,
-            @RequestBody TerapiaRequestDTO terapiaRequestDTO){
+            @RequestBody TerapiaRequestDTO terapiaRequestDTO) {
         terapiaRequestDTO.setPetId(petId);
 
-        TerapiaResponseDTO terapiaResponseDTO=
+        TerapiaResponseDTO terapiaResponseDTO =
                 gestioneTerapiaService.aggiungiTerapia(terapiaRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(terapiaResponseDTO);
     }
