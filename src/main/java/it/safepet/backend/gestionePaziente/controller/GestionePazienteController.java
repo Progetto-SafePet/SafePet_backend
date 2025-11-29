@@ -101,12 +101,12 @@ public class GestionePazienteController {
      * <p><b>Esempio risposta:</b></p>
      * <pre>
      * {
-     *   "petId": 1,
      *   "nomePet": "Rocky",
-     *   "linkingCodeId": 1,
      *   "codice": "ABC12345",
      *   "dataScadenza": "2026-05-14",
+     *   "isScaduto": false,
      *   "usato": false
+     *
      * }
      * </pre>
      *
