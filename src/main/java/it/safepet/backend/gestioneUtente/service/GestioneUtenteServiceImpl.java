@@ -117,7 +117,9 @@ public class GestioneUtenteServiceImpl implements GestioneUtenteService {
                 recensioniDTO,
                 mediaRecensioni);
     }
-  
+
+    @Override
+    @Transactional(readOnly = true)
     public ProfiloProprietarioResponseDTO visualizzaProfiloProprietario() {
         // Recupera l'utente autenticato
         AuthenticatedUser currentUser = AuthContext.getCurrentUser();
