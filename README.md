@@ -1,90 +1,37 @@
 # 🐾 SafePet_backend
 
 ## 📚 Indice
-* [Overview del progetto](#overview-del-progetto)
+* [Overview backend](#overview-backend)
+  * [Componenti del backend](#Componenti-del-backend)
 * [Tecnologie usate](#tecnologie-usate)
-* [Microservizi](#microservizi)
-* [Installazione ed esecuzione](#installazione-ed-esecuzione)
-    * [Prerequisiti](#prerequisiti)
-    * [Installazione Maven](#installazione-maven)
-    * [Backend](#backend)
-    * [Frontend](#frontend)
-    * [Account per utilizzo](#account-per-utilizzo)
-* [Team di sviluppo](#team-di-sviluppo)
+* [Avvio backend](#Avvio-backend)
 
 ---
 
-## 💡 Overview del progetto
-La **disponibilità immediata di informazioni cliniche aggiornate** è **cruciale** per interventi tempestivi ed efficaci sugli animali da compagnia, specialmente in **emergenze** (incidenti, allergie, intossicazioni, calamità naturali).
-La rapidità di accesso a dati come patologie pregresse, terapie e allergie può essere **vitale**.
-Il progetto **SafePet** è una piattaforma digitale che mira a:
+## 💡 Overview backend
+Il backend di SafePet, sviluppato con **Spring Boot** su **Java**, costituisce il nucleo operativo e logico della piattaforma, gestendo l'elaborazione dei dati, la sicurezza e la persistenza.
+Il suo ruolo principale è orchestrare tutte le funzioni del sistema:
+* **Logica di Business:** Eseguire tutti i requisiti funzionali (RF) relativi a utenti, animali, pazienti, veterinari ed emergenze.
+* **Sicurezza e Controllo Accessi:** Gestire in modo sicuro l'autenticazione degli utenti e l'autorizzazione alle risorse, proteggendo i dati sensibili tramite la cifratura delle password.
+* **Persistenza Dati:** Gestire la connessione e l'interazione con il database **MySQL** per la memorizzazione e il recupero di tutte le informazioni del sistema (cartelle cliniche, profili, ecc.).
+* **Integrazioni Esterne:** Fungerere da punto di controllo per la comunicazione con servizi esterni, in particolare il **Modulo AI** per le analisi dermatologiche e il **Sistema di Geolocalizzazione** per la Mappa Real Time.
 
-* **Digitalizzare e Centralizzare i dati:** Superare la gestione cartacea e frammentata.
-* **Garantire l'Immediata Disponibilità:** Assicurare che le informazioni cliniche essenziali siano disponibili in **ogni situazione di emergenza**.
-* **Favorire la Cooperazione:** Semplificare la **condivisione sicura** delle informazioni tra proprietari e veterinari.
-* **Potenziare la Risposta alle Emergenze:** Migliorare la capacità di risposta alle crisi veterinarie e sanitarie integrate.
-* **Promuovere una Gestione Moderna:** Sostenere una sanità veterinaria più resiliente e le politiche nazionali di prevenzione e benessere animale.
+### 🧱 Componenti del backend 
+* Controller: espone le API REST verso il frontend. Riceve le richieste HTTP, valida i dati in ingresso e li inoltra al livello di servizio. È l’unico punto di accesso del frontend al backend. Restituisce le risposte in formato JSON. 
+* Services: contiene la logica di business dell’applicazione. Implementa le regole e i processi che definiscono il comportamento del sistema (es. validazione dei dati, calcolo percorsi, gestione utenti). Sfrutta i repository per accedere al DB. 
+* Repository: Si occupa dell’accesso ai dati persistenti, astratto rispetto al database fisico. Utilizza Spring Data JPA o Hibernate per interagire con MySQL tramite le entity del modello e fornisce le operazioni CRUD.
 ---
 
 ## ⚙️ Tecnologie usate
-* **React**
-* **Vite.js** (v. 5.2.0)
-* **Canva**
-* **OpenStreetMap**
-* **Spring Framework**
-* **Spring Boot** (v. 3.5.7)
-* **Java 21**
-* **Hibernate**
-* **Spring Data JPA**
-* **MySQL Connector J**
-* **JJWT** (Java JWT)
-* **Spring Security Crypto**
-* **Checkstyle** // ???
-* **Maven**
-* **JUnit**
-* **Spring Test**
-* **Mockito**
-* **Postman**
-* **Docker**
-* **MySQL**
-
+* Spring Framework e Spring Boot (v. 3.5.7): Framework Java open-source (basato su Java 21) utilizzato per la logica di business e la realizzazione di un sistema scalabile e modulare. 
+* Hibernate e Spring Data JPA: Framework ORM (Object-Relational Mapping) utilizzato per la persistenza dei dati e l'interazione con il database tramite entità Java. 
+* MySQL: Sistema di gestione di database relazionale per la memorizzazione dei dati. 
+* MySQL Connector J: Driver utilizzato per la comunicazione tra il Backend e il database MySQL. 
+* JJWT (Java JWT): Libreria per la gestione (generazione, validazione e parsing) dei token JWT per l'autenticazione. 
+* Spring Security Crypto: Modulo per la gestione sicura dell'hashing e della cifratura delle password.
 ---
 
-## 🧱 Microservizi
-
-| Microservizio | Linguaggio | Descrizione | Link repository |
-|:---|:---|:---|:---:|
-| **Backend** | Java | Fornisce la logica di business, gestisce le API REST, l'autenticazione tramite JWT e <br/>la persistenza dei dati clinici nel database. | [🔍](https://github.com/Progetto-SafePet/SafePet_backend.git) |
-| **Frontend** | TypeScript | Interfaccia utente dell'applicazione, sviluppata in React, che permette ai proprietari e ai veterinari di visualizzare e interagire con i dati sanitari degli pet. | [🔍](https://github.com/Progetto-SafePet/SafePet_frontend.git) |
-
----
-
-## 🚀 Installazione ed esecuzione
-
----
-
-### ✅ Prerequisiti
-* Node.js (22.16.0)
-* Java JDK 21.0.8
-* Apache Maven 3.9.11
-* Docker 4.51.0
-* Intellij IDEA 2025.2.5 (per il backend)
-* WebStorm IDEA 2025.2.5 (per il frontend)
-
----
-
-### ⚙️ Installazione Maven
-Per installare maven su sistema Windows è necessario aver già installato **Java Development Kit (JDK)** ed aver configurato la variabile d'ambiente `JAVA_HOME`.
-
-Dopodichè è necessario seguire i seguenti passaggi:
-1. Scaricare `apache-maven-3.9.11-bin.zip` dalla seguente pagina: [https://maven.apache.org/download.cgi](https://maven.apache.org/download.cgi)
-2. Effettuare l'unzip del file scaricato al passo uno all'interno di una qualsiasi directory (preferibilmente in `Program Files`)
-3. Aggiungere la directory della cartella `bin` (contenuta nella cartella estratta al passo 2) alla variabile d'ambiente `PATH`
-4. Verificare se l'installazione è andata a buon fine utilizzando il comando `mvn -v` all`interno di una nuova shell
-
----
-
-### ☕ Backend
+## ☕ Avvio backend
 
 Per eseguire il backend è necessario seguire i seguenti passaggi:
 1.  **Avviare Intellij** e clonare la repository del progetto:
@@ -96,48 +43,3 @@ Per eseguire il backend è necessario seguire i seguenti passaggi:
 5.  Runnare `BackendApplication.java`.
 
 ---
-
-### 🎨 Frontend
-
-Per eseguire il frontend è necessario seguire i seguenti passaggi:
-
-1.  **Avviare WebStorm** e clonare la repository del progetto:
-    * `https://github.com/Progetto-SafePet/SafePet_frontend.git`
-2.  Tramite il terminale di WebStorm digitare:
-    * `cd safapet`
-3.  Digitare il comando per installare le dipendenze:
-    * `npm install`
-4.  Digitare il comando per avviare lo sviluppo:
-    * `npm run dev`
-5.  Selezionare l'indirizzo per visualizzare l'applicazione:
-    * `http://localhost:5173/`
-
----
-
-### 🔐 Account per utilizzo
-| Email | Password | Ruolo |
-|:---|:---|:---|
-| maria.rossi@example.com | `$2a$10$Nqbed79OJKcw2Fx4WFYOWemUCRT58WFIghR7366cqVt0rSmVrFykO` | Proprietario |
-| luca.bianchi@example.com | `$2a$10$J.NzkHNb/mFVLJDbKYYdLeAnHBKDHYcNb6t8FoM6uW9JeZIuaW3aq` | Proprietario |
-| acmemoli@gmail.com | `$2a$10$ee/6pnNfOQpLAW.GhbQYbuwIfjq/nvEaWSY9F1pO8B6236gnCAqqy` | Veterinario |
-| gamatruda2@gmail.com | `$2a$10$OVuLgX7mnmzIi2oZMfnceOJAGCuJjICfPLdLNHzeyNGKf9SN9D1aK` | Veterinario |
-
----
-
-### 👥 Team di sviluppo
-
-| Nome                 | Cognome   | Ruolo           |                                                                        Profilo GitHub                                                                        |
-| :------------------- | :-------- | :-------------- |:------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-| Francesco Alessandro | Pinto     | Project Manager |     <a href="https://github.com/FrancescoPinto02"><img src="https://github.com/FrancescoPinto02.png" width="80" height="80" alt="Francesco Pinto" /></a>     |
-| Francesco Maria      | Torino    | Project Manager | <a href="https://github.com/FrancescoTorino1999"><img src="https://github.com/FrancescoTorino1999.png" width="80" height="80" alt="Francesco Torino" /></a>  |
-| Aldo                 | Adinolfi  | Team Member     |             <a href="https://github.com/AldoAdi04"><img src="https://github.com/AldoAdi04.png" width="60" height="60" alt="Aldo Adinolfi" /></a>             |
-| Gianmarco            | Amatruda  | Team Member     |           <a href="https://github.com/Giammi19"><img src="https://github.com/Giammi19.png" width="60" height="60" alt="Gianmarco Amatruda" /></a>            |
-| Simone               | Cimmino   | Team Member     |            <a href="https://github.com/SimoCimmi"><img src="https://github.com/SimoCimmi.png" width="60" height="60" alt="Simone Cimmino" /></a>             |
-| Matteo Ferdinando    | Emolo     | Team Member     |               <a href="https://github.com/0xMatte"><img src="https://github.com/0xMatte.png" width="60" height="60" alt="Matteo Emolo" /></a>                |
-| Anna Chiara          | Memoli    | Team Member     |           <a href="https://github.com/memoli04"><img src="https://github.com/memoli04.png" width="60" height="60" alt="Anna Chiara Memoli" /></a>            |
-| Chiara               | Memoli    | Team Member     |            <a href="https://github.com/chiara0605"><img src="https://github.com/chiara0605.png" width="60" height="60" alt="Chiara Memoli" /></a>            |
-| Vincenzo Giuseppe    | Nappi     | Team Member     |           <a href="https://github.com/VincenzoGN"><img src="https://github.com/VincenzoGN.png" width="60" height="60" alt="Vincenzo Nappi" /></a>            |
-| Giuseppe             | Rossano   | Team Member     |          <a href="https://github.com/PeppeRed04"><img src="https://github.com/PeppeRed04.png" width="60" height="60" alt="Giuseppe Rossano" /></a>           |
-| Rosario              | Saggese   | Team Member     |          <a href="https://github.com/rossssss111"><img src="https://github.com/rossssss111.png" width="60" height="60" alt="Rosario Saggese" /></a>          |
-| Luca                 | Salvatore | Team Member     |           <a href="https://github.com/lucasalvaa"><img src="https://github.com/lucasalvaa.png" width="60" height="60" alt="Luca Salvatore" /></a>            |
-| Morgan               | Vitiello  | Team Member     |       <a href="https://github.com/MorganVitiello"><img src="https://github.com/MorganVitiello.png" width="60" height="60" alt="Morgan Vitiello" /></a>       |
