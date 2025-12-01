@@ -1,6 +1,6 @@
 # 🐾 SafePet_backend
 
-### 📚 Indice
+## 📚 Indice
 * [Overview del progetto](#overview-del-progetto)
 * [Tecnologie usate](#tecnologie-usate)
 * [Microservizi](#microservizi)
@@ -14,7 +14,7 @@
 
 ---
 
-### 💡 Overview del progetto
+## 💡 Overview del progetto
 La **disponibilità immediata di informazioni cliniche aggiornate** è **cruciale** per interventi tempestivi ed efficaci sugli animali da compagnia, specialmente in **emergenze** (incidenti, allergie, intossicazioni, calamità naturali).
 La rapidità di accesso a dati come patologie pregresse, terapie e allergie può essere **vitale**.
 Il progetto **SafePet** è una piattaforma digitale che mira a:
@@ -26,7 +26,7 @@ Il progetto **SafePet** è una piattaforma digitale che mira a:
 * **Promuovere una Gestione Moderna:** Sostenere una sanità veterinaria più resiliente e le politiche nazionali di prevenzione e benessere animale.
 ---
 
-### ⚙️ Tecnologie usate
+## ⚙️ Tecnologie usate
 * **React**
 * **Vite.js** (v. 5.2.0)
 * **Canva**
@@ -50,7 +50,7 @@ Il progetto **SafePet** è una piattaforma digitale che mira a:
 
 ---
 
-### 🧱 Microservizi
+## 🧱 Microservizi
 
 | Microservizio | Linguaggio | Descrizione | Link repository |
 |:---|:---|:---|:---:|
@@ -59,7 +59,7 @@ Il progetto **SafePet** è una piattaforma digitale che mira a:
 
 ---
 
-### 🚀 Installazione ed esecuzione
+## 🚀 Installazione ed esecuzione
 
 ---
 
@@ -125,18 +125,19 @@ Per eseguire il frontend è necessario seguire i seguenti passaggi:
 ---
 
 ### 👥 Team di sviluppo
-| Nome | Cognome | Ruolo |                                                   Profilo GitHub                                                   |
-| :--- | :--- | :--- |:------------------------------------------------------------------------------------------------------------------:|
-| Francesco Alessandro | Pinto | Project Manager |    [![Francesco Pinto](https://github.com/FrancescoPinto02.png?size=100)](https://github.com/FrancescoPinto02)     |
-| Francesco Maria | Torino | Project Manager | [![Francesco Torino](https://github.com/FrancescoTorino1999.png?size=100)](https://github.com/FrancescoTorino1999) |
-| Aldo | Adinolfi | Team Member |             [![Aldo Adinolfi](https://github.com/AldoAdi04.png?size=60)](https://github.com/AldoAdi04)             |
-| Gianmarco | Amatruda | Team Member |           [![Gianmarco Amatruda](https://github.com/Giammi19.png?size=60)](https://github.com/Giammi19)            |
-| Simone | Cimmino | Team Member |            [![Simone Cimmino](https://github.com/SimoCimmi.png?size=60)](https://github.com/SimoCimmi)             |
-| Matteo Ferdinando | Emolo | Team Member |               [![Matteo Emolo](https://github.com/0xMatte.png?size=100)](https://github.com/0xMatte)               |
-| Anna Chiara | Memoli | Team Member |           [![Anna Chiara Memoli](https://github.com/memoli04.png?size=60)](https://github.com/memoli04)            |
-| Chiara | Memoli | Team Member |            [![Chiara Memoli](https://github.com/chiara0605.png?size=60)](https://github.com/chiara0605)            |
-| Vincenzo Giuseppe | Nappi | Team Member |           [![Vincenzo Nappi](https://github.com/VincenzoGN.png?size=60)](https://github.com/VincenzoGN)            |
-| Giuseppe | Rossano | Team Member |          [![Giuseppe Rossano](https://github.com/PeppeRed04.png?size=100)](https://github.com/PeppeRed04)          |
-| Rosario | Saggese | Team Member |          [![Rosario Saggese](https://github.com/rossssss111.png?size=60)](https://github.com/rossssss111)          |
-| Luca | Salvatore | Team Member |           [![Luca Salvatore](https://github.com/lucasalvaa.png?size=100)](https://github.com/lucasalvaa)           |
-| Morgan | Vitiello | Team Member |       [![Morgan Vitiello](https://github.com/MorganVitiello.png?size=60)](https://github.com/MorganVitiello)       |
+
+| Nome                 | Cognome   | Ruolo           |                                                                        Profilo GitHub                                                                        |
+| :------------------- | :-------- | :-------------- |:------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| Francesco Alessandro | Pinto     | Project Manager |     <a href="https://github.com/FrancescoPinto02"><img src="https://github.com/FrancescoPinto02.png" width="80" height="80" alt="Francesco Pinto" /></a>     |
+| Francesco Maria      | Torino    | Project Manager | <a href="https://github.com/FrancescoTorino1999"><img src="https://github.com/FrancescoTorino1999.png" width="80" height="80" alt="Francesco Torino" /></a>  |
+| Aldo                 | Adinolfi  | Team Member     |             <a href="https://github.com/AldoAdi04"><img src="https://github.com/AldoAdi04.png" width="60" height="60" alt="Aldo Adinolfi" /></a>             |
+| Gianmarco            | Amatruda  | Team Member     |           <a href="https://github.com/Giammi19"><img src="https://github.com/Giammi19.png" width="60" height="60" alt="Gianmarco Amatruda" /></a>            |
+| Simone               | Cimmino   | Team Member     |            <a href="https://github.com/SimoCimmi"><img src="https://github.com/SimoCimmi.png" width="60" height="60" alt="Simone Cimmino" /></a>             |
+| Matteo Ferdinando    | Emolo     | Team Member     |               <a href="https://github.com/0xMatte"><img src="https://github.com/0xMatte.png" width="60" height="60" alt="Matteo Emolo" /></a>                |
+| Anna Chiara          | Memoli    | Team Member     |           <a href="https://github.com/memoli04"><img src="https://github.com/memoli04.png" width="60" height="60" alt="Anna Chiara Memoli" /></a>            |
+| Chiara               | Memoli    | Team Member     |            <a href="https://github.com/chiara0605"><img src="https://github.com/chiara0605.png" width="60" height="60" alt="Chiara Memoli" /></a>            |
+| Vincenzo Giuseppe    | Nappi     | Team Member     |           <a href="https://github.com/VincenzoGN"><img src="https://github.com/VincenzoGN.png" width="60" height="60" alt="Vincenzo Nappi" /></a>            |
+| Giuseppe             | Rossano   | Team Member     |          <a href="https://github.com/PeppeRed04"><img src="https://github.com/PeppeRed04.png" width="60" height="60" alt="Giuseppe Rossano" /></a>           |
+| Rosario              | Saggese   | Team Member     |          <a href="https://github.com/rossssss111"><img src="https://github.com/rossssss111.png" width="60" height="60" alt="Rosario Saggese" /></a>          |
+| Luca                 | Salvatore | Team Member     |           <a href="https://github.com/lucasalvaa"><img src="https://github.com/lucasalvaa.png" width="60" height="60" alt="Luca Salvatore" /></a>            |
+| Morgan               | Vitiello  | Team Member     |       <a href="https://github.com/MorganVitiello"><img src="https://github.com/MorganVitiello.png" width="60" height="60" alt="Morgan Vitiello" /></a>       |
