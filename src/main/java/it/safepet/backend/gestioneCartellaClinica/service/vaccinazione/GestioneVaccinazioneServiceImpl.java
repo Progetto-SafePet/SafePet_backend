@@ -32,7 +32,7 @@ public class GestioneVaccinazioneServiceImpl implements GestioneVaccinazioneServ
 
     @Override
     @Transactional
-    public VaccinazioneResponseDTO aggiungiVaccinazione(VaccinazioneRequestDTO dto) {
+    public VaccinazioneResponseDTO aggiungiVaccinazione(Long petId, VaccinazioneRequestDTO dto) {
 
         AuthenticatedUser currentUser = AuthContext.getCurrentUser();
         if (currentUser == null || !Role.VETERINARIO.equals(currentUser.getRole())) {
@@ -42,7 +42,7 @@ public class GestioneVaccinazioneServiceImpl implements GestioneVaccinazioneServ
         Veterinario veterinario = veterinarioRepository.findById(currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Veterinario non trovato"));
 
-        Pet pet = petRepository.findById(dto.getPetId())
+        Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new RuntimeException("Pet non trovato"));
 
         boolean associato = pet.getVeterinariAssociati().stream()

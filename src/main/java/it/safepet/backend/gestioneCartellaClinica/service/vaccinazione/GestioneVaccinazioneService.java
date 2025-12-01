@@ -12,5 +12,5 @@ public interface GestioneVaccinazioneService {
      * @param requestDTO Dati della vaccinazione da registrare.
      * @return VaccinazioneResponseDTO contenente i dettagli della nuova vaccinazione.
      */
-    VaccinazioneResponseDTO aggiungiVaccinazione(VaccinazioneRequestDTO requestDTO);
+    VaccinazioneResponseDTO aggiungiVaccinazione(Long petId, VaccinazioneRequestDTO requestDTO);
 }
