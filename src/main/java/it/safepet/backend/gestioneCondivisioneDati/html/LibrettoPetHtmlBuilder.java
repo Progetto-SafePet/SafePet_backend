@@ -2,25 +2,45 @@ package it.safepet.backend.gestioneCondivisioneDati.html;
 
 import it.safepet.backend.gestioneCondivisioneDati.dto.CondivisioneDatiPetResponseDTO;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Base64;
+
 public class LibrettoPetHtmlBuilder {
+
+    private String loadLogoAsDataUrl() {
+        try {
+            byte[] bytes = Files.readAllBytes(Paths.get("src/main/resources/images/logo1.png"));
+            String base64 = Base64.getEncoder().encodeToString(bytes);
+            return "data:image/png;base64," + base64;
+        } catch (Exception e) {
+            return ""; // niente logo se fallisce
+        }
+    }
+
 
     public String buildHtml(CondivisioneDatiPetResponseDTO dto) {
 
         String vaccinazioni = dto.getCartellaClinica().getVaccinazioni().stream()
-                .map(v -> "<tr><td>" + v.getNomeVaccino() + "</td><td>" + v.getDataDiSomministrazione() + "</td></tr>")
+                .map(v -> "<tr><td>" + v.getNomeVaccino() + "</td><td>" + v.getDataDiSomministrazione() + "</td><td>"
+                        + v.getRichiamoPrevisto() + "</td><td>" + v.getTipologia() + "</td></tr>")
                 .reduce("", String::concat);
 
         String patologie = dto.getCartellaClinica().getPatologie().stream()
-                .map(p -> "<tr><td>" + p.getNome() + "</td><td>" + p.getDataDiDiagnosi() + "</td></tr>")
+                .map(p -> "<tr><td>" + p.getNome() + "</td><td>" + p.getDataDiDiagnosi() + "</td><td>" + p.getSintomiOsservati()
+                        + "</td></tr>")
                 .reduce("", String::concat);
 
         String terapie = dto.getCartellaClinica().getTerapie().stream()
-                .map(t -> "<tr><td>" + t.getNome() + "</td><td>" + t.getDurata() + "</td></tr>")
+                .map(t -> "<tr><td>" + t.getNome() + "</td><td>" + t.getDurata() + "</td><td>" + t.getFormaFarmaceutica()
+                        + "</td><td>" + t.getViaDiSomministrazione() + "</td><td>" + t.getFrequenza() + "</td></tr>" )
                 .reduce("", String::concat);
 
         String visite = dto.getCartellaClinica().getVisiteMediche().stream()
                 .map(v -> "<tr><td>" + v.getNome() + "</td><td>" + v.getData() + "</td></tr>")
                 .reduce("", String::concat);
+
+        String logoSrc = loadLogoAsDataUrl();
 
         return """
         <html>
@@ -38,6 +58,7 @@ public class LibrettoPetHtmlBuilder {
                     text-align: center;
                     color: #7d4f21;
                     font-size: 34px;
+                    margin-top: 0;
                     margin-bottom: 40px;
                     border-bottom: 3px solid #c5a982;
                     padding-bottom: 10px;
@@ -85,18 +106,32 @@ public class LibrettoPetHtmlBuilder {
                     font-weight: bold;
                 }
     
-                .divider {
-                    border-bottom: 2px solid #c5a982;
-                    margin: 40px 0;
+                /* logo */
+                .header-logo{
+                    text-align: center;
+                    margin-bottom: 5px;
                 }
-    
+  
+                .header-logo img {
+                    width: 70px;
+                    height: 70px;
+                    margin-bottom: 20px;
+                }
+        
+                .page-break-before {
+                     page-break-before: always;
+                }
             </style>
         </head>
     
         <body>
-    
-            <h1>Scheda Anagrafica Pet: %s</h1>
-    
+            <!-- LOGO -->
+            <div class="header-logo">
+                <img src="%s" alt="SafePet Logo" />
+            </div>
+        
+            <h1> Scheda Anagrafica Pet: %s </h1>
+        
             <!-- DATI ANAGRAFICI PET -->
             <h2>Dati Anagrafici</h2>
     
@@ -121,24 +156,23 @@ public class LibrettoPetHtmlBuilder {
                 </p>
             </div>
    
-    
-            <h1>Storico Clinico Completo</h1>
+            <h1 class="page-break-before">Storico Clinico Completo</h1>
     
             <h2>Vaccinazioni</h2>
             <table>
-                <tr><th>Vaccino</th><th>Data</th></tr>
+                <tr><th>Vaccino</th><th>Data</th><th>Richiamo</th><th>Tipologia</th></tr>
                 %s
             </table>
     
             <h2>Patologie</h2>
             <table>
-                <tr><th>Patologia</th><th>Data Diagnosi</th></tr>
+                <tr><th>Patologia</th><th>Data Diagnosi</th><th> Sintomi Osservati</th></tr>
                 %s
             </table>
     
             <h2>Terapie</h2>
             <table>
-                <tr><th>Terapia</th><th>Durata</th></tr>
+                <tr><th>Terapia</th><th>Durata</th><th>Forma Farmaceutica</th><th>Via di somministrazione</th><th>Frequenza</th></tr>
                 %s
             </table>
     
@@ -151,6 +185,7 @@ public class LibrettoPetHtmlBuilder {
         </body>
         </html>
         """.formatted(
+                logoSrc,
                 dto.getPet().getNome(),
                 dto.getPet().getSpecie(),
                 dto.getPet().getRazza(),
