@@ -6,6 +6,7 @@ import it.safepet.backend.reportCliniche.service.ReportClinicheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -77,9 +78,9 @@ public class ReportClinicheController {
      *
      * @return {@link ResponseEntity} contenente la lista di {@link InfoClinicheDTO}.
      */
-    @GetMapping("/mostraMappa")
-    public ResponseEntity<List<InfoClinicheDTO>> getDatiMappa() {
-        return ResponseEntity.ok(reportClinicheService.prelevaDatiMappa());
+    @GetMapping("/mostraMappa/{lat}/{lon}")
+    public ResponseEntity<List<InfoClinicheDTO>> getDatiMappa(@PathVariable double lat, @PathVariable double lon) {
+        return ResponseEntity.ok(reportClinicheService.prelevaDatiMappa(lat, lon));
     }
 
 }

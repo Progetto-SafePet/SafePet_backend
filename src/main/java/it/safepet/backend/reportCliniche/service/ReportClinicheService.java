@@ -29,5 +29,5 @@ public interface ReportClinicheService {
      *
      * @return lista di {@link InfoClinicheDTO}
      */
-    List<InfoClinicheDTO> prelevaDatiMappa();
+    List<InfoClinicheDTO> prelevaDatiMappa(Double lat, Double lon);
 }
