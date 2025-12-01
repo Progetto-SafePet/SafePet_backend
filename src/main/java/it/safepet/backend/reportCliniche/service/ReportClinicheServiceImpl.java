@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.AbstractMap;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Validated
@@ -55,30 +58,62 @@ public class ReportClinicheServiceImpl implements ReportClinicheService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<InfoClinicheDTO> prelevaDatiMappa() {
+    public List<InfoClinicheDTO> prelevaDatiMappa(Double lat, Double lon) {
+        if (lat == null || lon == null) {
+            return List.of();
+        }
+
         List<Clinica> cliniche = clinicaRepository.findAll();
         return cliniche.stream()
-                .map(c -> new InfoClinicheDTO(
-                        c.getId(),
-                        c.getNome(),
-                        c.getIndirizzo(),
-                        c.getNumeroTelefono(),
-                        c.getVeterinario().getId(),
-                        c.getVeterinario().getNome(),
-                        c.getVeterinario().getCognome(),
-                        recensioneRepository.countByVeterinarioId(c.getVeterinario().getId()),
-                        veterinarioRepository.calcolaMediaRecensioniVeterinario(c.getVeterinario().getId()),
-                        c.getLatitudine(),
-                        c.getLongitudine(),
-                        (c.getOrariApertura().stream()
-                                .map(o -> new OrariClinicaResponseDTO(
-                                        o.getGiorno(),
-                                        o.getOrarioApertura(),
-                                        o.getOrarioChiusura(),
-                                        o.getAperto24h()
-                                ))
-                                .toList())
+                .map(c -> new AbstractMap.SimpleEntry<>(
+                        c,
+                        haversineKm(lat, lon, c.getLatitudine(), c.getLongitudine())
                 ))
+                // ordina per distanza crescente
+                .sorted(Comparator.comparingDouble(Map.Entry::getValue))
+                // prendi le prime 5
+                .limit(5)
+                // mappa al DTO (come nel tuo codice originale)
+                .map(entry -> {
+                    Clinica c = entry.getKey();
+                    return new InfoClinicheDTO(
+                            c.getId(),
+                            c.getNome(),
+                            c.getIndirizzo(),
+                            c.getNumeroTelefono(),
+                            c.getVeterinario().getId(),
+                            c.getVeterinario().getNome(),
+                            c.getVeterinario().getCognome(),
+                            recensioneRepository.countByVeterinarioId(c.getVeterinario().getId()),
+                            veterinarioRepository.calcolaMediaRecensioniVeterinario(c.getVeterinario().getId()),
+                            c.getLatitudine(),
+                            c.getLongitudine(),
+                            c.getOrariApertura().stream()
+                                    .map(o -> new OrariClinicaResponseDTO(
+                                            o.getGiorno(),
+                                            o.getOrarioApertura(),
+                                            o.getOrarioChiusura(),
+                                            o.getAperto24h()
+                                    ))
+                                    .toList()
+                    );
+                })
                 .toList();
     }
+
+    /**
+     * Calcola la distanza in km tra due punti (lat, lon) usando la formula di Haversine.
+     */
+    private static double haversineKm(double lat1, double lon1, double lat2, double lon2) {
+        final double R = 6371.0; // raggio medio Terra in km
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
 }
+
+
