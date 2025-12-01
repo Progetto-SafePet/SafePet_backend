@@ -1,6 +1,7 @@
 package it.safepet.backend.gestioneUtente.service;
 
 import it.safepet.backend.gestioneUtente.dto.ProfiloProprietarioResponseDTO;
+import it.safepet.backend.gestioneUtente.dto.ProprietarioResponseDTO;
 import it.safepet.backend.gestioneUtente.dto.RegistrazioneProprietarioRequestDTO;
 import it.safepet.backend.gestioneUtente.dto.VisualizzaDettagliVeterinariResponseDTO;
 import jakarta.validation.Valid;
@@ -33,4 +34,6 @@ public interface GestioneUtenteService {
      * @throws org.springframework.web.server.ResponseStatusException con status 404 se il proprietario non viene trovato
      */
     ProfiloProprietarioResponseDTO visualizzaProfiloProprietario();
+
+    ProprietarioResponseDTO getProprietario(Long propId);
 }

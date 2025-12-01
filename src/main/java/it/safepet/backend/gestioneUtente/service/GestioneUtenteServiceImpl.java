@@ -6,6 +6,7 @@ import it.safepet.backend.autenticazione.jwt.AuthenticatedUser;
 import it.safepet.backend.autenticazione.jwt.Role;
 import it.safepet.backend.gestionePet.dto.PetResponseDTO;
 import it.safepet.backend.gestioneUtente.dto.ProfiloProprietarioResponseDTO;
+import it.safepet.backend.gestioneUtente.dto.ProprietarioResponseDTO;
 import it.safepet.backend.gestioneUtente.dto.RegistrazioneProprietarioRequestDTO;
 import it.safepet.backend.gestioneUtente.dto.VisualizzaDettagliVeterinariResponseDTO;
 import it.safepet.backend.gestioneUtente.model.Proprietario;
@@ -163,6 +164,30 @@ public class GestioneUtenteServiceImpl implements GestioneUtenteService {
                 proprietario.getGenere(),
                 proprietario.getIndirizzoDomicilio(),
                 petsInfo
+        );
+    }
+
+    public ProprietarioResponseDTO getProprietario(Long propId) {
+        AuthenticatedUser currentUser = AuthContext.getCurrentUser();
+
+        if (currentUser == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Utente non autenticato");
+        }
+
+        // Verifica che l'utente sia un proprietario
+        if (!Role.PROPRIETARIO.equals(currentUser.getRole())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accesso negato: solo i proprietari possono visualizzare il proprio profilo");
+        }
+
+        Proprietario p = proprietarioRepository.findById(propId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Proprietario non trovato"));
+
+        return new ProprietarioResponseDTO(
+                p.getNome(),
+                p.getCognome(),
+                p.getEmail(),
+                p.getNumeroTelefono(),
+                p.getIndirizzoDomicilio()
         );
     }
 }
