@@ -1,10 +1,13 @@
 package it.safepet.backend.reportCliniche.service;
 
 import it.safepet.backend.gestioneRecensioni.model.Recensione;
+import it.safepet.backend.gestioneRecensioni.repository.RecensioneRepository;
 import it.safepet.backend.gestioneUtente.model.Veterinario;
+import it.safepet.backend.reportCliniche.dto.InfoClinicheDTO;
 import it.safepet.backend.reportCliniche.dto.ElencoResponseDTO;
+import it.safepet.backend.reportCliniche.dto.OrariClinicaResponseDTO;
+import it.safepet.backend.reportCliniche.model.Clinica;
 import it.safepet.backend.reportCliniche.repository.ClinicaRepository;
-import it.safepet.backend.reportCliniche.repository.OrarioDiAperturaRepository;
 import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +26,7 @@ public class ReportClinicheServiceImpl implements ReportClinicheService {
     private ClinicaRepository clinicaRepository;
 
     @Autowired
-    private OrarioDiAperturaRepository orarioDiAperturaRepository;
+    private RecensioneRepository recensioneRepository;
 
     @Transactional(readOnly = true)
     public List<ElencoResponseDTO> visualizzaElencoVeterinari() {
@@ -47,6 +50,35 @@ public class ReportClinicheServiceImpl implements ReportClinicheService {
                             mediaRecensioni
                     );
                 })
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<InfoClinicheDTO> prelevaDatiMappa() {
+        List<Clinica> cliniche = clinicaRepository.findAll();
+        return cliniche.stream()
+                .map(c -> new InfoClinicheDTO(
+                        c.getId(),
+                        c.getNome(),
+                        c.getIndirizzo(),
+                        c.getNumeroTelefono(),
+                        c.getVeterinario().getId(),
+                        c.getVeterinario().getNome(),
+                        c.getVeterinario().getCognome(),
+                        recensioneRepository.countByVeterinarioId(c.getVeterinario().getId()),
+                        veterinarioRepository.calcolaMediaRecensioniVeterinario(c.getVeterinario().getId()),
+                        c.getLatitudine(),
+                        c.getLongitudine(),
+                        (c.getOrariApertura().stream()
+                                .map(o -> new OrariClinicaResponseDTO(
+                                        o.getGiorno(),
+                                        o.getOrarioApertura(),
+                                        o.getOrarioChiusura(),
+                                        o.getAperto24h()
+                                ))
+                                .toList())
+                ))
                 .toList();
     }
 }

@@ -1,5 +1,6 @@
 package it.safepet.backend.reportCliniche.controller;
 
+import it.safepet.backend.reportCliniche.dto.InfoClinicheDTO;
 import it.safepet.backend.reportCliniche.dto.ElencoResponseDTO;
 import it.safepet.backend.reportCliniche.service.ReportClinicheService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,16 @@ public class ReportClinicheController {
     @GetMapping("/elencoVeterinari")
     public ResponseEntity<List<ElencoResponseDTO>> getElencoVeterinari() {
         return ResponseEntity.ok(reportClinicheService.visualizzaElencoVeterinari());
+    }
+
+    /**
+     * Restituisce l'elenco delle cliniche con le coordinate per la mappa.
+     *
+     * @return {@link ResponseEntity} contenente la lista di {@link InfoClinicheDTO}.
+     */
+    @GetMapping("/mostraMappa")
+    public ResponseEntity<List<InfoClinicheDTO>> getDatiMappa() {
+        return ResponseEntity.ok(reportClinicheService.prelevaDatiMappa());
     }
 
 }

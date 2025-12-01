@@ -1,5 +1,6 @@
 package it.safepet.backend.reportCliniche.service;
 
+import it.safepet.backend.reportCliniche.dto.InfoClinicheDTO;
 import it.safepet.backend.reportCliniche.dto.ElencoResponseDTO;
 
 import java.util.List;
@@ -22,4 +23,11 @@ public interface ReportClinicheService {
      * @return lista di {@link ElencoResponseDTO} con i dati aggregati di veterinario e clinica
      */
     List<ElencoResponseDTO> visualizzaElencoVeterinari();
+
+    /**
+     * Recupera l'elenco di tutte le cliniche con le relative coordinate geografiche.
+     *
+     * @return lista di {@link InfoClinicheDTO}
+     */
+    List<InfoClinicheDTO> prelevaDatiMappa();
 }
