@@ -3,6 +3,8 @@ package it.safepet.backend.gestioneCondivisioneDati.service;
 import it.safepet.backend.autenticazione.jwt.AuthContext;
 import it.safepet.backend.autenticazione.jwt.AuthenticatedUser;
 import it.safepet.backend.autenticazione.jwt.Role;
+import it.safepet.backend.exception.NotFoundException;
+import it.safepet.backend.exception.UnauthorizedException;
 import it.safepet.backend.gestioneCartellaClinica.dto.CartellaClinicaResponseDTO;
 import it.safepet.backend.gestioneCartellaClinica.service.GestioneCartellaClinicaService;
 import it.safepet.backend.gestioneCondivisioneDati.dto.CondivisioneDatiPetResponseDTO;
@@ -48,20 +50,20 @@ public class GestioneCondivisioneDatiServiceImpl implements GestioneCondivisione
         // Recupera utente autenticato
         AuthenticatedUser currentUser = AuthContext.getCurrentUser();
         if (currentUser == null) {
-            throw new RuntimeException("Accesso non autorizzato: nessun utente autenticato");
+            throw new UnauthorizedException("Accesso non autorizzato: nessun utente autenticato");
         }
 
         // Solo PROPRIETARIO può accedere
         if (!Role.PROPRIETARIO.equals(currentUser.getRole())) {
-            throw new RuntimeException("Accesso negato: solo i proprietari possono accedere ai dati");
+            throw new NotFoundException("Accesso negato: solo i proprietari possono accedere ai dati");
         }
 
         // Recupera pet e controlla che appartenga al proprietario loggato
         Pet petEntity = petRepository.findById(petId)
-                .orElseThrow(() -> new RuntimeException("Pet non trovato"));
+                .orElseThrow(() -> new NotFoundException("Pet non trovato"));
 
         if (!petEntity.getProprietario().getId().equals(currentUser.getId())) {
-            throw new RuntimeException("Accesso negato: il pet non appartiene all'utente corrente");
+            throw new NotFoundException("Accesso negato: il pet non appartiene all'utente corrente");
         }
 
         // Recupera DTO già pronti dagli altri service

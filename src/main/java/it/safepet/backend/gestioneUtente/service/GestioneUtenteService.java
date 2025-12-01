@@ -1,10 +1,13 @@
 package it.safepet.backend.gestioneUtente.service;
 
+import it.safepet.backend.autenticazione.jwt.Role;
 import it.safepet.backend.gestioneUtente.dto.ProfiloProprietarioResponseDTO;
 import it.safepet.backend.gestioneUtente.dto.ProprietarioResponseDTO;
 import it.safepet.backend.gestioneUtente.dto.RegistrazioneProprietarioRequestDTO;
 import it.safepet.backend.gestioneUtente.dto.VisualizzaDettagliVeterinariResponseDTO;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 public interface GestioneUtenteService {
     /**
@@ -35,5 +38,24 @@ public interface GestioneUtenteService {
      */
     ProfiloProprietarioResponseDTO visualizzaProfiloProprietario();
 
+    /**
+     * Restituisce i dati di un proprietario specifico come {@link ProprietarioResponseDTO}.
+     * <p>
+     * Prima di recuperare i dati, il metodo esegue i seguenti controlli di autorizzazione:
+     * <ul>
+     *     <li>Verifica che ci sia un utente autenticato.</li>
+     *     <li>Verifica che l'utente autenticato abbia il ruolo di {@link Role#PROPRIETARIO}.</li>
+     * </ul>
+     * </p>
+     *
+     * @param propId l'ID del proprietario di cui recuperare i dati
+     * @return un {@link ProprietarioResponseDTO} contenente nome, cognome, email, numero di telefono e indirizzo del proprietario
+     * @throws ResponseStatusException con stato:
+     *         <ul>
+     *             <li>{@link HttpStatus#UNAUTHORIZED} se nessun utente è autenticato</li>
+     *             <li>{@link HttpStatus#FORBIDDEN} se l'utente autenticato non è un proprietario</li>
+     *             <li>{@link HttpStatus#NOT_FOUND} se non esiste un proprietario con l'ID specificato</li>
+     *         </ul>
+     */
     ProprietarioResponseDTO getProprietario(Long propId);
 }
