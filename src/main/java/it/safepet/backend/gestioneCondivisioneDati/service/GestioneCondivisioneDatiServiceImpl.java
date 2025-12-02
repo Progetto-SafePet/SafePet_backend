@@ -1,41 +1,107 @@
 package it.safepet.backend.gestioneCondivisioneDati.service;
 
-import it.safepet.backend.gestioneCartellaClinica.repository.PatologiaRepository;
-import it.safepet.backend.gestioneCartellaClinica.repository.RecordMedicoRepository;
-import it.safepet.backend.gestioneCartellaClinica.repository.TerapiaRepository;
-import it.safepet.backend.gestioneCartellaClinica.repository.VaccinazioneRepository;
-import it.safepet.backend.gestioneCartellaClinica.repository.VisitaMedicaRepository;
+import it.safepet.backend.autenticazione.jwt.AuthContext;
+import it.safepet.backend.autenticazione.jwt.AuthenticatedUser;
+import it.safepet.backend.autenticazione.jwt.Role;
+import it.safepet.backend.exception.NotFoundException;
+import it.safepet.backend.exception.UnauthorizedException;
+import it.safepet.backend.gestioneCartellaClinica.dto.CartellaClinicaResponseDTO;
+import it.safepet.backend.gestioneCartellaClinica.service.GestioneCartellaClinicaService;
+import it.safepet.backend.gestioneCondivisioneDati.dto.CondivisioneDatiPetResponseDTO;
+import it.safepet.backend.gestioneCondivisioneDati.html.LibrettoPetHtmlBuilder;
+import it.safepet.backend.gestionePet.dto.PetResponseDTO;
+import it.safepet.backend.gestionePet.model.Pet;
 import it.safepet.backend.gestionePet.repository.PetRepository;
-import it.safepet.backend.gestioneUtente.repository.ProprietarioRepository;
-import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
+import it.safepet.backend.gestionePet.service.GestionePetService;
+import it.safepet.backend.gestioneUtente.dto.ProprietarioResponseDTO;
+import it.safepet.backend.gestioneUtente.service.GestioneUtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
+
+import java.io.ByteArrayOutputStream;
 
 @Service
 @Validated
 public class GestioneCondivisioneDatiServiceImpl implements GestioneCondivisioneDatiService {
-    @Autowired
-    PetRepository petRepository;
 
     @Autowired
-    ProprietarioRepository proprietarioRepository;
+    private GestionePetService gestionePetService;
 
     @Autowired
-    VeterinarioRepository veterinarioRepository;
+    private GestioneCartellaClinicaService gestioneCartellaClinicaService;
 
     @Autowired
-    PatologiaRepository patologiaRepository;
+    private PetRepository petRepository;
 
     @Autowired
-    RecordMedicoRepository recordMedicoRepository;
+    private GestioneUtenteService gestioneUtenteService;
 
-    @Autowired
-    TerapiaRepository terapiaRepository;
+    // builder HTML dedicato
+    private final LibrettoPetHtmlBuilder htmlBuilder = new LibrettoPetHtmlBuilder();
 
-    @Autowired
-    VaccinazioneRepository vaccinazioneRepository;
+    @Override
+    @Transactional(readOnly = true)
+    public CondivisioneDatiPetResponseDTO getDatiCompletiPet(Long petId) {
 
-    @Autowired
-    VisitaMedicaRepository visitaMedicaRepository;
+        // Recupera utente autenticato
+        AuthenticatedUser currentUser = AuthContext.getCurrentUser();
+        if (currentUser == null) {
+            throw new UnauthorizedException("Accesso non autorizzato: nessun utente autenticato");
+        }
+
+        // Solo PROPRIETARIO può accedere
+        if (!Role.PROPRIETARIO.equals(currentUser.getRole())) {
+            throw new NotFoundException("Accesso negato: solo i proprietari possono accedere ai dati");
+        }
+
+        // Recupera pet e controlla che appartenga al proprietario loggato
+        Pet petEntity = petRepository.findById(petId)
+                .orElseThrow(() -> new NotFoundException("Pet non trovato"));
+
+        if (!petEntity.getProprietario().getId().equals(currentUser.getId())) {
+            throw new NotFoundException("Accesso negato: il pet non appartiene all'utente corrente");
+        }
+
+        // Recupera DTO già pronti dagli altri service
+        PetResponseDTO petDTO = gestionePetService.getAnagraficaPet(petId);
+        CartellaClinicaResponseDTO cartellaDTO = gestioneCartellaClinicaService.getCartellaClinica(petId);
+        ProprietarioResponseDTO proprietarioDTO = gestioneUtenteService.getProprietario(petEntity.getProprietario().getId());
+
+        // Costruzione DTO aggregato aggiornato
+        return new CondivisioneDatiPetResponseDTO(
+                proprietarioDTO,
+                petDTO,
+                cartellaDTO
+        );
+    }
+
+    //     GENERAZIONE PDF (con HTML)
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] generaPdfPet(Long petId) {
+
+        // 🔐 Anche qui serve il controllo autorizzazione
+        CondivisioneDatiPetResponseDTO dto = getDatiCompletiPet(petId);
+
+        String html = htmlBuilder.buildHtmlCSS(dto);
+
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+
+            PdfRendererBuilder builder = new PdfRendererBuilder();
+            builder.useFastMode();
+            builder.withHtmlContent(html, null);
+            builder.toStream(out);
+            builder.run();
+
+            return out.toByteArray();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Errore generazione PDF: " + e.getMessage());
+        }
+    }
+
 }
