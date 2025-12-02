@@ -16,6 +16,7 @@ public interface GestioneVisitaMedicaService {
      *         incluso il nome completo del veterinario, il nome del pet e una variabile booleana
      *         che può assumere valore true(se il referto è presente) o false(se il referto non è presente)
      * @throws RuntimeException se il pet non esiste o se si verificano errori nel salvataggio
+     * @throws IllegalArgumentException se il pdf inserito supera la dimensione massima di 5 Mb o se la data inserita è una data futura
      */
     VisitaMedicaResponseDTO creaVisitaMedica(@Valid VisitaMedicaRequestDTO visitaMedicaDTO);
     /**

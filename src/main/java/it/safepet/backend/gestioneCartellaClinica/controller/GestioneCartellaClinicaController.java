@@ -92,6 +92,7 @@ public class GestioneCartellaClinicaController {
      *         inclusa la presenza o meno di un referto
      * @throws RuntimeException se l'utente non è un veterinario, il pet non esiste,
      *         non è associato al veterinario o si verifica un errore nell'apertura del file
+     * @throws IllegalArgumentException se il pdf inserito supera la dimensione massima di 5 Mb o se la data inserita è una data futura
      */
     @PostMapping(value = "/creaVisitaMedica/{petId}",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<VisitaMedicaResponseDTO> creaVisitaMedica(
