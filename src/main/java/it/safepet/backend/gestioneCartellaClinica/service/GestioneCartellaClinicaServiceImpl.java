@@ -55,26 +55,6 @@ public class GestioneCartellaClinicaServiceImpl implements GestioneCartellaClini
     @Autowired
     private VeterinarioRepository veterinarioRepository;
 
-    /**
-     * Recupera la cartella clinica completa di un pet, verificando che l'utente autenticato
-     * sia autorizzato ad accedere ai dati (proprietario del pet o veterinario associato).
-     *
-     * <p><b>Logica:</b></p>
-     * <ul>
-     *   <li>Verifica che l'utente sia autenticato.</li>
-     *   <li>Controlla che il pet esista nel database.</li>
-     *   <li>Verifica l'autorizzazione dell'utente tramite {@link #isAuthorized(AuthenticatedUser, Long)}.</li>
-     *   <li>Recupera tutti i record medici associati al pet e li converte in un DTO tramite {@link #buildCartellaClinicaDTO(List)}.</li>
-     * </ul>
-     *
-     * <p><b>Transazione:</b> il metodo è annotato con {@code @Transactional(readOnly = true)}
-     * per garantire la consistenza dei dati durante la lettura.</p>
-     *
-     * @param petId identificativo del pet di cui recuperare la cartella clinica
-     * @return {@link CartellaClinicaResponseDTO} contenente liste di vaccinazioni, visite mediche,
-     *         patologie e terapie associate al pet
-     * @throws RuntimeException se l'utente non è autenticato, il pet non esiste o l'accesso è negato
-     */
     @Transactional(readOnly = true)
     public CartellaClinicaResponseDTO getCartellaClinica(Long petId) {
         AuthenticatedUser currentUser = AuthContext.getCurrentUser();
