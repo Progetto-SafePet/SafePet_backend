@@ -74,9 +74,22 @@ public class ReportClinicheController {
     }
 
     /**
-     * Restituisce l'elenco delle cliniche con le coordinate per la mappa.
+     * Restituisce le cliniche più vicine alla posizione specificata (latitudine e longitudine).
      *
-     * @return {@link ResponseEntity} contenente la lista di {@link InfoClinicheDTO}.
+     * <p>Il metodo riceve le coordinate dell'utente tramite path variable e delega al service
+     * il calcolo delle distanze. Restituisce una lista (limitata alle 5 più vicine)
+     * di oggetti {@link InfoClinicheDTO}, utili per popolare i marker su una mappa.</p>
+     *
+     * <h3>Esempio di richiesta</h3>
+     * <pre>
+     * GET /mostraMappa/40.77/14.79 HTTP/1.1
+     * Host: localhost:8080
+     * Accept: application/json
+     * </pre>
+     *
+     * @param lat La latitudine della posizione attuale dell'utente.
+     * @param lon La longitudine della posizione attuale dell'utente.
+     * @return {@link ResponseEntity} contenente la lista di {@link InfoClinicheDTO} delle cliniche più vicine.
      */
     @GetMapping("/mostraMappa/{lat}/{lon}")
     public ResponseEntity<List<InfoClinicheDTO>> getDatiMappa(@PathVariable double lat, @PathVariable double lon) {

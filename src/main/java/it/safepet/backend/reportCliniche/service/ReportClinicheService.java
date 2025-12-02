@@ -25,9 +25,17 @@ public interface ReportClinicheService {
     List<ElencoResponseDTO> visualizzaElencoVeterinari();
 
     /**
-     * Recupera l'elenco di tutte le cliniche con le relative coordinate geografiche.
+     * Recupera le cliniche più vicine alla posizione geografica specificata.
      *
-     * @return lista di {@link InfoClinicheDTO}
+     * <p>Questo metodo elabora le coordinate fornite (latitudine e longitudine) per
+     * identificare e restituire le cliniche limitrofe, includendo i dati necessari
+     * per la geolocalizzazione su mappa (come indirizzo e coordinate) e le statistiche
+     * del veterinario associato.</p>
+     *
+     * @param lat La latitudine della posizione di riferimento (es. posizione dell'utente).
+     * @param lon La longitudine della posizione di riferimento (es. posizione dell'utente).
+     * @return Una lista di {@link InfoClinicheDTO} contenente le informazioni delle cliniche
+     * ordinate per vicinanza.
      */
     List<InfoClinicheDTO> prelevaDatiMappa(Double lat, Double lon);
 }
