@@ -17,8 +17,6 @@ public class VaccinazioneRequestDTO {
     @Size(min = 3, max = 20, message = "Il nome del vaccino deve contenere tra 3 e 20 caratteri")
     private String nomeVaccino;
 
-    private Long petId;
-
     @NotBlank(message = "La tipologia è obbligatoria")
     @Size(min = 3, max = 20, message = "La tipologia deve contenere tra 3 e 20 caratteri")
     private String tipologia;
@@ -51,7 +49,6 @@ public class VaccinazioneRequestDTO {
 
     public VaccinazioneRequestDTO(
             String nomeVaccino,
-            Long petId,
             String tipologia,
             LocalDate dataDiSomministrazione,
             Float doseSomministrata,
@@ -60,7 +57,6 @@ public class VaccinazioneRequestDTO {
             LocalDate richiamoPrevisto) {
 
         this.nomeVaccino = nomeVaccino;
-        this.petId = petId;
         this.tipologia = tipologia;
         this.dataDiSomministrazione = dataDiSomministrazione;
         this.doseSomministrata = doseSomministrata;
@@ -108,19 +104,11 @@ public class VaccinazioneRequestDTO {
         return nomeVaccino;
     }
 
-    public Long getPetId() {
-        return petId;
-    }
-
 
     public void setNomeVaccino(@NotBlank(message = "Il nome del vaccino è obbligatorio")
                                @Size(min = 3, max = 20, message = "Il nome del vaccino deve contenere tra 3 e 20 caratteri")
                                String nomeVaccino) {
         this.nomeVaccino = nomeVaccino;
-    }
-
-    public void setPetId(Long petId) {
-        this.petId = petId;
     }
 
     public void setTipologia(@NotBlank(message = "La tipologia è obbligatoria")

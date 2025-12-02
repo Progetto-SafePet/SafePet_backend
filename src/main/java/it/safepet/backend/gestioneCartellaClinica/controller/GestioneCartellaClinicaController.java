@@ -256,10 +256,9 @@ public class GestioneCartellaClinicaController {
             @PathVariable Long petId,
             @RequestBody VaccinazioneRequestDTO request) {
 
-        request.setPetId(petId); // imposta automaticamente il petId nel DTO
 
         VaccinazioneResponseDTO response =
-                gestioneVaccinazioneService.aggiungiVaccinazione(request);
+                gestioneVaccinazioneService.aggiungiVaccinazione(petId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
