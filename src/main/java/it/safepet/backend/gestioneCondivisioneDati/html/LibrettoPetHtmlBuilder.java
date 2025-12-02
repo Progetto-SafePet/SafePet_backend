@@ -8,6 +8,17 @@ import java.util.Base64;
 
 public class LibrettoPetHtmlBuilder {
 
+    /**
+     * Carica il logo del progetto come Data URL Base64.
+     *
+     * <p>Questo permette di inserire l'immagine direttamente nell'HTML
+     * senza fare riferimento a un file esterno. Se il file non viene trovato
+     * o si verifica un errore, viene restituita una stringa vuota.</p>
+     *
+     * @return una stringa Data URL contenente l'immagine in Base64,
+     *         oppure "" se il caricamento fallisce
+     */
+
     private String loadLogoAsDataUrl() {
         try {
             byte[] bytes = Files.readAllBytes(Paths.get("src/main/resources/images/logo1.png"));
@@ -18,8 +29,8 @@ public class LibrettoPetHtmlBuilder {
         }
     }
 
-
-    public String buildHtml(CondivisioneDatiPetResponseDTO dto) {
+    // Creazione documento HTML e CSS
+    public String buildHtmlCSS(CondivisioneDatiPetResponseDTO dto) {
 
         String vaccinazioni = dto.getCartellaClinica().getVaccinazioni().stream()
                 .map(v -> "<tr><td>" + v.getNomeVaccino() + "</td><td>" + v.getDataDiSomministrazione() + "</td><td>"

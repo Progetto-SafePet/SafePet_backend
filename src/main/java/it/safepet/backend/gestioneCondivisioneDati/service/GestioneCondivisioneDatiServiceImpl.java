@@ -87,7 +87,7 @@ public class GestioneCondivisioneDatiServiceImpl implements GestioneCondivisione
         // 🔐 Anche qui serve il controllo autorizzazione
         CondivisioneDatiPetResponseDTO dto = getDatiCompletiPet(petId);
 
-        String html = htmlBuilder.buildHtml(dto);
+        String html = htmlBuilder.buildHtmlCSS(dto);
 
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
