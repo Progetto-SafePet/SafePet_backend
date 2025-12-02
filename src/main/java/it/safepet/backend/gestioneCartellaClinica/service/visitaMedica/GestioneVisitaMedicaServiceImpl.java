@@ -20,6 +20,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -58,6 +60,12 @@ public class GestioneVisitaMedicaServiceImpl implements GestioneVisitaMedicaServ
             throw new RuntimeException("Il pet non è un paziente del veterinario");
         }
 
+        LocalDate dataVisita = visitaMedicaRequestDTO.getData();
+
+        if (dataVisita.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("La data della visita non può essere futura.");
+        }
+
         MultipartFile referto = getMultipartFile(visitaMedicaRequestDTO);
 
         VisitaMedica visitaMedica;
@@ -67,7 +75,7 @@ public class GestioneVisitaMedicaServiceImpl implements GestioneVisitaMedicaServ
             visitaMedica.setPet(opPet.get());
             visitaMedica.setNome(visitaMedicaRequestDTO.getNome());
             visitaMedica.setDescrizione(visitaMedicaRequestDTO.getDescrizione());
-            visitaMedica.setData(visitaMedicaRequestDTO.getData());
+            visitaMedica.setData(dataVisita);
             if (referto != null) {
                 visitaMedica.setReferto(visitaMedicaRequestDTO.getReferto().getBytes());
             }
