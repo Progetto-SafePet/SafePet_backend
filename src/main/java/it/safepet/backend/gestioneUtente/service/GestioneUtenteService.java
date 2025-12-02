@@ -1,6 +1,8 @@
 package it.safepet.backend.gestioneUtente.service;
 
 import it.safepet.backend.autenticazione.jwt.Role;
+import it.safepet.backend.exception.NotFoundException;
+import it.safepet.backend.exception.UnauthorizedException;
 import it.safepet.backend.gestioneUtente.dto.ProfiloProprietarioResponseDTO;
 import it.safepet.backend.gestioneUtente.dto.ProprietarioResponseDTO;
 import it.safepet.backend.gestioneUtente.dto.RegistrazioneProprietarioRequestDTO;
@@ -39,23 +41,23 @@ public interface GestioneUtenteService {
     ProfiloProprietarioResponseDTO visualizzaProfiloProprietario();
 
     /**
-     * Restituisce i dati di un proprietario specifico come {@link ProprietarioResponseDTO}.
-     * <p>
-     * Prima di recuperare i dati, il metodo esegue i seguenti controlli di autorizzazione:
-     * <ul>
-     *     <li>Verifica che ci sia un utente autenticato.</li>
-     *     <li>Verifica che l'utente autenticato abbia il ruolo di {@link Role#PROPRIETARIO}.</li>
-     * </ul>
-     * </p>
+     * Recupera il profilo di un proprietario sulla base del suo ID, verificando che
+     * l'utente autenticato sia un proprietario e che abbia i permessi per accedere ai dati.
      *
-     * @param propId l'ID del proprietario di cui recuperare i dati
-     * @return un {@link ProprietarioResponseDTO} contenente nome, cognome, email, numero di telefono e indirizzo del proprietario
-     * @throws ResponseStatusException con stato:
-     *         <ul>
-     *             <li>{@link HttpStatus#UNAUTHORIZED} se nessun utente è autenticato</li>
-     *             <li>{@link HttpStatus#FORBIDDEN} se l'utente autenticato non è un proprietario</li>
-     *             <li>{@link HttpStatus#NOT_FOUND} se non esiste un proprietario con l'ID specificato</li>
-     *         </ul>
+     * <p><b>Logica:</b></p>
+     * <ul>
+     *   <li>Verifica che l'utente sia autenticato.</li>
+     *   <li>Controlla che il ruolo dell'utente sia PROPRIETARIO.</li>
+     *   <li>Recupera il proprietario dal repository tramite ID.</li>
+     *   <li>Restituisce un {@link ProprietarioResponseDTO} contenente i dati del profilo.</li>
+     * </ul>
+     *
+     * @param propId ID del proprietario da recuperare.
+     * @return un DTO con i dati del proprietario richiesto.
+     *
+     * @throws UnauthorizedException se l'utente non è autenticato.
+     * @throws NotFoundException se l'utente autenticato non è un proprietario
+     *                           oppure se il proprietario con l'ID specificato non esiste.
      */
     ProprietarioResponseDTO getProprietario(Long propId);
 }
