@@ -55,6 +55,6 @@ public class AutenticazioneServiceImpl implements AutenticazioneService {
         }
 
         // Se non trovato in nessuno dei due
-        throw new EntityNotFoundException("Utente non trovato con email: " + loginRequestDTO.getEmail());
+        throw new UnauthorizedException("Credenziali non valide.");
     }
 }
