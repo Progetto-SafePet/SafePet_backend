@@ -25,7 +25,7 @@ public interface ReportClinicheService {
     List<ElencoResponseDTO> visualizzaElencoVeterinari();
 
     /**
-     * Recupera le cliniche più vicine alla posizione geografica specificata.
+     * Recupera le cinque cliniche più vicine alla posizione geografica specificata.
      *
      * <p>Questo metodo elabora le coordinate fornite (latitudine e longitudine) per
      * identificare e restituire le cliniche limitrofe, includendo i dati necessari
