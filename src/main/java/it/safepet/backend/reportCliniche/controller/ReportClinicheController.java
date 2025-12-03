@@ -87,8 +87,8 @@ public class ReportClinicheController {
      * Accept: application/json
      * </pre>
      *
-     * @param lat La latitudine della posizione attuale dell'utente.
-     * @param lon La longitudine della posizione attuale dell'utente.
+     * @param lat La latitudine della posizione attuale dell'utente. Range: [-90, 90]
+     * @param lon La longitudine della posizione attuale dell'utente. Range: [-180, 180]
      * @return {@link ResponseEntity} contenente la lista di {@link InfoClinicheDTO} delle cliniche più vicine.
      */
     @GetMapping("/mostraMappa/{lat}/{lon}")

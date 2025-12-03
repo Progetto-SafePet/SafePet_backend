@@ -32,8 +32,8 @@ public interface ReportClinicheService {
      * per la geolocalizzazione su mappa (come indirizzo e coordinate) e le statistiche
      * del veterinario associato.</p>
      *
-     * @param lat La latitudine della posizione di riferimento (es. posizione dell'utente).
-     * @param lon La longitudine della posizione di riferimento (es. posizione dell'utente).
+     * @param lat La latitudine della posizione attuale dell'utente. Range di valori ammessi: [-90, 90]
+     * @param lon La longitudine della posizione attuale dell'utente. Range di valori ammessi: [-180, 180]
      * @return Una lista di {@link InfoClinicheDTO} contenente le informazioni delle cliniche
      * ordinate per vicinanza.
      */

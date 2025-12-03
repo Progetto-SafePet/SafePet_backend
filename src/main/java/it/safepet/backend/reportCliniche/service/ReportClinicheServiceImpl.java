@@ -59,8 +59,12 @@ public class ReportClinicheServiceImpl implements ReportClinicheService {
     @Transactional(readOnly = true)
     @Override
     public List<InfoClinicheDTO> prelevaDatiMappa(Double lat, Double lon) {
-        if (lat == null || lon == null) {
-            return List.of();
+        if (lat < -90.f || lat > 90.f) {
+            throw new IllegalArgumentException("La latitudine ricevuta non è compresa tra -90 e 90 gradi.");
+        }
+
+        if (lon < -180.f || lon > 180.f) {
+            throw new IllegalArgumentException("La latitudine ricevuta non è compresa tra -180 e 180 gradi.");
         }
 
         List<Clinica> cliniche = clinicaRepository.findAll();
