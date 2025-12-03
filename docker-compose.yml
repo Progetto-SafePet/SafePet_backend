@@ -14,5 +14,12 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
+  skindetector:
+    image: francescopinto02/skindetector-api:latest
+    container_name: skin-detector
+    restart: always
+    ports:
+      - "8000:8000"
+
 volumes:
   mysql_data:
