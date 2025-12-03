@@ -10,7 +10,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.FileCopyUtils;
 
+import java.io.InputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
@@ -90,9 +92,10 @@ public class ProprietariPetsSeeder implements CommandLineRunner {
     }
 
     private byte[] loadImage(String path) {
-        try {
-            ClassPathResource imgFile = new ClassPathResource(path);
-            return Files.readAllBytes(imgFile.getFile().toPath());
+        ClassPathResource imgFile = new ClassPathResource(path);
+
+        try (InputStream inputStream = imgFile.getInputStream()) {
+            return FileCopyUtils.copyToByteArray(inputStream);
         } catch (IOException e) {
             System.err.println("⚠️  Impossibile caricare immagine: " + path + " → " + e.getMessage());
             return null;
