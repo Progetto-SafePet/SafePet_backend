@@ -77,9 +77,9 @@ public class GestionePetServiceImpl implements GestionePetService {
             String contentType = newPetDTO.getFoto().getContentType();
 
             if (contentType == null ||
-                    !(contentType.equalsIgnoreCase("image/jpeg") ||
+                    !(contentType.equalsIgnoreCase("image/jpg") ||
                             contentType.equalsIgnoreCase("image/png"))) {
-                throw new RuntimeException("Formato immagine non valido: sono ammessi JPEG o PNG");
+                throw new RuntimeException("Formato immagine non valido: sono ammessi JPG o PNG");
             }
 
             pet.setFoto(newPetDTO.getFoto().getBytes());
