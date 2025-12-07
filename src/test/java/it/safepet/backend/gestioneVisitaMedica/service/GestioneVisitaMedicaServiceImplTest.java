@@ -104,7 +104,7 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_AggiuntaVisitaMedica_1() {
+    void TC_aggiuntaVisitaMedica_1() {
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(null);
 
         VisitaMedicaRequestDTO request = buildValidRequest(1L, null);
@@ -126,7 +126,7 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_AggiuntaVisitaMedica_2() {
+    void TC_aggiuntaVisitaMedica_2() {
         AuthenticatedUser user = new AuthenticatedUser(1L, "mail@example.com", Role.PROPRIETARIO);
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(user);
 
@@ -149,7 +149,7 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_AggiuntaVisitaMedica_3() {
+    void TC_aggiuntaVisitaMedica_3() {
         AuthenticatedUser user = new AuthenticatedUser(1L, "mail@example.com", Role.VETERINARIO);
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(user);
         when(veterinarioRepository.findById(1L)).thenReturn(Optional.of(buildVeterinario(1L)));
@@ -174,7 +174,7 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_AggiuntaVisitaMedica_4() {
+    void TC_aggiuntaVisitaMedica_4() {
         AuthenticatedUser user = new AuthenticatedUser(1L, "mail@example.com", Role.VETERINARIO);
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(user);
 
@@ -203,7 +203,7 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_AggiuntaVisitaMedica_5() {
+    void TC_aggiuntaVisitaMedica_5() {
         VisitaMedicaRequestDTO request = new VisitaMedicaRequestDTO(
                 "", 1L, "Descrizione valida", LocalDate.now(), null
         );
@@ -222,7 +222,7 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_AggiuntaVisitaMedica_6() {
+    void TC_aggiuntaVisitaMedica_6() {
         VisitaMedicaRequestDTO request = new VisitaMedicaRequestDTO(
                 "AB", 1L, "Descrizione valida", LocalDate.now(), null
         );
@@ -241,7 +241,7 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_AggiuntaVisitaMedica_7() {
+    void TC_aggiuntaVisitaMedica_7() {
         VisitaMedicaRequestDTO request = new VisitaMedicaRequestDTO(
                 "NomeMoltoMoltoMoltoLungo", 1L, "Descrizione valida", LocalDate.now(), null
         );
@@ -260,7 +260,7 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_AggiuntaVisitaMedica_8() {
+    void TC_aggiuntaVisitaMedica_8() {
         String longDesc = "a".repeat(301);
         VisitaMedicaRequestDTO request = new VisitaMedicaRequestDTO(
                 "Visita", 1L, longDesc, LocalDate.now(), null
@@ -280,7 +280,7 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_AggiuntaVisitaMedica_9() {
+    void TC_aggiuntaVisitaMedica_9() {
         VisitaMedicaRequestDTO request = new VisitaMedicaRequestDTO(
                 "Visita", 1L, "Descrizione valida", null, null
         );
@@ -299,7 +299,7 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_AggiuntaVisitaMedica_10() {
+    void TC_aggiuntaVisitaMedica_10() {
         AuthenticatedUser user = new AuthenticatedUser(1L, "mail@example.com", Role.VETERINARIO);
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(user);
 
@@ -330,7 +330,7 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_AggiuntaVisitaMedica_11() {
+    void TC_aggiuntaVisitaMedica_11() {
         AuthenticatedUser user = new AuthenticatedUser(1L, "mail@example.com" ,Role.VETERINARIO);
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(user);
 
@@ -360,7 +360,7 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_AggiuntaVisitaMedica_12() {
+    void TC_aggiuntaVisitaMedica_12() {
         // Simula utente veterinario autenticato
         AuthenticatedUser user = new AuthenticatedUser(1L, "mail@example.com", Role.VETERINARIO);
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(user);
@@ -401,7 +401,7 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_AggiuntaVisitaMedica_13() throws Exception {
+    void TC_aggiuntaVisitaMedica_13() throws Exception {
         AuthenticatedUser user = new AuthenticatedUser(1L, "mail", Role.VETERINARIO);
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(user);
 
