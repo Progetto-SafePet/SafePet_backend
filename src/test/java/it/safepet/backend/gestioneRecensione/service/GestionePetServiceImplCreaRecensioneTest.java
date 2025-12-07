@@ -115,7 +115,7 @@ class GestionePetServiceImplCreaRecensioneTest {
      *Il Test Case ha l’obiettivo di verificare che la funzione CreaRecensione(…) restituisca un errore se l’utente non è autenticato;
      * <p>
      * Parametri di input:
-     * idVeterinario = 20L
+     * idVeterinario = 20
      * newRecensioneDTO = {
      * punteggio: 3,
      * descrizione: "Buona"}
@@ -146,7 +146,7 @@ class GestionePetServiceImplCreaRecensioneTest {
      * Il Test Case ha l’obiettivo di verificare che la funzione CreaRecensione(…) restituisca un errore se l’utente non è autorizzato;
      * <p>
      * Parametri di input:
-     * idVeterinario = 20L
+     * idVeterinario = 20
      * newRecensioneDTO = {
      * punteggio: 3,
      * descrizione: "Buona"
@@ -177,7 +177,7 @@ class GestionePetServiceImplCreaRecensioneTest {
      * Il Test Case ha l’obiettivo di verificare che la funzione CreaRecensione(…) restituisca un errore se il veterinario non è stato trovato;
      * <p>
      * Parametri di input:
-     * idVeterinario = 20L
+     * idVeterinario = 20
      * newRecensioneDTO = {
      * punteggio: 3,
      * descrizione: "Buona"
@@ -216,7 +216,7 @@ class GestionePetServiceImplCreaRecensioneTest {
      * Il Test Case ha l’obiettivo di verificare che la funzione CreaRecensione(…) restituisca un errore se esiste già una recensione per il veterinario selezionato;
      * <p>
      * Parametri di input :
-     * idVeterinario = 20L
+     * idVeterinario = 20
      * newRecensioneDTO = {
      * punteggio: 3,
      * descrizione: "Buona"
@@ -257,7 +257,7 @@ class GestionePetServiceImplCreaRecensioneTest {
      * Il Test Case ha l’obiettivo di verificare che la funzione CreaRecensione(…) restituisca un errore se il punteggio non è valido;
      * <p>
      * Parametri di input :
-     * idVeterinario = 20L
+     * idVeterinario = 20
      * newRecensioneDTO = {
      * punteggio: 0,
      * descrizione: "Ottimo"
@@ -286,7 +286,7 @@ class GestionePetServiceImplCreaRecensioneTest {
      * Il Test Case ha l’obiettivo di verificare che la funzione CreaRecensione(…) restituisca un errore se il punteggio non è valido;
      * <p>
      * Parametri di input :
-     * idVeterinario = 20L
+     * idVeterinario = 20
      * newRecensioneDTO = {
      * punteggio: 6,
      * descrizione: "Ottimo"
@@ -316,7 +316,7 @@ class GestionePetServiceImplCreaRecensioneTest {
      * Il Test Case ha l’obiettivo di verificare che la funzione CreaRecensione(…) restituisca un errore se la descrizione non è valida;
      * <p>
      * Parametri di input :
-     * idVeterinario = 20L
+     * idVeterinario = 20
      * newRecensioneDTO = {
      * punteggio: 3,
      * descrizione: ""
@@ -344,7 +344,7 @@ class GestionePetServiceImplCreaRecensioneTest {
      * Il Test Case ha l’obiettivo di verificare che la funzione CreaRecensione(…) restituisca un errore se la descrizione non è valida;
      * <p>
      * Parametri di input :
-     * idVeterinario = 20L
+     * idVeterinario = 20
      * newRecensioneDTO = {
      * punteggio: 3,
      * descrizione: "xxx...>100"
@@ -373,7 +373,7 @@ class GestionePetServiceImplCreaRecensioneTest {
      * Il Test Case ha l’obiettivo di verificare che la funzione CreaRecensione(…) aggiunga correttamente la recensione al veterinario selezionato;
      * <p>
      * Parametri di input:
-     * idVeterinario = 20L
+     * idVeterinario = 20
      * newRecensioneDTO = {
      * punteggio: 5,
      * descrizione: "Recensione perfetta per il servizio."
