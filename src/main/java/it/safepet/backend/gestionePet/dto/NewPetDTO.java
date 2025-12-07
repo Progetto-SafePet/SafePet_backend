@@ -24,6 +24,10 @@ public class NewPetDTO {
     private String sesso;
 
     @NotBlank(message = "La specie del pet è obbligatoria")
+    @Pattern(
+            regexp = "(?i)^(cane|gatto|altro)$",
+            message = "La specie deve essere 'cane', 'gatto' o 'altro'"
+    )
     private String specie;
 
     @Size(min = 3, max = 30, message = "La razza deve contenere dai 3 caratteri ai 30 caratteri")

@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,6 +58,11 @@ public class GestionePetServiceImpl implements GestionePetService {
             }
         }
 
+        if (newPetDTO.getDataNascita() != null) {
+            if (newPetDTO.getDataNascita().isAfter(LocalDate.now())) {
+                throw new IllegalArgumentException("La data di nascita non può essere nel futuro");
+            }
+        }
         // Creazione pet
         Pet pet = new Pet();
         pet.setNome(newPetDTO.getNome());
@@ -77,9 +83,9 @@ public class GestionePetServiceImpl implements GestionePetService {
             String contentType = newPetDTO.getFoto().getContentType();
 
             if (contentType == null ||
-                    !(contentType.equalsIgnoreCase("image/jpeg") ||
+                    !(contentType.equalsIgnoreCase("image/jpg") ||
                             contentType.equalsIgnoreCase("image/png"))) {
-                throw new RuntimeException("Formato immagine non valido: sono ammessi JPEG o PNG");
+                throw new RuntimeException("Formato immagine non valido: sono ammessi JPG o PNG");
             }
 
             pet.setFoto(newPetDTO.getFoto().getBytes());
