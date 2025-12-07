@@ -116,7 +116,7 @@ class GestionePetServiceImplCreaRecensioneTest {
      * <p>
      * Parametri di input:
      * idVeterinario = 20L
-     *- newRecensioneDTO = {
+     * newRecensioneDTO = {
      * punteggio: 3,
      * descrizione: "Buona"}
      * ===========================
@@ -177,7 +177,7 @@ class GestionePetServiceImplCreaRecensioneTest {
      * Il Test Case ha l’obiettivo di verificare che la funzione CreaRecensione(…) restituisca un errore se il veterinario non è stato trovato;
      * <p>
      * Parametri di input:
-     *  idVeterinario = 20L
+     * idVeterinario = 20L
      * newRecensioneDTO = {
      * punteggio: 3,
      * descrizione: "Buona"
@@ -192,7 +192,7 @@ class GestionePetServiceImplCreaRecensioneTest {
 
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(proprietarioUser);
         when(proprietarioRepository.findById(PROPRIETARIO_ID)).thenReturn(Optional.of(proprietario));
-        when(veterinarioRepository.findById(VETERINARIO_ID)).thenReturn(Optional.empty()); // VT2: Veterinario non esiste
+        when(veterinarioRepository.findById(VETERINARIO_ID)).thenReturn(Optional.empty());
 
         NewRecensioneDTO dto = new NewRecensioneDTO(3, "Buona");
 
@@ -213,7 +213,7 @@ class GestionePetServiceImplCreaRecensioneTest {
      * Test Case ID: TC_creaRecensione_4
      * Test Frame: TF4
      * Obiettivo:
-     * Il Test Case ha l’obiettivo di verificare che la funzione CreaRecensione(…) restituisca un errore se esiste già una recensione per il veterinario selezionato
+     * Il Test Case ha l’obiettivo di verificare che la funzione CreaRecensione(…) restituisca un errore se esiste già una recensione per il veterinario selezionato;
      * <p>
      * Parametri di input :
      * idVeterinario = 20L
@@ -233,7 +233,7 @@ class GestionePetServiceImplCreaRecensioneTest {
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(proprietarioUser);
         when(proprietarioRepository.findById(PROPRIETARIO_ID)).thenReturn(Optional.of(proprietario));
         when(veterinarioRepository.findById(VETERINARIO_ID)).thenReturn(Optional.of(veterinario));
-        when(recensioneRepository.existsByVeterinarioAndProprietario(veterinario, proprietario)).thenReturn(true); // RE1: Recensione esistente
+        when(recensioneRepository.existsByVeterinarioAndProprietario(veterinario, proprietario)).thenReturn(true);
 
         NewRecensioneDTO dto = new NewRecensioneDTO(3, "Buona");
 
