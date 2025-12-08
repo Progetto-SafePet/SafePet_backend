@@ -13,8 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import jakarta.persistence.EntityNotFoundException;
-
 @Service
 @Validated
 public class AutenticazioneServiceImpl implements AutenticazioneService {
