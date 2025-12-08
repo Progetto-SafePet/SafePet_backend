@@ -84,7 +84,7 @@ public class VaccinazioneRequestDTO {
         return viaDiSomministrazione;
     }
 
-    public @Size(max = 200, message = "Gli effetti collaterali possono contenere massimo 200 caratteri") String getEffettiCollaterali() {
+    public @Size(min = 1, max = 200, message = "Gli effetti collaterali possono contenere massimo 200 caratteri e minimo 1") String getEffettiCollaterali() {
         return effettiCollaterali;
     }
 
