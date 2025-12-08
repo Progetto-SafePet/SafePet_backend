@@ -16,9 +16,14 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -26,6 +31,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -90,225 +96,413 @@ class TerapiaServiceImplAggiungiTerapiaTest {
         return dto;
     }
 
+    /**
+     * DTO completamente valido secondo:
+     * LN4, FF4, DO3, PO4, VS4, DU3, FR4, MO4
+     */
+    private TerapiaRequestDTO buildValidRequest(Long petId) {
+        return buildRequest(
+                "Antibiotico",                // nome (>=3 && <=100)
+                "Compressa",                  // formaFarmaceutica (len 2–50)
+                "20mg",                       // dosaggio (len 1–20)
+                "2 volte/die",                // posologia (len 5–100)
+                "Orale",                      // via (len 2–50)
+                "7 giorni",                   // durata (len 1–10)
+                "ogni 12h",                   // frequenza (len 3–50)
+                "Trattamento infezione",      // motivo (len 5–160)
+                petId
+        );
+    }
+
     private AuthenticatedUser buildVet(Long id) {
         return new AuthenticatedUser(id, "vet@test.com", Role.VETERINARIO);
     }
 
     // ============================================================
-    // TEST CASES
+    // TEST CASES dal Category Partitioning
     // ============================================================
 
-
     /**
-     * TC_13_1
-     * AU2: utente non autenticato [ERROR]
-     *
-     * Oracolo:
-     *  Deve lanciare RuntimeException "Accesso non autorizzato"
+     * TC_AggiungiTerapia_1:
+     * AU2 [ERROR] → accesso non autorizzato (utente non autenticato)
      */
     @Test
-    void TC_13_1() {
+    void TC_AggiungiTerapia_1() {
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(null);
 
-        TerapiaRequestDTO dto = buildRequest(
-                "Antibiotico", "Compressa", "20mg", "2 volte/die", "Orale",
-                "7 giorni", "ogni 12h", "Infezione", 1L
-        );
+        TerapiaRequestDTO dto = buildValidRequest(1L);
 
-        assertThrows(RuntimeException.class, () -> service.aggiungiTerapia(dto));
-        verifyNoInteractions(petRepository, terapiaRepository);
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> service.aggiungiTerapia(dto));
+
+        assertThat(ex.getMessage()).isEqualTo("Accesso non autorizzato");
+        verifyNoInteractions(veterinarioRepository, petRepository, terapiaRepository);
     }
 
     /**
-     * TC_13_2
-     * AU1, RU2: utente autenticato ma non veterinario [ERROR]
+     * TC_AggiungiTerapia_2:
+     * AU1, RU2 [ERROR] → accesso non autorizzato (utente non veterinario)
      */
     @Test
-    void TC_13_2() {
-        AuthenticatedUser owner = new AuthenticatedUser(50L, "p@test.com", Role.PROPRIETARIO);
+    void TC_AggiungiTerapia_2() {
+        AuthenticatedUser owner = new AuthenticatedUser(50L, "owner@test.com", Role.PROPRIETARIO);
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(owner);
 
-        TerapiaRequestDTO dto = buildRequest(
-                "Antibiotico", "Compressa", "20mg", "2 volte/die", "Orale",
-                "7 giorni", "ogni 12h", "Infezione", 1L
-        );
+        TerapiaRequestDTO dto = buildValidRequest(1L);
 
-        assertThrows(RuntimeException.class, () -> service.aggiungiTerapia(dto));
-        verifyNoInteractions(petRepository, terapiaRepository);
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> service.aggiungiTerapia(dto));
+
+        assertThat(ex.getMessage()).isEqualTo("Accesso non autorizzato");
+        verifyNoInteractions(veterinarioRepository, petRepository, terapiaRepository);
     }
 
-    /**
-     * TC_13_3
-     * AU1, RU1
-     * Pet inesistente → PE2 [ERROR]
-     */
-    @Test
-    void TC_13_3() {
-        // Utente veterinario autenticato
-        AuthenticatedUser vet = buildVet(1L);
-        authContextMock.when(AuthContext::getCurrentUser).thenReturn(vet);
-
-        // Mock veterinario (se richiesto dal servizio)
-        Veterinario vetEntity = new Veterinario();
-        vetEntity.setId(1L);
-        vetEntity.setNome("Mario");
-        vetEntity.setCognome("Rossi");
-
-        when(veterinarioRepository.findById(1L)).thenReturn(Optional.of(vetEntity));
-
-        // Pet inesistente → deve essere empty
-        when(petRepository.findById(10L)).thenReturn(Optional.empty());
-
-        // Costruisco DTO COMPLETAMENTE valido
-        TerapiaRequestDTO dto = buildRequest(
-                "Antibiotico",           // nome valido
-                "Compressa",             // forma valida
-                "20mg",                  // dosaggio valido
-                "2 volte/die",           // posologia valida
-                "Orale",                 // via valida
-                "7 giorni",              // durata valida
-                "ogni 12h",              // frequenza valida
-                "Infezione",             // motivo valido
-                10L                      // petId inesistente → PE2
-        );
-
-        assertThrows(RuntimeException.class, () -> service.aggiungiTerapia(dto));
-
-        // ORACOLO: IL SERVIZIO DEVE AVER PROVATO A CERCARE IL PET
-        verify(petRepository, times(1)).findById(10L);
-    }
-
+    // ============================ NOME (LN) ============================
 
     /**
-     * TC_13_4
-     * Pet esistente → PE1
-     * Ma dati non validi → nome vuoto [LT1]
+     * TC_AggiungiTerapia_3:
+     * LN1 [ERROR] → nome vuoto
      */
     @Test
-    void TC_13_4() {
-        TerapiaRequestDTO dto = buildRequest(
-                "", "Compressa", "20mg", "Due volte/die",
-                "Orale", "7", "12h", "Motivo valido", 1L
-        );
+    void TC_AggiungiTerapia_3() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setNome(""); // lunghezza = 0
 
         Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
         assertThat(errors).isNotEmpty();
     }
 
     /**
-     * TC_13_5
-     * Nome troppo corto (< 3)
+     * TC_AggiungiTerapia_4:
+     * LN2 [ERROR] → nome troppo corto
      */
     @Test
-    void TC_13_5() {
-        TerapiaRequestDTO dto = buildRequest(
-                "Ab", "Compressa", "20mg", "Due volte/die",
-                "Orale", "7", "12h", "Motivo valido", 1L
-        );
+    void TC_AggiungiTerapia_4() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setNome("Ab"); // lunghezza = 2 (<3)
 
         Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
         assertThat(errors).isNotEmpty();
     }
 
     /**
-     * TC_13_6
-     * Nome > 100 caratteri
+     * TC_AggiungiTerapia_5:
+     * LN3 [ERROR] → nome troppo lungo
      */
     @Test
-    void TC_13_6() {
-        String longName = "a".repeat(101);
-        TerapiaRequestDTO dto = buildRequest(
-                longName, "Compressa", "20mg", "Due volte/die",
-                "Orale", "7", "12h", "Motivo valido", 1L
-        );
+    void TC_AggiungiTerapia_5() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setNome("a".repeat(101)); // lunghezza > 100
+
+        Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
+        assertThat(errors).isNotEmpty();
+    }
+
+    // ===================== FORMA FARMACEUTICA (FF) =====================
+
+    /**
+     * TC_AggiungiTerapia_6:
+     * FF1 [ERROR] → forma farmaceutica vuota
+     */
+    @Test
+    void TC_AggiungiTerapia_6() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setFormaFarmaceutica(""); // len = 0
 
         Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
         assertThat(errors).isNotEmpty();
     }
 
     /**
-     * TC_13_7
-     * Via di somministrazione = 0 chars
+     * TC_AggiungiTerapia_7:
+     * FF2 [ERROR] → forma farmaceutica troppo corta
      */
     @Test
-    void TC_13_7() {
-        TerapiaRequestDTO dto = buildRequest(
-                "Antibiotico", "Compressa", "20mg", "2 volte/die",
-                "", "7", "12h", "Motivo valido", 1L
-        );
+    void TC_AggiungiTerapia_7() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setFormaFarmaceutica("A"); // len = 1
 
         Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
         assertThat(errors).isNotEmpty();
     }
 
-
     /**
-     * TC_13_8
-     * Motivo < 5 caratteri
+     * TC_AggiungiTerapia_8:
+     * FF3 [ERROR] → forma farmaceutica troppo lunga
      */
     @Test
-    void TC_13_8() {
-        TerapiaRequestDTO dto = buildRequest(
-                "Antibiotico", "Compressa", "20mg", "2 volte/die",
-                "Orale", "7", "12h", "Abc", 1L
-        );
+    void TC_AggiungiTerapia_8() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setFormaFarmaceutica("a".repeat(51)); // > 50
 
         Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
         assertThat(errors).isNotEmpty();
     }
 
+    // ========================== DOSAGGIO (DO) ==========================
 
     /**
-     * TC_13_9
-     * Caso COMPLETAMENTE VALIDO
+     * TC_AggiungiTerapia_9:
+     * DO1 [ERROR] → dosaggio vuoto
      */
     @Test
-    void TC_13_9() {
-        // AU1, RU1: utente veterinario autenticato
-        AuthenticatedUser vet = buildVet(1L);
-        authContextMock.when(AuthContext::getCurrentUser).thenReturn(vet);
+    void TC_AggiungiTerapia_9() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setDosaggio(""); // len = 0
 
-        // MOCK: il veterinario ESISTE
-        Veterinario vetEntity = new Veterinario();
-        vetEntity.setId(1L);
-        vetEntity.setNome("Mario");
-        vetEntity.setCognome("Rossi");
-        when(veterinarioRepository.findById(1L)).thenReturn(Optional.of(vetEntity));
+        Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
+        assertThat(errors).isNotEmpty();
+    }
 
+    /**
+     * TC_AggiungiTerapia_10:
+     * DO2 [ERROR] → dosaggio troppo lungo
+     */
+    @Test
+    void TC_AggiungiTerapia_10() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setDosaggio("a".repeat(21)); // > 20
+
+        Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
+        assertThat(errors).isNotEmpty();
+    }
+
+    // ========================= POSOLOGIA (PO) ==========================
+
+    /**
+     * TC_AggiungiTerapia_11:
+     * PO1 [ERROR] → posologia vuota
+     */
+    @Test
+    void TC_AggiungiTerapia_11() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setPosologia(""); // len = 0
+
+        Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
+        assertThat(errors).isNotEmpty();
+    }
+
+    /**
+     * TC_AggiungiTerapia_12:
+     * PO2 [ERROR] → posologia troppo corta
+     */
+    @Test
+    void TC_AggiungiTerapia_12() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setPosologia("abcd"); // len = 4 (<5)
+
+        Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
+        assertThat(errors).isNotEmpty();
+    }
+
+    /**
+     * TC_AggiungiTerapia_13:
+     * PO3 [ERROR] → posologia troppo lunga
+     */
+    @Test
+    void TC_AggiungiTerapia_13() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setPosologia("a".repeat(101)); // > 100
+
+        Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
+        assertThat(errors).isNotEmpty();
+    }
+
+    // ============ VIA DI SOMMINISTRAZIONE (VS) =========================
+
+    /**
+     * TC_AggiungiTerapia_14:
+     * VS1 [ERROR] → via di somministrazione vuota
+     */
+    @Test
+    void TC_AggiungiTerapia_14() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setViaDiSomministrazione(""); // len = 0
+
+        Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
+        assertThat(errors).isNotEmpty();
+    }
+
+    /**
+     * TC_AggiungiTerapia_15:
+     * VS2 [ERROR] → via di somministrazione troppo corta
+     */
+    @Test
+    void TC_AggiungiTerapia_15() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setViaDiSomministrazione("A"); // len = 1
+
+        Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
+        assertThat(errors).isNotEmpty();
+    }
+
+    /**
+     * TC_AggiungiTerapia_16:
+     * VS3 [ERROR] → via di somministrazione troppo lunga
+     */
+    @Test
+    void TC_AggiungiTerapia_16() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setViaDiSomministrazione("a".repeat(101)); // > 100
+
+        Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
+        assertThat(errors).isNotEmpty();
+    }
+
+    // ============================= DURATA (DU) =============================
+
+    /**
+     * TC_AggiungiTerapia_17:
+     * DU1 [ERROR] → durata vuota
+     */
+    @Test
+    void TC_AggiungiTerapia_17() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setDurata(""); // len = 0
+
+        Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
+        assertThat(errors).isNotEmpty();
+    }
+
+    /**
+     * TC_AggiungiTerapia_18:
+     * DU2 [ERROR] → durata troppo lunga
+     */
+    @Test
+    void TC_AggiungiTerapia_18() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setDurata("a".repeat(11)); // > 10
+
+        Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
+        assertThat(errors).isNotEmpty();
+    }
+
+    // =========================== FREQUENZA (FR) ============================
+
+    /**
+     * TC_AggiungiTerapia_19:
+     * FR1 [ERROR] → frequenza vuota
+     */
+    @Test
+    void TC_AggiungiTerapia_19() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setFrequenza(""); // len = 0
+
+        Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
+        assertThat(errors).isNotEmpty();
+    }
+
+    /**
+     * TC_AggiungiTerapia_20:
+     * FR2 [ERROR] → frequenza troppo corta
+     */
+    @Test
+    void TC_AggiungiTerapia_20() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setFrequenza("ab"); // len = 2 (<3)
+
+        Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
+        assertThat(errors).isNotEmpty();
+    }
+
+    /**
+     * TC_AggiungiTerapia_21:
+     * FR3 [ERROR] → frequenza troppo lunga
+     */
+    @Test
+    void TC_AggiungiTerapia_21() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setFrequenza("a".repeat(51)); // > 50
+
+        Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
+        assertThat(errors).isNotEmpty();
+    }
+
+    // ============================== MOTIVO (MO) ============================
+
+    /**
+     * TC_AggiungiTerapia_22:
+     * MO1 [ERROR] → motivo vuoto
+     */
+    @Test
+    void TC_AggiungiTerapia_22() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setMotivo(""); // len = 0
+
+        Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
+        assertThat(errors).isNotEmpty();
+    }
+
+    /**
+     * TC_AggiungiTerapia_23:
+     * MO2 [ERROR] → motivo troppo corto
+     */
+    @Test
+    void TC_AggiungiTerapia_23() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setMotivo("abcd"); // len = 4 (<5)
+
+        Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
+        assertThat(errors).isNotEmpty();
+    }
+
+    /**
+     * TC_AggiungiTerapia_24:
+     * MO3 [ERROR] → motivo troppo lungo
+     */
+    @Test
+    void TC_AggiungiTerapia_24() {
+        TerapiaRequestDTO dto = buildValidRequest(1L);
+        dto.setMotivo("a".repeat(161)); // > 160
+
+        Set<ConstraintViolation<TerapiaRequestDTO>> errors = validator.validate(dto);
+        assertThat(errors).isNotEmpty();
+    }
+
+    /**
+     * TC_AggiungiTerapia_25:
+     * AU1, RU1, LN4, FF4, DO3, PO4, VS4, DU3, FR4, MO4
+     * → terapia aggiunta con successo
+     */
+    @Test
+    void TC_AggiungiTerapia_25() {
+        // AU1, RU1: veterinario autenticato
+        AuthenticatedUser vetUser = buildVet(1L);
+        authContextMock.when(AuthContext::getCurrentUser).thenReturn(vetUser);
+
+        // Veterinario esistente
+        Veterinario vet = new Veterinario();
+        vet.setId(1L);
+        vet.setNome("Mario");
+        vet.setCognome("Rossi");
+        when(veterinarioRepository.findById(1L)).thenReturn(Optional.of(vet));
+
+        // Pet esistente
         Pet pet = new Pet();
         pet.setId(10L);
         pet.setNome("Fido");
         when(petRepository.findById(10L)).thenReturn(Optional.of(pet));
 
+        // Associazione pet–veterinario valida
         when(petRepository.verificaAssociazionePetVeterinario(10L, 1L))
                 .thenReturn(true);
 
+        // Terapia salvata
         Terapia saved = new Terapia();
         saved.setId(99L);
         saved.setNome("Antibiotico");
         saved.setPet(pet);
-        saved.setVeterinario(vetEntity);
+        saved.setVeterinario(vet);
         saved.setFormaFarmaceutica("Compressa");
         saved.setDosaggio("20mg");
         saved.setPosologia("2 volte/die");
         saved.setViaDiSomministrazione("Orale");
         saved.setDurata("7 giorni");
         saved.setFrequenza("ogni 12h");
-        saved.setMotivo("Infezione");
-
+        saved.setMotivo("Trattamento infezione");
         when(terapiaRepository.save(any(Terapia.class))).thenReturn(saved);
 
-        TerapiaRequestDTO dto = buildRequest(
-                "Antibiotico",          // nome
-                "Compressa",            // formaFarmaceutica
-                "20mg",                 // dosaggio
-                "2 volte/die",          // posologia
-                "Orale",                // via di somministrazione
-                "7 giorni",             // durata
-                "ogni 12h",             // frequenza
-                "Infezione",            // motivo
-                10L                     // petId
-        );
+        TerapiaRequestDTO dto = buildValidRequest(10L);
 
         TerapiaResponseDTO resp = service.aggiungiTerapia(dto);
 
@@ -316,14 +510,13 @@ class TerapiaServiceImplAggiungiTerapiaTest {
         assertThat(resp.getNome()).isEqualTo("Antibiotico");
         assertThat(resp.getPetId()).isEqualTo(10L);
         assertThat(resp.getVeterinarioId()).isEqualTo(1L);
-
         assertThat(resp.getFormaFarmaceutica()).isEqualTo("Compressa");
         assertThat(resp.getDosaggio()).isEqualTo("20mg");
         assertThat(resp.getPosologia()).isEqualTo("2 volte/die");
         assertThat(resp.getViaDiSomministrazione()).isEqualTo("Orale");
         assertThat(resp.getDurata()).isEqualTo("7 giorni");
         assertThat(resp.getFrequenza()).isEqualTo("ogni 12h");
-        assertThat(resp.getMotivo()).isEqualTo("Infezione");
+        assertThat(resp.getMotivo()).isEqualTo("Trattamento infezione");
         assertThat(resp.getNomeVeterinarioCompleto()).isEqualTo("Mario Rossi");
 
         verify(veterinarioRepository, times(1)).findById(1L);
@@ -331,7 +524,4 @@ class TerapiaServiceImplAggiungiTerapiaTest {
         verify(petRepository, times(1)).verificaAssociazionePetVeterinario(10L, 1L);
         verify(terapiaRepository, times(1)).save(any(Terapia.class));
     }
-
-
 }
-
