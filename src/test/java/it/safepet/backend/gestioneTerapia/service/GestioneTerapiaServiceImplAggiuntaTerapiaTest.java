@@ -275,17 +275,14 @@ class TerapiaServiceImplAggiungiTerapiaTest {
         vetEntity.setCognome("Rossi");
         when(veterinarioRepository.findById(1L)).thenReturn(Optional.of(vetEntity));
 
-        // MOCK: il pet ESISTE
         Pet pet = new Pet();
         pet.setId(10L);
         pet.setNome("Fido");
         when(petRepository.findById(10L)).thenReturn(Optional.of(pet));
 
-        // 🔴 QUI LA PARTE MANcante PRIMA → il pet è paziente del veterinario
         when(petRepository.verificaAssociazionePetVeterinario(10L, 1L))
                 .thenReturn(true);
 
-        // MOCK: Terapia salvata dal repository
         Terapia saved = new Terapia();
         saved.setId(99L);
         saved.setNome("Antibiotico");
@@ -301,7 +298,6 @@ class TerapiaServiceImplAggiungiTerapiaTest {
 
         when(terapiaRepository.save(any(Terapia.class))).thenReturn(saved);
 
-        // DTO COMPLETAMENTE VALIDO
         TerapiaRequestDTO dto = buildRequest(
                 "Antibiotico",          // nome
                 "Compressa",            // formaFarmaceutica
@@ -314,10 +310,8 @@ class TerapiaServiceImplAggiungiTerapiaTest {
                 10L                     // petId
         );
 
-        // ACT
         TerapiaResponseDTO resp = service.aggiungiTerapia(dto);
 
-        // ASSERT
         assertThat(resp.getTerapiaId()).isEqualTo(99L);
         assertThat(resp.getNome()).isEqualTo("Antibiotico");
         assertThat(resp.getPetId()).isEqualTo(10L);
@@ -332,7 +326,6 @@ class TerapiaServiceImplAggiungiTerapiaTest {
         assertThat(resp.getMotivo()).isEqualTo("Infezione");
         assertThat(resp.getNomeVeterinarioCompleto()).isEqualTo("Mario Rossi");
 
-        // Verifiche sulle interazioni
         verify(veterinarioRepository, times(1)).findById(1L);
         verify(petRepository, times(1)).findById(10L);
         verify(petRepository, times(1)).verificaAssociazionePetVeterinario(10L, 1L);
