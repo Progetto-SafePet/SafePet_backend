@@ -306,10 +306,10 @@ class GestionePazienteServiceImplAggiungiPazienteTest {
      * Test Case ID: TC_aggiungiPaziente_7
      * Test Frame: AU1, RU1, PE1, LC1, US1, SC1, AS2
      * Obiettivo:
-     * Verificare che il metodo fallisca se il Pet è già associato al Veterinario corrente
+     * Verificare che il metodo fallisca se il Pet è già associato al Veterinario corrente.
      * <p>
      * Parametri di input:
-     * petId: 2
+     * petId: 1
      * linkingCode: "XYZ123"
      * ===========================
      */
