@@ -16,12 +16,15 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -30,6 +33,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class GestioneVisitaMedicaServiceImplTest {
 
     @Mock
@@ -90,24 +94,26 @@ class GestioneVisitaMedicaServiceImplTest {
 
     /**
      * ===========================
-     * Test Case ID: TC_AggiuntaVisitaMedica_1
+     * Test Case ID: TC_aggiuntaVisitaMedica_1
      * Test Frame: TF1
      * Obiettivo:
      * Verificare che un utente non autenticato non possa creare una visita medica.
      * <p>
      * Parametri di input:
-     * - petId = valido
-     * - nome = "Visita di controllo"
-     * - descrizione = "Descrizione valida"
-     * - data = oggi
-     * - referto = null
+     * - petId = 1
      * ===========================
      */
     @Test
-    void TC_aggiuntaVisitaMedica_1() {
+    void TC_aggiuntaVisitaMedica_1() throws IOException {
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(null);
 
-        VisitaMedicaRequestDTO request = buildValidRequest(1L, null);
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getContentType()).thenReturn("application/pdf");
+        when(file.getOriginalFilename()).thenReturn("referto.pdf");
+        when(file.getSize()).thenReturn(1024L);
+        when(file.getBytes()).thenReturn("contenuto".getBytes());
+
+        VisitaMedicaRequestDTO request = buildValidRequest(1L, file);
 
         assertThatThrownBy(() -> service.creaVisitaMedica(request))
                 .isInstanceOf(RuntimeException.class)
@@ -116,7 +122,7 @@ class GestioneVisitaMedicaServiceImplTest {
 
     /**
      * ===========================
-     * Test Case ID: TC_AggiuntaVisitaMedica_2
+     * Test Case ID: TC_aggiuntaVisitaMedica_2
      * Test Frame: TF2
      * Obiettivo:
      * Verificare che un utente autenticato ma con ruolo diverso da Veterinario non possa creare una visita.
@@ -126,11 +132,17 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_aggiuntaVisitaMedica_2() {
+    void TC_aggiuntaVisitaMedica_2() throws IOException {
         AuthenticatedUser user = new AuthenticatedUser(1L, "mail@example.com", Role.PROPRIETARIO);
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(user);
 
-        VisitaMedicaRequestDTO request = buildValidRequest(1L, null);
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getContentType()).thenReturn("application/pdf");
+        when(file.getOriginalFilename()).thenReturn("referto.pdf");
+        when(file.getSize()).thenReturn(1024L);
+        when(file.getBytes()).thenReturn("contenuto".getBytes());
+
+        VisitaMedicaRequestDTO request = buildValidRequest(1L, file);
 
         assertThatThrownBy(() -> service.creaVisitaMedica(request))
                 .isInstanceOf(RuntimeException.class)
@@ -139,23 +151,29 @@ class GestioneVisitaMedicaServiceImplTest {
 
     /**
      * ===========================
-     * Test Case ID: TC_AggiuntaVisitaMedica_3
+     * Test Case ID: TC_aggiuntaVisitaMedica_3
      * Test Frame: TF3
      * Obiettivo:
      * Verificare che venga sollevata eccezione se il pet non esiste nel database.
      * <p>
      * Parametri di input:
-     * - petId = inesistente
+     * - petId = 99
      * ===========================
      */
     @Test
-    void TC_aggiuntaVisitaMedica_3() {
+    void TC_aggiuntaVisitaMedica_3() throws IOException {
         AuthenticatedUser user = new AuthenticatedUser(1L, "mail@example.com", Role.VETERINARIO);
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(user);
         when(veterinarioRepository.findById(1L)).thenReturn(Optional.of(buildVeterinario(1L)));
         when(petRepository.findById(99L)).thenReturn(Optional.empty());
 
-        VisitaMedicaRequestDTO request = buildValidRequest(99L, null);
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getContentType()).thenReturn("application/pdf");
+        when(file.getOriginalFilename()).thenReturn("referto.pdf");
+        when(file.getSize()).thenReturn(1024L);
+        when(file.getBytes()).thenReturn("contenuto".getBytes());
+
+        VisitaMedicaRequestDTO request = buildValidRequest(99L, file);
 
         assertThatThrownBy(() -> service.creaVisitaMedica(request))
                 .isInstanceOf(RuntimeException.class)
@@ -164,17 +182,17 @@ class GestioneVisitaMedicaServiceImplTest {
 
     /**
      * ===========================
-     * Test Case ID: TC_AggiuntaVisitaMedica_4
+     * Test Case ID: TC_aggiuntaVisitaMedica_4
      * Test Frame: TF4
      * Obiettivo:
      *   Verificare che venga sollevata eccezione se il pet non è paziente del veterinario.
      * Parametri di input:
-     *   - petId = valido
+     *   - petId = 2
      *   - veterinario associato = NO
      * ===========================
      */
     @Test
-    void TC_aggiuntaVisitaMedica_4() {
+    void TC_aggiuntaVisitaMedica_4() throws IOException {
         AuthenticatedUser user = new AuthenticatedUser(1L, "mail@example.com", Role.VETERINARIO);
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(user);
 
@@ -185,7 +203,13 @@ class GestioneVisitaMedicaServiceImplTest {
         when(petRepository.findById(2L)).thenReturn(Optional.of(pet));
         when(petRepository.verificaAssociazionePetVeterinario(2L, 1L)).thenReturn(false);
 
-        VisitaMedicaRequestDTO request = buildValidRequest(2L, null);
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getContentType()).thenReturn("application/pdf");
+        when(file.getOriginalFilename()).thenReturn("referto.pdf");
+        when(file.getSize()).thenReturn(1024L);
+        when(file.getBytes()).thenReturn("contenuto".getBytes());
+
+        VisitaMedicaRequestDTO request = buildValidRequest(2L, file);
 
         assertThatThrownBy(() -> service.creaVisitaMedica(request))
                 .isInstanceOf(RuntimeException.class)
@@ -194,7 +218,7 @@ class GestioneVisitaMedicaServiceImplTest {
 
     /**
      * ===========================
-     * Test Case ID: TC_AggiuntaVisitaMedica_5
+     * Test Case ID: TC_aggiuntaVisitaMedica_5
      * Test Frame: TF5
      * Obiettivo:
      *   Verificare che venga sollevata violazione Bean Validation se il nome è vuoto.
@@ -203,17 +227,22 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_aggiuntaVisitaMedica_5() {
+    void TC_aggiuntaVisitaMedica_5() throws IOException {
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getContentType()).thenReturn("application/pdf");
+        when(file.getOriginalFilename()).thenReturn("referto.pdf");
+        when(file.getSize()).thenReturn(1024L);
+        when(file.getBytes()).thenReturn("contenuto".getBytes());
+
         VisitaMedicaRequestDTO request = new VisitaMedicaRequestDTO(
-                "", 1L, "Descrizione valida", LocalDate.now(), null
-        );
+                "", 1L, "Descrizione valida", LocalDate.now(), file);
 
         assertThat(validator.validate(request)).isNotEmpty();
     }
 
     /**
      * ===========================
-     * Test Case ID: TC_AggiuntaVisitaMedica_6
+     * Test Case ID: TC_aggiuntaVisitaMedica_6
      * Test Frame: TF6
      * Obiettivo:
      *   Verificare che venga sollevata violazione Bean Validation se il nome è troppo corto (<3).
@@ -222,17 +251,22 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_aggiuntaVisitaMedica_6() {
+    void TC_aggiuntaVisitaMedica_6() throws IOException {
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getContentType()).thenReturn("application/pdf");
+        when(file.getOriginalFilename()).thenReturn("referto.pdf");
+        when(file.getSize()).thenReturn(1024L);
+        when(file.getBytes()).thenReturn("contenuto".getBytes());
+
         VisitaMedicaRequestDTO request = new VisitaMedicaRequestDTO(
-                "AB", 1L, "Descrizione valida", LocalDate.now(), null
-        );
+                "AB", 1L, "Descrizione valida", LocalDate.now(), file);
 
         assertThat(validator.validate(request)).isNotEmpty();
     }
 
     /**
      * ===========================
-     * Test Case ID: TC_AggiuntaVisitaMedica_7
+     * Test Case ID: TC_aggiuntaVisitaMedica_7
      * Test Frame: TF7
      * Obiettivo:
      *   Verificare che venga sollevata violazione Bean Validation se il nome è troppo lungo (>20).
@@ -241,17 +275,22 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_aggiuntaVisitaMedica_7() {
+    void TC_aggiuntaVisitaMedica_7() throws IOException {
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getContentType()).thenReturn("application/pdf");
+        when(file.getOriginalFilename()).thenReturn("referto.pdf");
+        when(file.getSize()).thenReturn(1024L);
+        when(file.getBytes()).thenReturn("contenuto".getBytes());
+
         VisitaMedicaRequestDTO request = new VisitaMedicaRequestDTO(
-                "NomeMoltoMoltoMoltoLungo", 1L, "Descrizione valida", LocalDate.now(), null
-        );
+                "NomeMoltoMoltoMoltoLungo", 1L, "Descrizione valida", LocalDate.now(), file);
 
         assertThat(validator.validate(request)).isNotEmpty();
     }
 
     /**
      * ===========================
-     * Test Case ID: TC_AggiuntaVisitaMedica_8
+     * Test Case ID: TC_aggiuntaVisitaMedica_8
      * Test Frame: TF8
      * Obiettivo:
      *   Verificare che venga sollevata violazione Bean Validation se la descrizione supera i 300 caratteri.
@@ -260,18 +299,24 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_aggiuntaVisitaMedica_8() {
+    void TC_aggiuntaVisitaMedica_8() throws IOException {
         String longDesc = "a".repeat(301);
+
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getContentType()).thenReturn("application/pdf");
+        when(file.getOriginalFilename()).thenReturn("referto.pdf");
+        when(file.getSize()).thenReturn(1024L);
+        when(file.getBytes()).thenReturn("contenuto".getBytes());
+
         VisitaMedicaRequestDTO request = new VisitaMedicaRequestDTO(
-                "Visita", 1L, longDesc, LocalDate.now(), null
-        );
+                "Visita di controllo", 1L, longDesc, LocalDate.now(), file);
 
         assertThat(validator.validate(request)).isNotEmpty();
     }
 
     /**
      * ===========================
-     * Test Case ID: TC_AggiuntaVisitaMedica_9
+     * Test Case ID: TC_aggiuntaVisitaMedica_9
      * Test Frame: TF9
      * Obiettivo:
      *   Verificare che venga sollevata violazione Bean Validation se la data non rispetta il formato (null).
@@ -280,17 +325,22 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_aggiuntaVisitaMedica_9() {
+    void TC_aggiuntaVisitaMedica_9() throws IOException {
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getContentType()).thenReturn("application/pdf");
+        when(file.getOriginalFilename()).thenReturn("referto.pdf");
+        when(file.getSize()).thenReturn(1024L);
+        when(file.getBytes()).thenReturn("contenuto".getBytes());
+
         VisitaMedicaRequestDTO request = new VisitaMedicaRequestDTO(
-                "Visita", 1L, "Descrizione valida", null, null
-        );
+                "Visita di controllo", 1L, "Descrizione valida", null, file);
 
         assertThat(validator.validate(request)).isNotEmpty();
     }
 
     /**
      * ===========================
-     * Test Case ID: TC_AggiuntaVisitaMedica_10
+     * Test Case ID: TC_aggiuntaVisitaMedica_10
      * Test Frame: TF10
      * Obiettivo:
      *   Verificare che venga sollevata eccezione se la data è futura (non ammissibile).
@@ -299,20 +349,25 @@ class GestioneVisitaMedicaServiceImplTest {
      * ===========================
      */
     @Test
-    void TC_aggiuntaVisitaMedica_10() {
+    void TC_aggiuntaVisitaMedica_10() throws IOException {
         AuthenticatedUser user = new AuthenticatedUser(1L, "mail@example.com", Role.VETERINARIO);
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(user);
 
         Veterinario vet = buildVeterinario(1L);
-        Pet pet = buildPet(2L);
+        Pet pet = buildPet(1L);
 
         when(veterinarioRepository.findById(1L)).thenReturn(Optional.of(vet));
-        when(petRepository.findById(2L)).thenReturn(Optional.of(pet));
-        when(petRepository.verificaAssociazionePetVeterinario(2L, 1L)).thenReturn(true);
+        when(petRepository.findById(1L)).thenReturn(Optional.of(pet));
+        when(petRepository.verificaAssociazionePetVeterinario(1L, 1L)).thenReturn(true);
+
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getContentType()).thenReturn("application/pdf");
+        when(file.getOriginalFilename()).thenReturn("referto.pdf");
+        when(file.getSize()).thenReturn(1024L);
+        when(file.getBytes()).thenReturn("contenuto".getBytes());
 
         VisitaMedicaRequestDTO request = new VisitaMedicaRequestDTO(
-                "Visita", 2L, "Descrizione valida", LocalDate.now().plusDays(1), null
-        );
+                "Visita di controllo", 1L, "Descrizione valida", LocalDate.now().plusDays(1), file);
 
         assertThatThrownBy(() -> service.creaVisitaMedica(request))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -321,7 +376,7 @@ class GestioneVisitaMedicaServiceImplTest {
 
     /**
      * ===========================
-     * Test Case ID: TC_AggiuntaVisitaMedica_11
+     * Test Case ID: TC_aggiuntaVisitaMedica_11
      * Test Frame: TF11
      * Obiettivo:
      *   Verificare che venga sollevata eccezione se il referto non è in formato PDF.
@@ -335,13 +390,15 @@ class GestioneVisitaMedicaServiceImplTest {
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(user);
 
         when(veterinarioRepository.findById(1L)).thenReturn(Optional.of(buildVeterinario(1L)));
-        when(petRepository.findById(2L)).thenReturn(Optional.of(buildPet(2L)));
-        when(petRepository.verificaAssociazionePetVeterinario(2L, 1L)).thenReturn(true);
+        when(petRepository.findById(1L)).thenReturn(Optional.of(buildPet(1L)));
+        when(petRepository.verificaAssociazionePetVeterinario(1L, 1L)).thenReturn(true);
 
         MultipartFile file = mock(MultipartFile.class);
         when(file.getContentType()).thenReturn("text/plain");
+        when(file.getOriginalFilename()).thenReturn("referto.txt");
+        when(file.getSize()).thenReturn(1024L);
 
-        VisitaMedicaRequestDTO request = buildValidRequest(2L, file);
+        VisitaMedicaRequestDTO request = buildValidRequest(1L, file);
 
         assertThatThrownBy(() -> service.creaVisitaMedica(request))
                 .isInstanceOf(RuntimeException.class)
@@ -351,7 +408,7 @@ class GestioneVisitaMedicaServiceImplTest {
 
     /**
      * ===========================
-     * Test Case ID: TC_AggiuntaVisitaMedica_12
+     * Test Case ID: TC_aggiuntaVisitaMedica_12
      * Test Frame: TF12
      * Obiettivo:
      *   Verificare che venga sollevata eccezione se la dimensione del referto PDF supera i 5 MB.
@@ -366,11 +423,11 @@ class GestioneVisitaMedicaServiceImplTest {
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(user);
 
         Veterinario vet = buildVeterinario(1L);
-        Pet pet = buildPet(2L);
+        Pet pet = buildPet(1L);
 
         when(veterinarioRepository.findById(1L)).thenReturn(Optional.of(vet));
-        when(petRepository.findById(2L)).thenReturn(Optional.of(pet));
-        when(petRepository.verificaAssociazionePetVeterinario(2L, 1L)).thenReturn(true);
+        when(petRepository.findById(1L)).thenReturn(Optional.of(pet));
+        when(petRepository.verificaAssociazionePetVeterinario(1L, 1L)).thenReturn(true);
 
         // Referto PDF troppo grande
         MultipartFile file = mock(MultipartFile.class);
@@ -378,7 +435,7 @@ class GestioneVisitaMedicaServiceImplTest {
         when(file.getOriginalFilename()).thenReturn("referto.pdf");
         when(file.getSize()).thenReturn(6 * 1024 * 1024L); // 6 MB
 
-        VisitaMedicaRequestDTO request = buildValidRequest(2L, file);
+        VisitaMedicaRequestDTO request = buildValidRequest(1L, file);
 
         assertThatThrownBy(() -> service.creaVisitaMedica(request))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -388,7 +445,7 @@ class GestioneVisitaMedicaServiceImplTest {
 
     /**
      * ===========================
-     * Test Case ID: TC_AggiuntaVisitaMedica_13
+     * Test Case ID: TC_aggiuntaVisitaMedica_13
      * Test Frame: TF13
      * Obiettivo:
      *   Verificare il caso valido: creazione visita medica corretta con salvataggio e ritorno DTO.
@@ -406,11 +463,11 @@ class GestioneVisitaMedicaServiceImplTest {
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(user);
 
         Veterinario vet = buildVeterinario(1L);
-        Pet pet = buildPet(2L);
+        Pet pet = buildPet(1L);
 
         when(veterinarioRepository.findById(1L)).thenReturn(Optional.of(vet));
-        when(petRepository.findById(2L)).thenReturn(Optional.of(pet));
-        when(petRepository.verificaAssociazionePetVeterinario(2L, 1L)).thenReturn(true);
+        when(petRepository.findById(1L)).thenReturn(Optional.of(pet));
+        when(petRepository.verificaAssociazionePetVeterinario(1L, 1L)).thenReturn(true);
 
         MultipartFile file = mock(MultipartFile.class);
         when(file.getContentType()).thenReturn("application/pdf");
@@ -418,7 +475,7 @@ class GestioneVisitaMedicaServiceImplTest {
         when(file.getSize()).thenReturn(1024L);
         when(file.getBytes()).thenReturn("contenuto".getBytes());
 
-        VisitaMedicaRequestDTO request = buildValidRequest(2L, file);
+        VisitaMedicaRequestDTO request = buildValidRequest(1L, file);
 
         VisitaMedica visitaSalvata = new VisitaMedica();
         visitaSalvata.setId(10L);
@@ -436,7 +493,7 @@ class GestioneVisitaMedicaServiceImplTest {
         assertThat(response).isNotNull();
         assertThat(response.getVisitaMedicaId()).isEqualTo(10L);
         assertThat(response.getNome()).isEqualTo("Visita di controllo");
-        assertThat(response.getPetId()).isEqualTo(2L);
+        assertThat(response.getPetId()).isEqualTo(1L);
         assertThat(response.getVeterinarioId()).isEqualTo(1L);
         assertThat(response.getDescrizione()).isEqualTo("Descrizione valida");
         assertThat(response.getNomeCompletoVeterinario()).contains("Mario Rossi");
