@@ -18,7 +18,6 @@ package it.safepet.backend.reportCliniche.service;
  * TC_5: LAT3 LON3
  */
 
-import jakarta.validation.Validation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,6 +62,7 @@ class ReportClinicheServiceImplPrelevaDatiMappaTest {
     @BeforeEach
     void setUp() {
         org.mockito.MockitoAnnotations.openMocks(this);
+        this.service = new ReportClinicheServiceImpl(veterinarioRepository, clinicaRepository, recensioneRepository);
     }
 
     private Veterinario buildVeterinario(Long id, String nome, String cognome) {

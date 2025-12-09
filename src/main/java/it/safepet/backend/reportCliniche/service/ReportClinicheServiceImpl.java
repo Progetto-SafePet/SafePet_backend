@@ -9,7 +9,6 @@ import it.safepet.backend.reportCliniche.dto.OrariClinicaResponseDTO;
 import it.safepet.backend.reportCliniche.model.Clinica;
 import it.safepet.backend.reportCliniche.repository.ClinicaRepository;
 import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -22,14 +21,15 @@ import java.util.Map;
 @Service
 @Validated
 public class ReportClinicheServiceImpl implements ReportClinicheService {
-    @Autowired
-    private VeterinarioRepository veterinarioRepository;
+    private final VeterinarioRepository veterinarioRepository;
+    private final ClinicaRepository clinicaRepository;
+    private final RecensioneRepository recensioneRepository;
 
-    @Autowired
-    private ClinicaRepository clinicaRepository;
-
-    @Autowired
-    private RecensioneRepository recensioneRepository;
+    public ReportClinicheServiceImpl(VeterinarioRepository vetRepo, ClinicaRepository clinRepo, RecensioneRepository recRepo) {
+        this.veterinarioRepository = vetRepo;
+        this.clinicaRepository = clinRepo;
+        this.recensioneRepository = recRepo;
+    }
 
     @Transactional(readOnly = true)
     public List<ElencoResponseDTO> visualizzaElencoVeterinari() {
