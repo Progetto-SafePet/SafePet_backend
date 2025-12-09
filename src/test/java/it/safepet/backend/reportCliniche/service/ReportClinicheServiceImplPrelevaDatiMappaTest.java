@@ -18,31 +18,30 @@ package it.safepet.backend.reportCliniche.service;
  * TC_5: LAT3 LON3
  */
 
+import it.safepet.backend.gestioneRecensioni.repository.RecensioneRepository;
+import it.safepet.backend.gestioneUtente.model.Veterinario;
+import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
+import it.safepet.backend.reportCliniche.dto.InfoClinicheDTO;
+import it.safepet.backend.reportCliniche.model.Clinica;
+import it.safepet.backend.reportCliniche.model.OrarioDiApertura;
+import it.safepet.backend.reportCliniche.repository.ClinicaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
+import java.time.Clock;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.anyLong;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-import it.safepet.backend.reportCliniche.dto.InfoClinicheDTO;
-import it.safepet.backend.reportCliniche.model.Clinica;
-import it.safepet.backend.reportCliniche.model.OrarioDiApertura;
-import it.safepet.backend.gestioneUtente.model.Veterinario;
-import it.safepet.backend.reportCliniche.repository.ClinicaRepository;
-import it.safepet.backend.gestioneRecensioni.repository.RecensioneRepository;
-import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ReportClinicheServiceImplPrelevaDatiMappaTest {
@@ -236,9 +235,9 @@ class ReportClinicheServiceImplPrelevaDatiMappaTest {
         Clinica c2 = buildClinica(11L, "ClinicaMilano", 45.1, 7.1, v2);     // più lontana
         Clinica c3 = buildClinica(12L, "ClinicaTorino", 46.0, 8.0, v3);     // ancora più lontana
 
-        OrarioDiApertura o1 = buildOrario(OrarioDiApertura.Giorno.LUNEDI, LocalTime.of(9,0), LocalTime.of(17,0), false, c1);
-        OrarioDiApertura o2 = buildOrario(OrarioDiApertura.Giorno.LUNEDI, LocalTime.of(9,0), LocalTime.of(17,0), false, c2);
-        OrarioDiApertura o3 = buildOrario(OrarioDiApertura.Giorno.LUNEDI, LocalTime.of(9,0), LocalTime.of(17,0), false, c3);
+        OrarioDiApertura o1 = buildOrario(currentGiorno(), LocalTime.of(9,0), LocalTime.of(17,0), false, c1);
+        OrarioDiApertura o2 = buildOrario(currentGiorno(), LocalTime.of(9,0), LocalTime.of(17,0), false, c2);
+        OrarioDiApertura o3 = buildOrario(currentGiorno(), LocalTime.of(9,0), LocalTime.of(17,0), false, c3);
 
         c1.getOrariApertura().add(o1);
         c2.getOrariApertura().add(o2);
@@ -254,31 +253,16 @@ class ReportClinicheServiceImplPrelevaDatiMappaTest {
         all.add(c2);
 
         when(clinicaRepository.findAll()).thenReturn(all);
-        when(recensioneRepository.countByVeterinarioId(1L)).thenReturn(2);
-        when(recensioneRepository.countByVeterinarioId(2L)).thenReturn(1);
-        when(recensioneRepository.countByVeterinarioId(3L)).thenReturn(0);
 
         when(recensioneRepository.countByVeterinarioId(1L)).thenReturn(2);
         when(recensioneRepository.countByVeterinarioId(2L)).thenReturn(1);
         when(recensioneRepository.countByVeterinarioId(3L)).thenReturn(0);
-
-        List<Clinica> sanity = clinicaRepository.findAll();
-        assertThat(sanity).isNotNull();
-        assertThat(sanity.size()).as("sanity: mock clinicaRepository deve restituire 3 elementi").isEqualTo(3);
 
         when(veterinarioRepository.calcolaMediaRecensioniVeterinario(1L)).thenReturn(4.5);
         when(veterinarioRepository.calcolaMediaRecensioniVeterinario(2L)).thenReturn(3.0);
         when(veterinarioRepository.calcolaMediaRecensioniVeterinario(3L)).thenReturn(0.0);
 
         List<InfoClinicheDTO> result = service.prelevaDatiMappa(lat, lon);
-
-        // SE LA LISTA RISULTA VUOTA, stampiamo diagnostica (verrà catturata nei log CI)
-        if (result == null || result.isEmpty()) {
-            System.err.println("DIAGNOSTICA: result is empty or null");
-            System.err.println("mock clinicaRepository identityHash: " + System.identityHashCode(clinicaRepository));
-            Object repoField = getFieldFromService();
-            System.err.println("service.clinicaRepository identityHash: " + (repoField != null ? System.identityHashCode(repoField) : "null"));
-        }
 
         assertThat(result).isNotNull();
         assertThat(result).hasSize(3);
@@ -295,34 +279,21 @@ class ReportClinicheServiceImplPrelevaDatiMappaTest {
         assertThat(first.numRecensioni()).isEqualTo(2);
         assertThat(first.mediaRecensioni()).isEqualTo(4.5);
 
-        verify(clinicaRepository, times(2)).findAll() ;
+        verify(clinicaRepository).findAll() ;
         verify(recensioneRepository, times(3)).countByVeterinarioId(anyLong());
         verify(veterinarioRepository, times(3)).calcolaMediaRecensioniVeterinario(anyLong());
     }
 
-    // helper reflection per diagnostica: restituisce il valore del campo dal service (o null)
-    private Object getFieldFromService() {
-        try {
-            Field f = service.getClass().getDeclaredField("clinicaRepository");
-            f.setAccessible(true);
-            return f.get(service);
-        } catch (NoSuchFieldException nsf) {
-            // cerca su superclass se non trovato direttamente
-            Class<?> cls = service.getClass().getSuperclass();
-            while (cls != null) {
-                try {
-                    Field f = cls.getDeclaredField("clinicaRepository");
-                    f.setAccessible(true);
-                    return f.get(service);
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    cls = cls.getSuperclass();
-                }
-            }
-            System.err.println("DIAGNOSTICA: field '" + "clinicaRepository" + "' non trovato in service");
-            return null;
-        } catch (Exception e) {
-            System.err.println("DIAGNOSTICA: errore leggendo field '" + "clinicaRepository" + "': " + e);
-            return null;
-        }
+    private OrarioDiApertura.Giorno currentGiorno() {
+        DayOfWeek dow = ZonedDateTime.now(Clock.systemDefaultZone()).getDayOfWeek();
+        return switch (dow) {
+            case MONDAY -> OrarioDiApertura.Giorno.LUNEDI;
+            case TUESDAY -> OrarioDiApertura.Giorno.MARTEDI;
+            case WEDNESDAY -> OrarioDiApertura.Giorno.MERCOLEDI;
+            case THURSDAY -> OrarioDiApertura.Giorno.GIOVEDI;
+            case FRIDAY -> OrarioDiApertura.Giorno.VENERDI;
+            case SATURDAY -> OrarioDiApertura.Giorno.SABATO;
+            case SUNDAY -> OrarioDiApertura.Giorno.DOMENICA;
+        };
     }
 }

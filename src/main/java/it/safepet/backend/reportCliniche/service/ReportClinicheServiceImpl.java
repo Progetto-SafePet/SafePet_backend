@@ -30,17 +30,13 @@ public class ReportClinicheServiceImpl implements ReportClinicheService {
     private final VeterinarioRepository veterinarioRepository;
     private final ClinicaRepository clinicaRepository;
     private final RecensioneRepository recensioneRepository;
+    private final Clock clock;
+    private final ZoneId zoneId;
 
     public ReportClinicheServiceImpl(VeterinarioRepository vetRepo, ClinicaRepository clinRepo, RecensioneRepository recRepo) {
         this.veterinarioRepository = vetRepo;
         this.clinicaRepository = clinRepo;
         this.recensioneRepository = recRepo;
-    }
-
-    private final Clock clock;
-    private final ZoneId zoneId;
-
-    public ReportClinicheServiceImpl() {
         this.clock = Clock.systemDefaultZone();
         this.zoneId = ZoneId.systemDefault();
     }
@@ -119,7 +115,7 @@ public class ReportClinicheServiceImpl implements ReportClinicheService {
     /**
      * Calcola la distanza in km tra due punti (lat, lon) usando la formula di Haversine.
      */
-    private static double haversineKm(double lat1, double lon1, double lat2, double lon2) {
+    public double haversineKm(double lat1, double lon1, double lat2, double lon2) {
         final double R = 6371.0; // raggio medio Terra in km
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(lon2 - lon1);
