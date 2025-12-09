@@ -18,14 +18,13 @@ package it.safepet.backend.reportCliniche.service;
  * TC_5: LAT3 LON3
  */
 
-import jakarta.validation.Validation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -57,12 +56,13 @@ class ReportClinicheServiceImplPrelevaDatiMappaTest {
     @Mock
     private RecensioneRepository recensioneRepository;
 
-    @InjectMocks
+    // @InjectMocks
     private ReportClinicheServiceImpl service;
 
     @BeforeEach
     void setUp() {
         org.mockito.MockitoAnnotations.openMocks(this);
+        this.service = new ReportClinicheServiceImpl(veterinarioRepository, clinicaRepository, recensioneRepository);
     }
 
     private Veterinario buildVeterinario(Long id, String nome, String cognome) {
@@ -265,6 +265,14 @@ class ReportClinicheServiceImplPrelevaDatiMappaTest {
 
         List<InfoClinicheDTO> result = service.prelevaDatiMappa(lat, lon);
 
+        // SE LA LISTA RISULTA VUOTA, stampiamo diagnostica (verrà catturata nei log CI)
+        if (result == null || result.isEmpty()) {
+            System.err.println("DIAGNOSTICA: result is empty or null");
+            System.err.println("mock clinicaRepository identityHash: " + System.identityHashCode(clinicaRepository));
+            Object repoField = getFieldFromService();
+            System.err.println("service.clinicaRepository identityHash: " + (repoField != null ? System.identityHashCode(repoField) : "null"));
+        }
+
         assertThat(result).isNotNull();
         assertThat(result).hasSize(3);
 
@@ -283,5 +291,31 @@ class ReportClinicheServiceImplPrelevaDatiMappaTest {
         verify(clinicaRepository).findAll();
         verify(recensioneRepository, times(3)).countByVeterinarioId(anyLong());
         verify(veterinarioRepository, times(3)).calcolaMediaRecensioniVeterinario(anyLong());
+    }
+
+    // helper reflection per diagnostica: restituisce il valore del campo dal service (o null)
+    private Object getFieldFromService() {
+        try {
+            Field f = service.getClass().getDeclaredField("clinicaRepository");
+            f.setAccessible(true);
+            return f.get(service);
+        } catch (NoSuchFieldException nsf) {
+            // cerca su superclass se non trovato direttamente
+            Class<?> cls = service.getClass().getSuperclass();
+            while (cls != null) {
+                try {
+                    Field f = cls.getDeclaredField("clinicaRepository");
+                    f.setAccessible(true);
+                    return f.get(service);
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    cls = cls.getSuperclass();
+                }
+            }
+            System.err.println("DIAGNOSTICA: field '" + "clinicaRepository" + "' non trovato in service");
+            return null;
+        } catch (Exception e) {
+            System.err.println("DIAGNOSTICA: errore leggendo field '" + "clinicaRepository" + "': " + e);
+            return null;
+        }
     }
 }
