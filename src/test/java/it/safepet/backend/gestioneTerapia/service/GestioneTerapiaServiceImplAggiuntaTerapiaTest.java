@@ -157,14 +157,94 @@ class TerapiaServiceImplAggiungiTerapiaTest {
         verifyNoInteractions(veterinarioRepository, petRepository, terapiaRepository);
     }
 
+    /**
+     * TC_AggiungiTerapia_3:
+     * Verifica che, se il petId non esiste nel DB,
+     * il service lancia "Pet non trovato".
+     */
+    @Test
+    void TC_AggiungiTerapia3() {
+        // Utente veterinario autenticato (AU1, RU1)
+        AuthenticatedUser vetUser = buildVet(1L);
+        authContextMock.when(AuthContext::getCurrentUser).thenReturn(vetUser);
+
+        // Il veterinario ESISTE
+        Veterinario vet = new Veterinario();
+        vet.setId(1L);
+        vet.setNome("Mario");
+        vet.setCognome("Rossi");
+        when(veterinarioRepository.findById(1L)).thenReturn(Optional.of(vet));
+
+        // Il pet NON esiste nel DB
+        when(petRepository.findById(10L)).thenReturn(Optional.empty());
+
+        // DTO valido ma con petId inesistente
+        TerapiaRequestDTO dto = buildValidRequest(10L);
+
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> service.aggiungiTerapia(dto));
+
+        assertThat(ex.getMessage()).isEqualTo("Pet non trovato");
+
+        verify(veterinarioRepository, times(1)).findById(1L);
+        verify(petRepository, times(1)).findById(10L);
+
+        verify(petRepository, never()).verificaAssociazionePetVeterinario(anyLong(), anyLong());
+        verifyNoInteractions(terapiaRepository);
+    }
+
+    /**
+     * TC_Aggiungiterapia_4
+     * Verifica che, se il pet esiste ma non è paziente del veterinario,
+     * il service lancia "Il pet non è un paziente del veterinario".
+     */
+    @Test
+    void TC_AggiungiTerapia_4() {
+        // Utente veterinario autenticato (AU1, RU1)
+        AuthenticatedUser vetUser = buildVet(1L);
+        authContextMock.when(AuthContext::getCurrentUser).thenReturn(vetUser);
+
+        // Il veterinario ESISTE
+        Veterinario vet = new Veterinario();
+        vet.setId(1L);
+        vet.setNome("Mario");
+        vet.setCognome("Rossi");
+        when(veterinarioRepository.findById(1L)).thenReturn(Optional.of(vet));
+
+        // Il pet ESISTE nel DB
+        Pet pet = new Pet();
+        pet.setId(10L);
+        pet.setNome("Fido");
+        when(petRepository.findById(10L)).thenReturn(Optional.of(pet));
+
+        // ❌ Il pet NON è associato a quel veterinario
+        when(petRepository.verificaAssociazionePetVeterinario(10L, 1L))
+                .thenReturn(false);
+
+        TerapiaRequestDTO dto = buildValidRequest(10L);
+
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> service.aggiungiTerapia(dto));
+
+        assertThat(ex.getMessage()).isEqualTo("Il pet non è un paziente del veterinario");
+
+        verify(veterinarioRepository, times(1)).findById(1L);
+        verify(petRepository, times(1)).findById(10L);
+        verify(petRepository, times(1)).verificaAssociazionePetVeterinario(10L, 1L);
+
+        verifyNoInteractions(terapiaRepository);
+    }
+
+
+
     // ============================ NOME (LN) ============================
 
     /**
-     * TC_AggiungiTerapia_3:
+     * TC_AggiungiTerapia_5:
      * LN1 [ERROR] → nome vuoto
      */
     @Test
-    void TC_AggiungiTerapia_3() {
+    void TC_AggiungiTerapia_5() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setNome(""); // lunghezza = 0
 
@@ -173,11 +253,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     }
 
     /**
-     * TC_AggiungiTerapia_4:
+     * TC_AggiungiTerapia_6:
      * LN2 [ERROR] → nome troppo corto
      */
     @Test
-    void TC_AggiungiTerapia_4() {
+    void TC_AggiungiTerapia_6() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setNome("Ab"); // lunghezza = 2 (<3)
 
@@ -186,11 +266,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     }
 
     /**
-     * TC_AggiungiTerapia_5:
+     * TC_AggiungiTerapia_7:
      * LN3 [ERROR] → nome troppo lungo
      */
     @Test
-    void TC_AggiungiTerapia_5() {
+    void TC_AggiungiTerapia_7() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setNome("a".repeat(101)); // lunghezza > 100
 
@@ -201,11 +281,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     // ===================== FORMA FARMACEUTICA (FF) =====================
 
     /**
-     * TC_AggiungiTerapia_6:
+     * TC_AggiungiTerapia_8:
      * FF1 [ERROR] → forma farmaceutica vuota
      */
     @Test
-    void TC_AggiungiTerapia_6() {
+    void TC_AggiungiTerapia_8() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setFormaFarmaceutica(""); // len = 0
 
@@ -214,11 +294,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     }
 
     /**
-     * TC_AggiungiTerapia_7:
+     * TC_AggiungiTerapia_9:
      * FF2 [ERROR] → forma farmaceutica troppo corta
      */
     @Test
-    void TC_AggiungiTerapia_7() {
+    void TC_AggiungiTerapia_9() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setFormaFarmaceutica("A"); // len = 1
 
@@ -227,11 +307,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     }
 
     /**
-     * TC_AggiungiTerapia_8:
+     * TC_AggiungiTerapia_10:
      * FF3 [ERROR] → forma farmaceutica troppo lunga
      */
     @Test
-    void TC_AggiungiTerapia_8() {
+    void TC_AggiungiTerapia_10() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setFormaFarmaceutica("a".repeat(51)); // > 50
 
@@ -242,11 +322,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     // ========================== DOSAGGIO (DO) ==========================
 
     /**
-     * TC_AggiungiTerapia_9:
+     * TC_AggiungiTerapia_11:
      * DO1 [ERROR] → dosaggio vuoto
      */
     @Test
-    void TC_AggiungiTerapia_9() {
+    void TC_AggiungiTerapia_11() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setDosaggio(""); // len = 0
 
@@ -255,11 +335,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     }
 
     /**
-     * TC_AggiungiTerapia_10:
+     * TC_AggiungiTerapia_12:
      * DO2 [ERROR] → dosaggio troppo lungo
      */
     @Test
-    void TC_AggiungiTerapia_10() {
+    void TC_AggiungiTerapia_12() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setDosaggio("a".repeat(21)); // > 20
 
@@ -270,11 +350,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     // ========================= POSOLOGIA (PO) ==========================
 
     /**
-     * TC_AggiungiTerapia_11:
+     * TC_AggiungiTerapia_13:
      * PO1 [ERROR] → posologia vuota
      */
     @Test
-    void TC_AggiungiTerapia_11() {
+    void TC_AggiungiTerapia_13() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setPosologia(""); // len = 0
 
@@ -283,11 +363,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     }
 
     /**
-     * TC_AggiungiTerapia_12:
+     * TC_AggiungiTerapia_14:
      * PO2 [ERROR] → posologia troppo corta
      */
     @Test
-    void TC_AggiungiTerapia_12() {
+    void TC_AggiungiTerapia_14() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setPosologia("abcd"); // len = 4 (<5)
 
@@ -296,11 +376,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     }
 
     /**
-     * TC_AggiungiTerapia_13:
+     * TC_AggiungiTerapia_15:
      * PO3 [ERROR] → posologia troppo lunga
      */
     @Test
-    void TC_AggiungiTerapia_13() {
+    void TC_AggiungiTerapia_15() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setPosologia("a".repeat(101)); // > 100
 
@@ -311,11 +391,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     // ============ VIA DI SOMMINISTRAZIONE (VS) =========================
 
     /**
-     * TC_AggiungiTerapia_14:
+     * TC_AggiungiTerapia_16:
      * VS1 [ERROR] → via di somministrazione vuota
      */
     @Test
-    void TC_AggiungiTerapia_14() {
+    void TC_AggiungiTerapia_16() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setViaDiSomministrazione(""); // len = 0
 
@@ -324,11 +404,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     }
 
     /**
-     * TC_AggiungiTerapia_15:
+     * TC_AggiungiTerapia_17:
      * VS2 [ERROR] → via di somministrazione troppo corta
      */
     @Test
-    void TC_AggiungiTerapia_15() {
+    void TC_AggiungiTerapia_17() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setViaDiSomministrazione("A"); // len = 1
 
@@ -337,11 +417,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     }
 
     /**
-     * TC_AggiungiTerapia_16:
+     * TC_AggiungiTerapia_18:
      * VS3 [ERROR] → via di somministrazione troppo lunga
      */
     @Test
-    void TC_AggiungiTerapia_16() {
+    void TC_AggiungiTerapia_18() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setViaDiSomministrazione("a".repeat(101)); // > 100
 
@@ -352,11 +432,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     // ============================= DURATA (DU) =============================
 
     /**
-     * TC_AggiungiTerapia_17:
+     * TC_AggiungiTerapia_19:
      * DU1 [ERROR] → durata vuota
      */
     @Test
-    void TC_AggiungiTerapia_17() {
+    void TC_AggiungiTerapia_19() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setDurata(""); // len = 0
 
@@ -365,11 +445,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     }
 
     /**
-     * TC_AggiungiTerapia_18:
+     * TC_AggiungiTerapia_20:
      * DU2 [ERROR] → durata troppo lunga
      */
     @Test
-    void TC_AggiungiTerapia_18() {
+    void TC_AggiungiTerapia_20() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setDurata("a".repeat(11)); // > 10
 
@@ -380,11 +460,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     // =========================== FREQUENZA (FR) ============================
 
     /**
-     * TC_AggiungiTerapia_19:
+     * TC_AggiungiTerapia_21:
      * FR1 [ERROR] → frequenza vuota
      */
     @Test
-    void TC_AggiungiTerapia_19() {
+    void TC_AggiungiTerapia_21() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setFrequenza(""); // len = 0
 
@@ -393,11 +473,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     }
 
     /**
-     * TC_AggiungiTerapia_20:
+     * TC_AggiungiTerapia_22:
      * FR2 [ERROR] → frequenza troppo corta
      */
     @Test
-    void TC_AggiungiTerapia_20() {
+    void TC_AggiungiTerapia_22() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setFrequenza("ab"); // len = 2 (<3)
 
@@ -406,11 +486,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     }
 
     /**
-     * TC_AggiungiTerapia_21:
+     * TC_AggiungiTerapia_23:
      * FR3 [ERROR] → frequenza troppo lunga
      */
     @Test
-    void TC_AggiungiTerapia_21() {
+    void TC_AggiungiTerapia_23() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setFrequenza("a".repeat(51)); // > 50
 
@@ -421,11 +501,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     // ============================== MOTIVO (MO) ============================
 
     /**
-     * TC_AggiungiTerapia_22:
+     * TC_AggiungiTerapia_24:
      * MO1 [ERROR] → motivo vuoto
      */
     @Test
-    void TC_AggiungiTerapia_22() {
+    void TC_AggiungiTerapia_24() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setMotivo(""); // len = 0
 
@@ -434,11 +514,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     }
 
     /**
-     * TC_AggiungiTerapia_23:
+     * TC_AggiungiTerapia_25:
      * MO2 [ERROR] → motivo troppo corto
      */
     @Test
-    void TC_AggiungiTerapia_23() {
+    void TC_AggiungiTerapia_25() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setMotivo("abcd"); // len = 4 (<5)
 
@@ -447,11 +527,11 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     }
 
     /**
-     * TC_AggiungiTerapia_24:
+     * TC_AggiungiTerapia_26:
      * MO3 [ERROR] → motivo troppo lungo
      */
     @Test
-    void TC_AggiungiTerapia_24() {
+    void TC_AggiungiTerapia_26() {
         TerapiaRequestDTO dto = buildValidRequest(1L);
         dto.setMotivo("a".repeat(161)); // > 160
 
@@ -460,12 +540,12 @@ class TerapiaServiceImplAggiungiTerapiaTest {
     }
 
     /**
-     * TC_AggiungiTerapia_25:
+     * TC_AggiungiTerapia_27:
      * AU1, RU1, LN4, FF4, DO3, PO4, VS4, DU3, FR4, MO4
      * → terapia aggiunta con successo
      */
     @Test
-    void TC_AggiungiTerapia_25() {
+    void TC_AggiungiTerapia_27() {
         // AU1, RU1: veterinario autenticato
         AuthenticatedUser vetUser = buildVet(1L);
         authContextMock.when(AuthContext::getCurrentUser).thenReturn(vetUser);
