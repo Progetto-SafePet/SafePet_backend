@@ -10,7 +10,6 @@ import it.safepet.backend.reportCliniche.model.Clinica;
 import it.safepet.backend.reportCliniche.model.OrarioDiApertura;
 import it.safepet.backend.reportCliniche.repository.ClinicaRepository;
 import it.safepet.backend.gestioneUtente.repository.VeterinarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -28,19 +27,16 @@ import java.util.Map;
 @Service
 @Validated
 public class ReportClinicheServiceImpl implements ReportClinicheService {
-    @Autowired
-    private VeterinarioRepository veterinarioRepository;
-
-    @Autowired
-    private ClinicaRepository clinicaRepository;
-
-    @Autowired
-    private RecensioneRepository recensioneRepository;
-
+    private final VeterinarioRepository veterinarioRepository;
+    private final ClinicaRepository clinicaRepository;
+    private final RecensioneRepository recensioneRepository;
     private final Clock clock;
     private final ZoneId zoneId;
 
-    public ReportClinicheServiceImpl() {
+    public ReportClinicheServiceImpl(VeterinarioRepository vetRepo, ClinicaRepository clinRepo, RecensioneRepository recRepo) {
+        this.veterinarioRepository = vetRepo;
+        this.clinicaRepository = clinRepo;
+        this.recensioneRepository = recRepo;
         this.clock = Clock.systemDefaultZone();
         this.zoneId = ZoneId.systemDefault();
     }
@@ -78,7 +74,7 @@ public class ReportClinicheServiceImpl implements ReportClinicheService {
         }
 
         if (lon < -180.f || lon > 180.f) {
-            throw new IllegalArgumentException("La latitudine ricevuta non è compresa tra -180 e 180 gradi.");
+            throw new IllegalArgumentException("La longitudine ricevuta non è compresa tra -180 e 180 gradi.");
         }
 
         List<Clinica> cliniche = clinicaRepository.findAll();
@@ -119,7 +115,7 @@ public class ReportClinicheServiceImpl implements ReportClinicheService {
     /**
      * Calcola la distanza in km tra due punti (lat, lon) usando la formula di Haversine.
      */
-    private static double haversineKm(double lat1, double lon1, double lat2, double lon2) {
+    public double haversineKm(double lat1, double lon1, double lat2, double lon2) {
         final double R = 6371.0; // raggio medio Terra in km
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(lon2 - lon1);
