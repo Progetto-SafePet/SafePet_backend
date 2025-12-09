@@ -2,8 +2,6 @@ package it.safepet.backend.gestioneCartellaClinica.service;
 
 import it.safepet.backend.gestioneCartellaClinica.dto.CartellaClinicaResponseDTO;
 
-import java.util.List;
-
 public interface GestioneCartellaClinicaService {
     /**
      * Recupera la cartella clinica completa di un pet, verificando che l'utente autenticato
