@@ -21,6 +21,7 @@ public class FilterConfig {
         registrationBean.addUrlPatterns("/gestionePet/*");
         registrationBean.addUrlPatterns("/gestioneRecensioni/*");
         registrationBean.addUrlPatterns("/gestioneUtente/visualizzaProfiloProprietario");
+        registrationBean.addUrlPatterns("/analisiDermatologica/*");
         registrationBean.setOrder(1);
         return registrationBean;
     }

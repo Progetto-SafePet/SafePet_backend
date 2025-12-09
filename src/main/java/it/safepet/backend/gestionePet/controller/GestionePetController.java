@@ -46,24 +46,25 @@ public class GestionePetController {
      *     <li><b>razza</b> (form-data): razza dell’animale</li>
      *     <li><b>microchip</b> (form-data): codice microchip univoco</li>
      *     <li><b>sesso</b> (form-data): M o F</li>
-     *     <li><b>foto</b> (form-data): immagine JPEG o PNG</li>
+     *     <li><b>foto</b> (form-data): immagine JPG o PNG</li>
      * </ul>
      *
      * <p><b>Campi obbligatori nella risposta:</b></p>
      * <ul>
-     * <li><code>nome</code> (String): nome del pet, obbligatorio, 3-20 caratteri</li>
-     * <li><code>specie</code> (String): specie dell'animale, obbligatorio</li>
-     * <li><code>sesso</code> (char): 'M' o 'F', obbligatorio</li>
-     * <li><code>dataNascita</code> (String): data in formato ISO yyyy-MM-dd, obbligatorio</li>
+     *     <li><code>nome</code> (String): nome del pet, obbligatorio, 3-20 caratteri</li>
+     *     <li><code>specie</code> (String): specie dell'animale, obbligatorio, valori ammessi: <code> cane</code>,
+     *          <code> gatto </code>, <code> altro </code></li>
+     *     <li><code>sesso</code> (char): 'M' o 'F', obbligatorio</li>
+     *     <li><code>dataNascita</code> (String): data in formato ISO yyyy-MM-dd, obbligatorio</li>
      * </ul>*
      * <p><b>Campi opzionali e vincoli:</b></p>
      * <ul>
-     * <li><code>razza</code> (String): opzionale, 3-30 caratteri</l
-     * <li><code>peso</code> (String): opzionale, 0.1-100.0</l
-     * <li><code>colore mantello</code> (String): opzionale, 3-15 caratteri</li>
-     * <li><code>microchip</code> (String): opzionale, 15 caratteri alfanumerici</li>
-     *<li><code>Sterilizzato</code> (String): opzionale, True-False</li>
-     * <li><code>fotoBase64</code> (String): opzionale, immagine codificata in Base64</li>
+     *     <li><code>razza</code> (String): opzionale, 3-30 caratteri</l
+     *     <li><code>peso</code> (String): opzionale, 0.1-100.0</l
+     *     <li><code>colore mantello</code> (String): opzionale, 3-15 caratteri</li>
+     *     <li><code>microchip</code> (String): opzionale, 15 caratteri alfanumerici</li>
+     *     <li><code>Sterilizzato</code> (String): opzionale, True-False</li>
+     *     <li><code>fotoBase64</code> (String): opzionale, immagine codificata in Base64</li>
      * </ul>
      *
      * <p><b>Esempio richiesta:</b></p>

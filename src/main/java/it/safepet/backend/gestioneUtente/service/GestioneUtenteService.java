@@ -1,6 +1,5 @@
 package it.safepet.backend.gestioneUtente.service;
 
-import it.safepet.backend.autenticazione.jwt.Role;
 import it.safepet.backend.exception.NotFoundException;
 import it.safepet.backend.exception.UnauthorizedException;
 import it.safepet.backend.gestioneUtente.dto.ProfiloProprietarioResponseDTO;
@@ -8,8 +7,6 @@ import it.safepet.backend.gestioneUtente.dto.ProprietarioResponseDTO;
 import it.safepet.backend.gestioneUtente.dto.RegistrazioneProprietarioRequestDTO;
 import it.safepet.backend.gestioneUtente.dto.VisualizzaDettagliVeterinariResponseDTO;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 public interface GestioneUtenteService {
     /**
