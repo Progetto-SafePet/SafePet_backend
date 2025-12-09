@@ -235,9 +235,9 @@ class ReportClinicheServiceImplPrelevaDatiMappaTest {
         Clinica c2 = buildClinica(11L, "ClinicaMilano", 45.1, 7.1, v2);     // più lontana
         Clinica c3 = buildClinica(12L, "ClinicaTorino", 46.0, 8.0, v3);     // ancora più lontana
 
-        OrarioDiApertura o1 = buildOrario(currentGiorno(), LocalTime.of(9,0), LocalTime.of(17,0), false, c1);
-        OrarioDiApertura o2 = buildOrario(currentGiorno(), LocalTime.of(9,0), LocalTime.of(17,0), false, c2);
-        OrarioDiApertura o3 = buildOrario(currentGiorno(), LocalTime.of(9,0), LocalTime.of(17,0), false, c3);
+        OrarioDiApertura o1 = buildOrario(currentGiorno(), null, null,true, c1);
+        OrarioDiApertura o2 = buildOrario(currentGiorno(),  null, null, true, c2);
+        OrarioDiApertura o3 = buildOrario(currentGiorno(), null, null, true, c3);
 
         c1.getOrariApertura().add(o1);
         c2.getOrariApertura().add(o2);
