@@ -254,10 +254,17 @@ class ReportClinicheServiceImplPrelevaDatiMappaTest {
         all.add(c2);
 
         when(clinicaRepository.findAll()).thenReturn(all);
+        when(recensioneRepository.countByVeterinarioId(1L)).thenReturn(2);
+        when(recensioneRepository.countByVeterinarioId(2L)).thenReturn(1);
+        when(recensioneRepository.countByVeterinarioId(3L)).thenReturn(0);
 
         when(recensioneRepository.countByVeterinarioId(1L)).thenReturn(2);
         when(recensioneRepository.countByVeterinarioId(2L)).thenReturn(1);
         when(recensioneRepository.countByVeterinarioId(3L)).thenReturn(0);
+
+        List<Clinica> sanity = clinicaRepository.findAll();
+        assertThat(sanity).isNotNull();
+        assertThat(sanity.size()).as("sanity: mock clinicaRepository deve restituire 3 elementi").isEqualTo(3);
 
         when(veterinarioRepository.calcolaMediaRecensioniVeterinario(1L)).thenReturn(4.5);
         when(veterinarioRepository.calcolaMediaRecensioniVeterinario(2L)).thenReturn(3.0);
@@ -288,7 +295,7 @@ class ReportClinicheServiceImplPrelevaDatiMappaTest {
         assertThat(first.numRecensioni()).isEqualTo(2);
         assertThat(first.mediaRecensioni()).isEqualTo(4.5);
 
-        verify(clinicaRepository).findAll();
+        verify(clinicaRepository, times(2)).findAll() ;
         verify(recensioneRepository, times(3)).countByVeterinarioId(anyLong());
         verify(veterinarioRepository, times(3)).calcolaMediaRecensioniVeterinario(anyLong());
     }
