@@ -23,6 +23,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,24 +60,20 @@ class ReportClinicheServiceImplPrelevaDatiMappaTest {
 
     private Veterinario buildVeterinario(Long id, String nome, String cognome) {
         Veterinario v = new Veterinario();
-        // set id tramite reflection-like o setter se presente
-        try {
-            var idField = Veterinario.class.getDeclaredField("id");
-            idField.setAccessible(true);
-            idField.set(v, id);
-        } catch (Exception ignored) {}
+        v.setId(id);
         v.setNome(nome);
         v.setCognome(cognome);
+        v.setDataNascita(LocalDate.of(1990,1,1));
+        v.setEmail(nome.toLowerCase() + "@example.com");
+        v.setPassword("Password123");
+        v.setNumeroTelefono("0123456789");
+        v.setSpecializzazioniAnimali("Cani");
         return v;
     }
 
     private Clinica buildClinica(Long id, String nome, Double lat, Double lon, Veterinario vet) {
         Clinica c = new Clinica();
-        try {
-            var idField = Clinica.class.getDeclaredField("id");
-            idField.setAccessible(true);
-            idField.set(c, id);
-        } catch (Exception ignored) {}
+        c.setId(id);
         c.setNome(nome);
         c.setLatitudine(lat);
         c.setLongitudine(lon);
