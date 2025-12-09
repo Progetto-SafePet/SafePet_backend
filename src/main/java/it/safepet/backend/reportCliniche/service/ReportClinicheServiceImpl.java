@@ -64,7 +64,7 @@ public class ReportClinicheServiceImpl implements ReportClinicheService {
         }
 
         if (lon < -180.f || lon > 180.f) {
-            throw new IllegalArgumentException("La latitudine ricevuta non è compresa tra -180 e 180 gradi.");
+            throw new IllegalArgumentException("La longitudine ricevuta non è compresa tra -180 e 180 gradi.");
         }
 
         List<Clinica> cliniche = clinicaRepository.findAll();

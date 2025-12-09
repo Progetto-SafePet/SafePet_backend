@@ -171,7 +171,7 @@ class ReportClinicheServiceImplPrelevaDatiMappaTest {
 
         assertThatThrownBy(() -> service.prelevaDatiMappa(lat, lon))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("La latitudine ricevuta non è compresa tra -180 e 180");
+                .hasMessageContaining("La longitudine ricevuta non è compresa tra -180 e 180");
 
         verifyNoInteractions(clinicaRepository, recensioneRepository, veterinarioRepository);
     }
@@ -197,7 +197,7 @@ class ReportClinicheServiceImplPrelevaDatiMappaTest {
 
         assertThatThrownBy(() -> service.prelevaDatiMappa(lat, lon))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("La latitudine ricevuta non è compresa tra -180 e 180");
+                .hasMessageContaining("La longitudine ricevuta non è compresa tra -180 e 180");
 
         verifyNoInteractions(clinicaRepository, recensioneRepository, veterinarioRepository);
     }
