@@ -10,7 +10,6 @@ public class LoginRequestDTO {
     private String email;
 
     @NotBlank(message = "La password è obbligatoria")
-    @Size(min = 8, max = 64, message = "La password deve contenere tra 8 e 64 caratteri")
     private String password;
 
     public LoginRequestDTO(String email, String password) {
