@@ -13,8 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import jakarta.persistence.EntityNotFoundException;
-
 @Service
 @Validated
 public class AutenticazioneServiceImpl implements AutenticazioneService {
@@ -55,6 +53,6 @@ public class AutenticazioneServiceImpl implements AutenticazioneService {
         }
 
         // Se non trovato in nessuno dei due
-        throw new EntityNotFoundException("Utente non trovato con email: " + loginRequestDTO.getEmail());
+        throw new UnauthorizedException("Credenziali non valide.");
     }
 }

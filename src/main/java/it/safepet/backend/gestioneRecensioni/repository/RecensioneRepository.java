@@ -17,4 +17,6 @@ public interface RecensioneRepository extends JpaRepository<Recensione, Long> {
      *         {@code false} altrimenti
      */
     boolean existsByVeterinarioAndProprietario(Veterinario veterinario, Proprietario proprietario);
+
+    int countByVeterinarioId(Long veterinarioId);
 }

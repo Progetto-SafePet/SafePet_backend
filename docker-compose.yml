@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql-safepet
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: safepet
+      MYSQL_USER: safepet_user
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  skindetector:
+    image: francescopinto02/skindetector-api:latest
+    container_name: skin-detector
+    restart: always
+    ports:
+      - "8000:8000"
+
+volumes:
+  mysql_data:
