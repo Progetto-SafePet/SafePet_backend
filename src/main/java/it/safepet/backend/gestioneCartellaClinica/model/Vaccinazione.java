@@ -34,7 +34,7 @@ public class Vaccinazione extends RecordMedico {
         INTRAMUSCOLARE,
         ORALE,
         INTRANASALE,
-        TRANSDERMICA;
+        TRANSDERMICA
     }
 
     public Vaccinazione() {

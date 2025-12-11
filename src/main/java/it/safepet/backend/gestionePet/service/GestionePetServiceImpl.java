@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -43,7 +44,7 @@ public class GestionePetServiceImpl implements GestionePetService {
 
         // Verifica autenticazione
         AuthenticatedUser currentUser = AuthContext.getCurrentUser();
-        if (currentUser == null || !Role.PROPRIETARIO.equals(currentUser.getRole())) {
+        if (checkUser(currentUser)) {
             throw new RuntimeException("Accesso non autorizzato");
         }
 
@@ -79,16 +80,12 @@ public class GestionePetServiceImpl implements GestionePetService {
         pet.setProprietario(proprietario);
 
         // Validazione foto
-        if (newPetDTO.getFoto() != null && !newPetDTO.getFoto().isEmpty()) {
-            String contentType = newPetDTO.getFoto().getContentType();
-
-            if (contentType == null ||
-                    !(contentType.equalsIgnoreCase("image/jpg") ||
-                            contentType.equalsIgnoreCase("image/png"))) {
+        MultipartFile image = newPetDTO.getFoto();
+        if (image != null && !image.isEmpty()) {
+            if (!checkImageContentType(image.getContentType())) {
                 throw new RuntimeException("Formato immagine non valido: sono ammessi JPG o PNG");
             }
-
-            pet.setFoto(newPetDTO.getFoto().getBytes());
+            pet.setFoto(image.getBytes());
         }
 
         // Salvataggio
@@ -242,5 +239,15 @@ public class GestionePetServiceImpl implements GestionePetService {
                         n.getPet().getProprietario().getNome() + " " + n.getPet().getProprietario().getCognome()
                 ))
                 .toList();
+    }
+
+    private boolean checkUser(AuthenticatedUser user) {
+        return user == null || !Role.PROPRIETARIO.equals(user.getRole());
+    }
+
+    private boolean checkImageContentType(String contentType) {
+        return contentType != null &&
+                (contentType.equalsIgnoreCase("image/jpg") ||
+                        contentType.equalsIgnoreCase("image/png"));
     }
 }

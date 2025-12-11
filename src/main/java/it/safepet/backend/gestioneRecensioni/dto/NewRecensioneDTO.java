@@ -13,7 +13,7 @@ public class NewRecensioneDTO {
     @Max(value = 5, message = "Il punteggio massimo è 5")
     private Integer punteggio;
 
-    @Size(max = 100, message="la dimensione deve essere compresa tra 0 e 100")
+    @Size(max = 100, message = "la dimensione deve essere compresa tra 0 e 100")
     @NotBlank(message = "La descrizione è obbligatoria")
     private String descrizione;
 
