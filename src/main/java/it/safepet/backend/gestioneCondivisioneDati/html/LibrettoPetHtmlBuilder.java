@@ -30,6 +30,7 @@ public class LibrettoPetHtmlBuilder {
     }
 
     // Creazione documento HTML e CSS
+    @SuppressWarnings("checkstyle:MethodLength")
     public String buildHtmlCSS(CondivisioneDatiPetResponseDTO dto) {
 
         String vaccinazioni = dto.getCartellaClinica().getVaccinazioni().stream()
@@ -58,13 +59,11 @@ public class LibrettoPetHtmlBuilder {
         <head>
             <meta charset="UTF-8"/>
             <style>
-    
                 body {
                     font-family: Arial, sans-serif;
                     padding: 30px;
                     color: #3a2c1a;
                 }
-    
                 h1 {
                     text-align: center;
                     color: #7d4f21;
@@ -74,20 +73,17 @@ public class LibrettoPetHtmlBuilder {
                     border-bottom: 3px solid #c5a982;
                     padding-bottom: 10px;
                 }
-    
                 h2 {
                     color: #7d4f21;
                     font-size: 24px;
                     margin-top: 40px;
                     margin-bottom: 15px;
                 }
-    
                 table {
                     width: 100%%;
                     border-collapse: collapse;
                     margin-bottom: 25px;
                 }
-    
                 th {
                     background-color: #f7e7ce;
                     color: #3a2c1a;
@@ -96,14 +92,11 @@ public class LibrettoPetHtmlBuilder {
                     border: 1px solid #e0d3b8;
                     width: 25%%;
                 }
-    
                 td {
                     background-color: #ffffff;
                     padding: 10px;
                     border: 1px solid #e0d3b8;
                 }
-    
-                /* BOX PROPRIETARIO */
                 .box {
                     background-color: #f7e7ce;
                     border: 2px solid #d6b894;
@@ -112,40 +105,29 @@ public class LibrettoPetHtmlBuilder {
                     margin-top: 20px;
                     margin-bottom: 30px;
                 }
-    
                 .label {
                     font-weight: bold;
                 }
-    
-                /* logo */
                 .header-logo{
                     text-align: center;
                     margin-bottom: 5px;
                 }
-  
                 .header-logo img {
                     width: 70px;
                     height: 70px;
                     margin-bottom: 20px;
                 }
-        
                 .page-break-before {
                      page-break-before: always;
                 }
             </style>
         </head>
-    
         <body>
-            <!-- LOGO -->
             <div class="header-logo">
                 <img src="%s" alt="SafePet Logo" />
             </div>
-        
             <h1> Scheda Anagrafica Pet: %s </h1>
-        
-            <!-- DATI ANAGRAFICI PET -->
             <h2>Dati Anagrafici</h2>
-    
             <table>
                 <tr><th>Specie</th><td>%s</td></tr>
                 <tr><th>Razza</th><td>%s</td></tr>
@@ -156,8 +138,6 @@ public class LibrettoPetHtmlBuilder {
                 <tr><th>Microchip</th><td>%s</td></tr>
                 <tr><th>Sterilizzato</th><td>%s</td></tr>
             </table>
-    
-            <!-- DATI PROPRIETARIO -->
             <h2>Contatti Proprietario</h2>
             <div class="box">
                 <p><span class="label">Nome Completo:</span> %s %s<br/>
@@ -166,39 +146,30 @@ public class LibrettoPetHtmlBuilder {
                    <span class="label">Indirizzo:</span> %s
                 </p>
             </div>
-   
             <h1 class="page-break-before">Storico Clinico Completo</h1>
-    
             <h2>Vaccinazioni</h2>
             <table>
                 <tr><th>Vaccino</th><th>Data</th><th>Richiamo</th><th>Tipologia</th></tr>
                 %s
             </table>
-    
             <h2>Patologie</h2>
             <table>
                 <tr><th>Patologia</th><th>Data Diagnosi</th><th> Sintomi Osservati</th></tr>
                 %s
             </table>
-    
             <h2>Terapie</h2>
             <table>
                 <tr><th>Terapia</th><th>Durata</th><th>Forma Farmaceutica</th><th>Via di somministrazione</th><th>Frequenza</th></tr>
                 %s
             </table>
-    
             <h2>Visite Mediche</h2>
             <table>
                 <tr><th>Visita</th><th>Data</th></tr>
                 %s
             </table>
-    
         </body>
         </html>
-        """.formatted(
-                logoSrc,
-                dto.getPet().getNome(),
-                dto.getPet().getSpecie(),
+        """.formatted(logoSrc, dto.getPet().getNome(), dto.getPet().getSpecie(),
                 dto.getPet().getRazza(),
                 dto.getPet().getSesso(),
                 dto.getPet().getDataNascita(),

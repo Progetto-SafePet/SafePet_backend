@@ -80,11 +80,13 @@ public class VaccinazioneRequestDTO {
     public @NotBlank(message = "La via di somministrazione è obbligatoria") @Pattern(
             regexp = "SOTTOCUTANEA|INTRAMUSCOLARE|ORALE|INTRANASALE|TRANSDERMICA",
             message = "La via di somministrazione non è valida"
-    ) String getViaDiSomministrazione() {
+    )
+    String getViaDiSomministrazione() {
         return viaDiSomministrazione;
     }
 
-    public @Size(min = 1, max = 200, message = "Gli effetti collaterali possono contenere massimo 200 caratteri e minimo 1") String getEffettiCollaterali() {
+    public @Size(min = 1, max = 200, message = "Gli effetti collaterali possono contenere massimo 200 caratteri e minimo 1")
+    String getEffettiCollaterali() {
         return effettiCollaterali;
     }
 
