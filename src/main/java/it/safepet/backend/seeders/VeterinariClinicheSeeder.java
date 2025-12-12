@@ -42,26 +42,26 @@ public class VeterinariClinicheSeeder implements CommandLineRunner {
         if (clinicaRepository.count() == 0) {
             System.out.println("### Inizio popolamento tabelle veterinari, cliniche, orari_di_apertura");
             ArrayList<Clinica> cliniche = new ArrayList<Clinica>() {{
-                add(new Clinica("Zampa Felice", "Via Giovanni Paolo II, 150 - Fisciano", "0899911111", 40.7715, 14.7890));
-                add(new Clinica("Animalia", "Via Principe Amedeo, 22 - Lancusi", "0899922222", 40.7430, 14.7700));
-                add(new Clinica("Pet Harmony", "Via Roma, 10 - Penta", "0899933333", 40.7495, 14.7810));
-                add(new Clinica("Vet Guardian", "Corso Garibaldi, 88 - Baronissi", "0899944444", 40.7385, 14.7688));
-                add(new Clinica("Oasi Vet", "Via Aldo Moro, 12 - Mercato San Severino", "0899955555", 40.7812, 14.7550));
-                add(new Clinica("Arca Vet", "Via San Giovanni, 5 - Pellezzano", "0899966666", 40.7300, 14.7500));
-                add(new Clinica("Vet Nova", "Via Trento, 40 - Baronissi", "0899977777", 40.7390, 14.7695));
-                add(new Clinica("Pet Fusion", "Via Università, 20 - Fisciano", "0899988888", 40.7720, 14.7900));
-                add(new Clinica("AnimAxis", "Via San Lorenzo, 8 - Mercato San Severino", "0899999999", 40.7820, 14.7560));
-                add(new Clinica("Vet Mind", "Via Roma, 200 - Baronissi", "0899922222", 40.7378, 14.7678));
-                add(new Clinica("Pinto Pet", "Via Aldo Moro, 22 - Baronissi", "0899912121", 40.7380, 14.7690));
-                add(new Clinica("Vet Sphere", "Via San Michele, 14 - Fisciano", "0899911112", 40.7705, 14.7885));
-                add(new Clinica("TorinoPet", "Via Diaz, 30 - Mercato San Severino", "0899913131", 40.7815, 14.7545));
-                add(new Clinica("Pet Well", "Via San Giovanni, 18 - Pellezzano", "0899914141", 40.7295, 14.7510));
-                add(new Clinica("Neo Vet", "Via Roma, 55 - Baronissi", "0899915151", 40.7392, 14.7685));
-                add(new Clinica("Vet Quantum", "Via Università, 5 - Fisciano", "0899916161", 40.7725, 14.7895));
-                add(new Clinica("Vet Atlas", "Via Trento, 12 - Mercato San Severino", "0899917171", 40.7825, 14.7555));
-                add(new Clinica("Pet Horizon", "Via San Lorenzo, 25 - Baronissi", "0899918181",  40.7370, 14.7675));
-                add(new Clinica("Vet Zen", "Via Diaz, 60 - Pellezzano", "0899919191", 40.7285, 14.7520));
-                add(new Clinica("Pet Logic", "Via San Vincenzo, 33 - Pellezzano", "0899921212", 40.7290, 14.7530));
+                add(new Clinica("Zampa Felice", "Via Ugo Foscolo, 18 - Salerno", "0899911111", 40.667808217305264, 14.798157969061371));
+                add(new Clinica("Oasi Vet", "Via Aldo Moro, 1 - Baronissi", "0899955555", 40.748323195781786, 14.775263009418884));
+                add(new Clinica("Animalia", "Via Michele Vernieri, 16 - Salerno", "0899922222", 40.681698254988945, 14.766198224076366));
+                add(new Clinica("Arca Vet", "Via Tenente Nastri, 120 - Baronissi", "0899966666", 40.761614557438925, 14.779088084565712));
+                add(new Clinica("Vet Nova", "Via Isolella, 6 - Fisciano", "0899977777", 40.76979646864549, 14.802020993286323));
+                add(new Clinica("Pet Harmony", "Via Zarra Nicola, 2 - Salerno", "0899933333", 40.6571210652716, 14.808987753943399));
+                add(new Clinica("Pet Fusion", "Via Roma, 84 - Fisciano", "0899988888", 40.77308191757273, 14.79742443502071));
+                add(new Clinica("AnimAxis", "Via Roma, 14 - Mercato San Severino", "0899999999", 40.78452413349735, 14.754706668156071));
+                add(new Clinica("Vet Mind", "Via Vincenzo Alfano, 414 - Mercato San Severino", "0899922222", 40.78056844131724, 14.747091008136438));
+                add(new Clinica("Pinto Pet", "Via Nicola Capuano, 4 - Castel San Giorgio", "0899912121", 40.7815058276157, 14.70060865509447));
+                add(new Clinica("TorinoPet", "Via Quattro Novembre, 35 - Penta", "0899913131", 40.76001147388277, 14.782332730226333));
+                add(new Clinica("Vet Guardian", "Via Alfonso Grassi, 3 - Salerno", "0899944444", 40.66530559670722, 14.813341076580066));
+                add(new Clinica("Pet Well", "Via del Centenario, 533 - Penta", "0899914141", 40.76467637883549, 14.777245728274728));
+                add(new Clinica("Vet Sphere", "Via S. Francesco, 7 - Castel San Giorgio", "0899911112", 40.78875799035043, 14.701155835432957));
+                add(new Clinica("Neo Vet", "Via Giovanni Falcone, 6 - Pellezzano", "0899915151", 40.726320917020516, 14.75700441801544));
+                add(new Clinica("Vet Atlas", "Via Gaetano Filangieri, 33 - Cava de' Tirreni", "0899917171", 40.70265961129606, 14.702021684359128));
+                add(new Clinica("Vet Quantum", "Via Casal Murino, 22 - Pellezzano", "0899916161", 40.72474991309838, 14.757770041602617));
+                add(new Clinica("Pet Horizon", "Via Clemente Tafuri, 53 - Cava de' Tirreni", "0899918181",  40.70710312235834, 14.70377728419267));
+                add(new Clinica("Pet Logic", "Via Santacroce, 9 - Nocera Superiore", "0899921212", 40.73896667640164, 14.656100242031949));
+                add(new Clinica("Vet Zen", "Via S. Clemente, 150 - Nocera Superiore", "0899919191", 40.74180229816638, 14.672751189300856));
             }};
 
             ArrayList<Veterinario> veterinari =  new ArrayList<Veterinario>() {{
