@@ -76,8 +76,8 @@ public class SkinDetectorAdapter {
                 root = mapper.readTree(root.asText());
             }
 
-            String classe = root.path("class").asText(null);
-            double confidence = root.path("confidence").asDouble(Double.NaN);
+            String classe = root.path("label_name").asText(null);
+            double confidence = root.path("confidence_score").asDouble(Double.NaN);
 
             if (classe == null || classe.isBlank() || Double.isNaN(confidence)) {
                 return new RisultatoDiagnosiDTO("errore", 0.0);
